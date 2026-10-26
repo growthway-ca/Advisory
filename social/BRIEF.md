@@ -77,7 +77,7 @@ quiet day, 1–2 strong stories beat 5 weak ones; it's fine to say "quiet day".
 **Watchlist:** dates coming up (committee hearings, board votes, survey releases, consultations closing).
 ~~~
 
-Give two takes for Matt on the top pick (one sharper, one more measured) so there's a real choice. Never invent
+Every story gets all three text drafts (Matt · Bluesky, Matt · X, Growthway · X), even one you suggest holding. Give two takes for Matt on the top pick (one sharper, one more measured) so there's a real choice. Never invent
 numbers or quotes; every figure in a draft must appear in a source you opened. Canadian spelling.
 
 Also write `covered.json`: `[{"url": "...", "title": "..."}]` for the stories in today's brief.
