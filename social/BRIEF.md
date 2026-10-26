@@ -91,7 +91,7 @@ Also write `covered.json`: `[{"url": "...", "title": "..."}]` for the stories in
 Write the spec to `reels/growthway/specs/<YYYY-MM-DD>-<slug>.json` following `reels/growthway/README.md` (scene types,
 fields, rules), build it with `npm run reel:growthway -- <spec>`, and look at `preview.png`. Fix anything that wraps
 badly or runs outside the frame, then rebuild. Copy `reel.mp4`, `cover.png`, `caption.txt` and `preview.png` into the
-day's `reel/` folder. Commit the spec to the code branch so the reel can be rebuilt; the video only goes to `social`.
+day's `reel/` folder, along with the spec as `spec.json` so the reel can be rebuilt later. Everything goes to `social`; never push to the code branch.
 
 ## Publish
 
