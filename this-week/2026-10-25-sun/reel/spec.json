@@ -1,0 +1,14 @@
+{
+  "slug": "2026-10-25-pisa-teens-ai",
+  "caption": "New international test data (OECD PISA 2025) asked 15-year-olds how they use AI chatbots for school. In Canada, 38% use them to help them learn at least once a week, and 18% use them to draft writing assignments.\n\nA McGill education researcher who dug into the results found Canadian teens who use AI weekly for schoolwork scored about two years behind those who never use it. That's a link, not proof that AI caused it. But it's a strong signal that how teens use AI matters more than whether they use it.\n\nThree questions to ask at home this week 👇 and if your school or parent council wants a plain-language AI night, that's what we do. Link in bio.\n\nSources: OECD, PISA 2025 Results (Volume I), Canada country note; Adam Dubé, McGill University, in The Conversation.",
+  "hashtags": ["#AIinEducation", "#AIliteracy", "#PISA", "#K12", "#CanadianEducation", "#Parenting", "#Growthway"],
+  "scenes": [
+    { "type": "hook", "kicker": "Why this matters", "text": "Teens use AI for school. Is it [[helping them learn?]]" },
+    { "type": "stat", "kicker": "New PISA data", "value": 38, "suffix": "%", "label": "of Canadian 15-year-olds use AI chatbots to help them learn at least weekly", "source": "Source: OECD, PISA 2025, Canada country note" },
+    { "type": "stat", "kicker": "Writing", "value": 18, "suffix": "%", "label": "use AI to draft their writing assignments", "source": "Source: OECD, PISA 2025, Canada country note" },
+    { "type": "point", "lead": "A McGill researcher's read of the scores:", "text": "Weekly AI users were [[two years behind]] non-users.", "kicker": "Source: Dubé, McGill" },
+    { "type": "point", "theme": "deep", "lead": "That’s a link, not proof.", "text": "But [[how]] teens use AI matters." },
+    { "type": "list", "kicker": "This week", "title": "Ask your teen", "items": ["What do you use AI for?", "Did it explain, or answer?", "Can you redo it alone?"] },
+    { "type": "outro" }
+  ]
+}
