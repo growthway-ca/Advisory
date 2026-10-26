@@ -97,11 +97,12 @@ day's `reel/` folder, along with the spec as `spec.json` so the reel can be rebu
 
 ```bash
 DAY=$(TZ=America/Toronto date +%F)
-git fetch -q --depth 1 origin social && mkdir -p "$TMP/old" && git archive FETCH_HEAD | tar -x -C "$TMP/old"  # skip if the branch doesn't exist yet
+git fetch -q --depth 1 origin +social:refs/remotes/origin/social && mkdir -p "$TMP/old" && git archive origin/social | tar -x -C "$TMP/old"  # skip if the branch doesn't exist yet
 node social/publish.mjs "$TMP/old" "$TMP/today" "$TMP/new" "$DAY"
 export GIT_INDEX_FILE="$TMP/idx"; git --work-tree="$TMP/new" add -A
-git push -f origin "$(git commit-tree "$(git write-tree)" -m "Brief $DAY"):refs/heads/social"
+P=$(git rev-parse -q --verify origin/social >/dev/null && echo "-p origin/social")  # empty when social doesn't exist yet
+git push origin "$(git commit-tree "$(git write-tree)" $P -m "Brief $DAY"):refs/heads/social"
 ```
 
-The `social` branch is rewritten as one commit every run (like Sens's `instagram` branch), so old videos don't pile up
-in Git. Finish with a one-paragraph summary: the top pick, how many stories, and whether there's a reel.
+Each run adds one commit on top of the last (a plain push, never a force push), and the tree only ever holds this week
+and last week, so a shallow clone of `social` stays small. Finish with a one-paragraph summary: the top pick, how many stories, and whether there's a reel.
