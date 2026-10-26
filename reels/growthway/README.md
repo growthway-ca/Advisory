@@ -35,7 +35,7 @@ In any text, wrap the key phrase in `[[double brackets]]` to give it the marker.
 | `list` | `title`, `items` (2–4, short) | What to do about it. |
 | `outro` | `tagline`, `cta` (both optional) | Always last. |
 
-A good reel is 5–7 scenes and 18–28 seconds: hook → evidence (stat or gap) → the take (point) → what to do (list) → outro.
+A good reel is 5–7 scenes and 25–35 seconds: hook → evidence (stat or gap) → the take (point) → what to do (list) → outro.
 
 ## Rules
 

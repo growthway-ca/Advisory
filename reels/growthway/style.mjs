@@ -50,7 +50,7 @@ export function logo(color, { size = 64, build = false, delay = 0 } = {}) {
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // Splits a line into rising words. Text inside [[double brackets]] gets the marker.
-function words(text, { start = 0, step = 0.07 } = {}) {
+function words(text, { start = 0, step = 0.09 } = {}) {
   let i = 0;
   return esc(text).split(/(\[\[.*?\]\])/).map((part) => {
     const marked = part.startsWith('[[');
@@ -70,28 +70,28 @@ function counter(value, { prefix = '', suffix = '', t = 0.3, dur = 1.1 } = {}) {
 
 const SCENES = {
   hook: (s) => `<div class="content mid">${kicker(s.kicker)}<h1 class="headline">${words(s.text, { start: 0.35 })}</h1>
-${s.sub ? `<p class="sub" style="--t:${0.5 + s.text.split(/\s+/).length * 0.07}s">${esc(s.sub)}</p>` : ''}</div>`,
+${s.sub ? `<p class="sub" style="--t:${0.6 + s.text.split(/\s+/).length * 0.09}s">${esc(s.sub)}</p>` : ''}</div>`,
 
   stat: (s) => `<div class="content mid">${kicker(s.kicker)}${counter(s.value, { prefix: s.prefix, suffix: s.suffix })}
-<p class="label">${words(s.label, { start: 0.9, step: 0.05 })}</p>${source(s.source, 1.6)}</div>`,
+<p class="label">${words(s.label, { start: 1.0, step: 0.07 })}</p>${source(s.source, 1.9)}</div>`,
 
   // Two bars and the space between them, the house way of showing "adoption is outpacing guidance".
   gap: (s) => {
     const [a, b] = s.bars;
-    const bar = (x, k) => `<div class="bar-row" style="--t:${0.5 + k * 0.35}s">
+    const bar = (x, k) => `<div class="bar-row" style="--t:${0.6 + k * 0.55}s">
 <div class="bar-head"><span class="bar-label">${esc(x.label)}</span><span class="bar-val">${esc(x.display ?? `${x.value}%`)}</span></div>
 <div class="track"><div class="fill ${k ? 'b' : 'a'}" style="--w:${x.value}%"></div></div></div>`;
     return `<div class="content mid">${kicker(s.kicker)}<h2 class="title">${words(s.title, { start: 0.2, step: 0.05 })}</h2>
 <div class="bars">${bar(a, 0)}${bar(b, 1)}
 <div class="gapmark" style="--l:${b.value}%;--r:${a.value}%"><div class="brace"></div><div class="gaptag">${esc(s.gapLabel ?? 'THE GAP')}</div></div></div>
-${source(s.source, 2.0)}</div>`;
+${source(s.source, 2.6)}</div>`;
   },
 
-  point: (s) => `<div class="content mid">${kicker(s.kicker)}<p class="serif">${words(s.lead, { start: 0.3, step: 0.06 })}</p>
-<h1 class="headline punch">${words(s.text, { start: 0.45 + s.lead.split(/\s+/).length * 0.06, step: 0.08 })}</h1></div>`,
+  point: (s) => `<div class="content mid">${kicker(s.kicker)}<p class="serif">${words(s.lead, { start: 0.35, step: 0.08 })}</p>
+<h1 class="headline punch">${words(s.text, { start: 0.8 + s.lead.split(/\s+/).length * 0.08, step: 0.1 })}</h1></div>`,
 
   list: (s) => `<div class="content mid">${kicker(s.kicker)}<h2 class="title">${words(s.title, { start: 0.2, step: 0.05 })}</h2>
-<ol class="items">${s.items.map((x, k) => `<li style="--t:${0.7 + k * 0.45}s"><span class="ix">${String(k + 1).padStart(2, '0')}</span><span class="it">${esc(x)}</span></li>`).join('')}</ol></div>`,
+<ol class="items">${s.items.map((x, k) => `<li style="--t:${0.8 + k * 0.7}s"><span class="ix">${String(k + 1).padStart(2, '0')}</span><span class="it">${esc(x)}</span></li>`).join('')}</ol></div>`,
 
   outro: (s, th) => `<div class="content center">${logo(th.mark, { size: 300, build: true, delay: 0.25 })}
 <div class="wordmark" style="--t:1.35s">Growthway</div>
@@ -105,7 +105,7 @@ const CSS = `
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1920px;overflow:hidden}
 body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
-.scene{position:absolute;inset:0;background:var(--bg);overflow:hidden;animation:reveal .6s cubic-bezier(.75,0,.2,1) both}
+.scene{position:absolute;inset:0;background:var(--bg);overflow:hidden;animation:reveal .85s cubic-bezier(.7,0,.25,1) both}
 .first .scene{animation:none}
 @keyframes reveal{from{clip-path:circle(0% at 50% 46%)}to{clip-path:circle(75% at 50% 46%)}}
 .glow{position:absolute;width:1500px;height:1500px;left:-210px;top:200px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 62%);opacity:.75;animation:breathe var(--d) ease-in-out both}
@@ -130,7 +130,7 @@ body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
 .content.center{align-items:center;text-align:center;right:84px}
 .kicker{font:500 30px/1 Mono,monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:44px;animation:fadeUp .6s var(--t) cubic-bezier(.2,.8,.2,1) both}
 .kicker span{opacity:.7;margin-right:6px}
-.w{display:inline-block;animation:rise .75s var(--t) cubic-bezier(.2,.8,.2,1) both}
+.w{display:inline-block;animation:rise .9s var(--t) cubic-bezier(.2,.8,.2,1) both}
 @keyframes rise{from{opacity:0;transform:translateY(56px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 .mk{position:relative;display:inline;padding:0 .12em;margin:0 -.04em;color:var(--markText);background:linear-gradient(var(--marker),var(--marker)) no-repeat 0 92%/0% 88%;animation:marker .55s calc(var(--t) + .25s) cubic-bezier(.65,0,.35,1) both;-webkit-box-decoration-break:clone;box-decoration-break:clone;border-radius:10px}
@@ -155,7 +155,7 @@ body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
 .fill.a{background:var(--accent)}
 .fill.b{background:${COLORS.rust}}
 @keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.gapmark{position:absolute;left:var(--l);width:calc(var(--r) - var(--l));bottom:0;height:130px;animation:fadeUp .6s 1.75s both}
+.gapmark{position:absolute;left:var(--l);width:calc(var(--r) - var(--l));bottom:0;height:130px;animation:fadeUp .6s 2.3s both}
 .brace{height:34px;border:5px solid ${COLORS.rust};border-top:0;border-radius:0 0 18px 18px}
 .gaptag{position:absolute;left:50%;top:56px;transform:translateX(-50%);white-space:nowrap;background:${COLORS.rust};color:${COLORS.cream};font:500 30px/1 Mono,monospace;letter-spacing:.2em;padding:16px 22px;border-radius:12px}
 .serif{font:italic 500 76px/1.12 Newsreader,serif;opacity:.92;margin-bottom:36px}
