@@ -1,1 +1,3 @@
 node_modules/
+reels/growthway/out/*
+!reels/growthway/out/student-ai-gap/
