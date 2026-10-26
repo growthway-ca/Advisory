@@ -64,11 +64,38 @@ Media Literacy Week runs Oct. 26–30, with a focus on misinformation and AI-gen
 6. Wednesday is Digital Citizen Day: share one good thing online.
 7. Growthway: plain-language AI nights for parent councils.
 
+## Politics (Matt · Bluesky only)
+
+### P1. B.C. Conservatives win a majority on a $2.9-billion-a-year tax cut · score 10/10
+Preliminary Elections BC results from Saturday's snap election: Conservatives leading in 63 of 93 ridings with 48.05% of the vote, NDP 28 (37.37%), Greens 2 (10.97%); preliminary turnout 48.12%; mail-in and absentee ballots are counted about two weeks after election day. Eby is stepping down as NDP leader. Lorne Doerkson's platform: a $1,000 income-tax cut per person ($2,000 for a couple) by raising the basic personal amount from $13,216 to $32,000, est. $2.9 billion a year; the whole "Help families when it counts" package (24-hour child care, bigger family and child-care benefits, independent providers eligible for $10-a-day spaces "within existing funding") is $150 million a year at full cost. It also ends the "safe supply" approach and adds mandatory care for people "incapable of caring for themselves." · [primary source (Elections BC results)](https://results.elections.bc.ca/) · [Conservative platform (PDF)](https://conservativebc.ca/wp-content/uploads/2026/10/20261016_BCC_Platform2026_8-5x11-Draft-18_compressed.pdf) · [coverage (The Hub)](https://thehub.ca/2026/10/26/b-c-conservatives-win-majority-as-ebys-snap-election-gamble-ends-ndp-rule/)
+
+⚠️ Results are preliminary (seats are "leading", not confirmed). The new government will oversee B.C.'s education ministry; neither draft goes after the ministry, but keep it in mind if Growthway does B.C. work.
+
+**Matt · Bluesky** (sharper)
+```text
+B.C.'s new government ran on a $1,000-per-person income tax cut: an estimated $2.9 billion a year. Its whole "help families" package, child care included, is $150 million a year. That's the choice in two numbers. Imagine $2.9 billion a year in child care spaces and housing instead.
+```
+**Matt · Bluesky** (more measured)
+```text
+B.C. has a new Conservative majority, elected on 48% turnout (preliminary). The platform ends "safe supply" and adds mandatory care. People living with addiction need detox, treatment, food and a home to go back to. Watch what actually gets funded, not just what gets enforced.
+```
+
+### P2. Ontario votes today, Manitoba on Wednesday · score 9/10
+Ontario's municipal and school board elections are today, Oct. 26. In Toronto, Olivia Chow is promising to expand the school food program (it now feeds more than 275,000 children), freeze TTC fares in 2027 and cap them so rides are free after 10 paid trips a week; Brad Bradford would freeze property taxes for a year and offer "more voluntary and mandatory treatment options" for addiction. Manitoba's municipal elections, including Winnipeg's, are Wednesday, Oct. 28. · [coverage (CP24, Toronto platforms)](https://www.cp24.com/gta-elections-2026/2026/09/28/torontos-mayoral-election-is-four-weeks-away-heres-everything-you-need-to-know-if-you-havent-been-paying-attention/) · [Manitoba date](https://en.wikipedia.org/wiki/2026_Manitoba_municipal_elections)
+
+The draft stays on issues rather than endorsing a candidate; add one if you want to.
+
+**Matt · Bluesky**
+```text
+Ontario votes today, Manitoba on Wednesday. Local races get the least attention and decide some of the most: in Toronto, whether school food programs grow, whether transit fares freeze, how a city treats people living on its streets. Vote, and vote for trustees too. Then hold them to it.
+```
+
 **Watchlist:**
 - **Today, Mon. Oct. 26:** Ontario municipal and school board elections (results tonight); "Getting Bill C-34 Right" conference, Ottawa.
-- **Wed. Oct. 28:** Digital Citizen Day; MediaSmarts' 30th-anniversary Digital Media Literacy Awards, Ottawa.
+- **Wed. Oct. 28:** Manitoba municipal elections; Digital Citizen Day; MediaSmarts' 30th-anniversary Digital Media Literacy Awards, Ottawa.
 - **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
 - **C-34 committee:** watch for a committee name and witness list after second reading.
+- **About two weeks out (~Nov. 6):** B.C. final count.
 - **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
 - **Mar. 5, 2027:** AI Literacy Day.
 
