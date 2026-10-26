@@ -9,7 +9,7 @@ automatically: Matt picks, edits and posts.
 
 | Account | Audience | Job | Voice |
 |---|---|---|---|
-| **Matt, Bluesky** (@mattparreira.bsky.social, ~20K) | Policy people, educators, public-good crowd | Flagship opinion | First person, a clear take, names the gap or tension. Model: "Let's notice the gap between adoption and instruction, it's the actual policy problem, not the technology." Up to 300 characters. |
+| **Matt, Bluesky** (@mattparreira.bsky.social, ~20K) | Policy people, educators, public-good crowd | Flagship opinion: education and AI, plus Canadian politics from Matt's progressive view (see "Politics" below) | First person, a clear take, names the gap or tension. Model: "Let's notice the gap between adoption and instruction, it's the actual policy problem, not the technology." Up to 300 characters. |
 | **Matt, X** (@matthewparreira, small) | Growing | Mirror of Bluesky | Same take, tightened to fit X. Suggest one larger Canadian account to reply to when relevant. |
 | **Growthway, X** (@growthway_, ~4.4K) | School leaders, educators, boards | The organization's news desk | Neutral and useful: what happened → what it means for schools. No hot takes. Link the primary source. |
 | **Growthway, Instagram** (growthway.ca, ~2K) | Parents and teachers | Visual, practical help | Plain language. Carousels in the "Why this matters" style; reels on Tue/Fri. |
@@ -49,6 +49,30 @@ Suggested queries (adapt as stories develop): `Ontario ministry of education AI`
 Drop anything already in `covered.json` on the `social` branch unless there's real news on it. Keep 3–5 stories. On a
 quiet day, 1–2 strong stories beat 5 weak ones; it's fine to say "quiet day".
 
+## Politics (Matt · Bluesky only)
+
+Matt's Bluesky also covers general Canadian politics from his progressive view (the list under "Matt (politics)" in
+`social/positions.md`). This is a separate track from the education stories above. Growthway's accounts stay
+non-partisan and never get political drafts, and Matt · X stays on education unless Matt says otherwise.
+
+**Scan** (same window): federal, provincial and big-city elections, results, platforms and budgets; votes in Parliament
+and the legislatures; and news on the issues in positions.md (health care workforce, post-secondary, child care,
+income support, tax fairness, corporate influence and lobbying, housing, homelessness, addiction, food insecurity).
+Primary sources first: Elections Canada and the provincial election agencies, party platforms, budget documents,
+Hansard, StatCan, the PBO and provincial budget officers. Then CBC, The Canadian Press, Globe and Mail, The Narwhal, The Tyee.
+
+**Pick** (0–2 each, keep 7+, 1–2 stories a day, none on a quiet day):
+1. **Canadian**: national 1, provincial or a big city 2.
+2. **Fresh**: from the window, or a genuinely new angle 2.
+3. **A gap or tension**: who pays vs. who benefits, promise vs. costing, rhetoric vs. record 2.
+4. **Fits Matt's views**: a clear progressive take that matches positions.md 2.
+5. **Timely**: an election, a vote, a budget or a deadline this week 2.
+
+**Rules:** argue about policies and records, not people's character. Every figure and quote has to come from a source you
+opened, same as the education stories. Prefer "here's what was promised and what it costs" over slogans. When a take
+would sharply criticize a government or minister Growthway deals with (an education ministry, a big board), flag it so
+Matt can weigh it against Growthway's relationships.
+
 ## Write `brief.md`
 
 ~~~markdown
@@ -74,8 +98,21 @@ quiet day, 1–2 strong stories beat 5 weak ones; it's fine to say "quiet day".
 
 ### 2. ...
 
-**Watchlist:** dates coming up (committee hearings, board votes, survey releases, consultations closing).
+## Politics (Matt · Bluesky only)
+
+### P1. <headline in plain words> · score 8/10
+<one or two sentences: what happened> · [primary source](url) · [coverage](url)
+
+**Matt · Bluesky**
+```text
+<draft>
+```
+
+**Watchlist:** dates coming up (committee hearings, board votes, survey releases, consultations closing, elections).
 ~~~
+
+Politics stories get one Matt · Bluesky draft each (two takes, sharper and more measured, on the strongest one) and no
+Growthway or X drafts. Skip the section on a day with nothing worth 7+.
 
 Every story gets all three text drafts (Matt · Bluesky, Matt · X, Growthway · X), even one you suggest holding. Give two takes for Matt on the top pick (one sharper, one more measured) so there's a real choice. Never invent
 numbers or quotes; every figure in a draft must appear in a source you opened. Canadian spelling.
