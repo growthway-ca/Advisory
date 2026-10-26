@@ -1,0 +1,18 @@
+{
+  "slug": "student-ai-gap",
+  "caption": "Most Canadian students already use AI for schoolwork. Fewer than half of educators think students are getting enough guidance on using it responsibly.\n\nThat gap between adoption and instruction is the real policy problem, not the technology.\n\nThree things schools can do this term 👇 and if you lead a school or a parent council, this is exactly what our PD sessions and parent nights cover. Link in bio.\n\nSource: KPMG Canada survey of students and educators.",
+  "hashtags": ["#AIinEducation", "#AIliteracy", "#K12", "#CanadianEducation", "#EdTech", "#Growthway"],
+  "scenes": [
+    { "type": "hook", "kicker": "Why this matters", "text": "Students adopted AI. Schools haven't [[caught up.]]" },
+    { "type": "stat", "kicker": "Adoption", "value": 75, "suffix": "%", "label": "of Canadian students use AI for schoolwork", "source": "Source: KPMG Canada" },
+    { "type": "gap", "kicker": "Adoption vs. guidance", "title": "The real problem is the space in between.",
+      "bars": [
+        { "label": "Students using AI for schoolwork", "value": 75 },
+        { "label": "Educators who say students get enough guidance", "value": 47, "display": "<50%" }
+      ],
+      "source": "Source: KPMG Canada" },
+    { "type": "point", "lead": "It isn't the technology.", "text": "It's the [[instruction.]]" },
+    { "type": "list", "kicker": "This term", "title": "Three moves for schools", "items": ["Publish a clear AI use policy", "Teach responsible use, don't just ban it", "Bring parents into the conversation"] },
+    { "type": "outro" }
+  ]
+}

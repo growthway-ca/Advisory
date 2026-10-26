@@ -3,10 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "reel:nordic": "node reels/nordic-fix/build.mjs"
+    "reel:nordic": "node reels/nordic-fix/build.mjs",
+    "reel:growthway": "node reels/growthway/build.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/newsreader": "5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
     "playwright": "1.56.0"
