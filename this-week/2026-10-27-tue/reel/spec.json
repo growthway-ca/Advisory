@@ -1,0 +1,56 @@
+{
+  "slug": "2026-10-27-c34-chatbots",
+  "caption": "Ottawa's Safe Social Media Act (Bill C-34) would bar kids under 16 from having social media accounts. AI chatbots are covered too, but differently: they'd get new safety duties, and no age limit.\n\nUnder the bill, chatbot services would have to reduce the risk of harmful content and harmful behaviour, and be clear about when they report a crisis, like a user who may harm themselves or someone else. The government's announcement doesn't mention schools, where many teens use these tools most.\n\nIt's still a bill, now at second reading in the House of Commons. A few things you can do at home today 👇 and if your school or parent council wants a plain-language AI night, that's what we do. Link in bio.\n\nSource: Canadian Heritage, Government of Canada introduces legislation to make social media services and AI chatbots safer for children (June 10, 2026).",
+  "hashtags": [
+    "#AIinEducation",
+    "#AIliteracy",
+    "#OnlineSafety",
+    "#BillC34",
+    "#Parenting",
+    "#CanadianEducation",
+    "#Growthway"
+  ],
+  "scenes": [
+    {
+      "type": "hook",
+      "kicker": "Why this matters",
+      "text": "Social media at 16. AI chatbots? [[No age limit.]]"
+    },
+    {
+      "type": "stat",
+      "kicker": "Bill C-34",
+      "value": 16,
+      "prefix": "Under ",
+      "label": "would be barred from having social media accounts",
+      "source": "Source: Canadian Heritage, Bill C-34"
+    },
+    {
+      "type": "list",
+      "kicker": "AI chatbots would have to",
+      "title": "New duties, no age gate",
+      "items": [
+        "Reduce harmful content",
+        "Reduce harmful behaviour",
+        "Disclose crisis reporting"
+      ]
+    },
+    {
+      "type": "point",
+      "lead": "What the announcement leaves out:",
+      "text": "Any mention of [[schools.]]"
+    },
+    {
+      "type": "list",
+      "kicker": "Parents, today",
+      "title": "Three small moves",
+      "items": [
+        "Ask which AI they use",
+        "Try one together",
+        "Agree what not to share"
+      ]
+    },
+    {
+      "type": "outro"
+    }
+  ]
+}
