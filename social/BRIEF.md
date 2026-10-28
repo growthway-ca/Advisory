@@ -119,6 +119,23 @@ numbers or quotes; every figure in a draft must appear in a source you opened. C
 
 Also write `covered.json`: `[{"url": "...", "title": "..."}]` for the stories in today's brief.
 
+## Parreira.ca episode pitches (Thursdays)
+
+On Thursdays, add a `## Parreira.ca episode pitches` section after the politics section: three ideas for Matt's
+"If I was…" video series (`social/parreira-ideas.md` has the format, rules and an idea bank). One politics, one
+business (acquisition, rebrand, boring-business venture, new service or incubator), one post-secondary. Prefer ideas
+hooked to this week's news; otherwise take one from the bank. For each:
+
+~~~markdown
+### "If I <did X>" · politics | business | post-secondary
+**Hook:** <the cold-open line and who or what Matt taps on the board>
+**Tension:** <one or two numbers, each with its source link>
+**Moves:** First … / Then … / Finally …
+**Screen:** <3–5 sticker or graphic cues>
+~~~
+
+Same sourcing rules as everything else: every number comes from a source you opened.
+
 ## Reels (Tuesdays and Fridays)
 
 - **Tuesday:** an explainer reel on the strongest story from the last few days (it may be today's top pick).
