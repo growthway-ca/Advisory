@@ -10,3 +10,7 @@ TV above him. Bracketed tags like `[CFIB, Oct. 2026]` are the small source label
 - [If I was B.C.'s new premier](2026-10-28-if-i-was-bcs-new-premier.md) · politics
 
 Before filming, re-check any number older than a month; the sources are listed at the bottom of each script.
+
+## Renders
+
+- [If I bought a 30-year-old HVAC company](../renders/2026-10-28-if-i-bought-an-hvac-company/reel.mp4): graphics draft with a placeholder where Matt goes

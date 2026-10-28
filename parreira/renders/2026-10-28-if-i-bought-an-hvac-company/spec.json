@@ -1,0 +1,108 @@
+{
+  "slug": "2026-10-28-if-i-bought-an-hvac-company",
+  "script": "parreira/scripts/2026-10-28-if-i-bought-an-hvac-company.md on the social branch",
+  "cold": {
+    "until": 2.4,
+    "pill": "If I bought…",
+    "cards": [
+      { "icon": "van", "label": "HVAC", "x": 29, "y": 30, "rot": -4 },
+      { "icon": "laundromat", "label": "Laundromat", "x": 72, "y": 29, "rot": 3 },
+      { "icon": "printer", "label": "Print shop", "x": 28, "y": 54, "rot": 2 },
+      { "icon": "drivingSchool", "label": "Driving school", "x": 71, "y": 55, "rot": -3 }
+    ],
+    "tap": 0,
+    "tapAt": 0.9,
+    "superAt": 1.3,
+    "super": "HVAC COMPANY"
+  },
+  "zooms": [
+    { "from": 34, "to": 36 },
+    { "from": 76, "to": 79 }
+  ],
+  "beats": [
+    { "from": 2.4, "to": 8, "vo": "Despite being / one of the most / boring businesses / in Canada…",
+      "elements": [
+        { "type": "sticker", "icon": "furnace", "x": 50, "y": 50, "w": 20, "t": 2.6, "out": 14 },
+        { "type": "tape", "text": "Boring", "color": "green", "x": 50, "y": 22, "rot": -4, "size": 44, "t": 5.6, "out": 8.6, "exit": "peel" }
+      ] },
+    { "from": 8, "to": 14, "vo": "…it might be / one of the best / to buy / right now.",
+      "elements": [
+        { "type": "sticker", "icon": "forSale", "x": 76, "y": 52, "w": 22, "rot": 6, "t": 9.2 },
+        { "type": "tape", "text": "Good bones", "color": "yellow", "x": 24, "y": 74, "rot": -3, "t": 11.6 }
+      ] },
+    { "from": 14, "to": 22, "vo": "63 per cent / of small business owners / plan to leave / in the next 10 years. / Only 6 per cent / have a formal / succession plan.",
+      "elements": [
+        { "type": "counter", "value": 63, "suffix": "%", "label": "plan to exit within 10 years", "x": 33, "y": 46, "t": 14.3 },
+        { "type": "counter", "value": 6, "suffix": "%", "label": "have a formal succession plan", "size": 96, "x": 75, "y": 50, "t": 18.4 },
+        { "type": "source", "text": "CFIB, Oct. 2026", "x": 85, "y": 90, "t": 14.8 }
+      ] },
+    { "from": 22, "to": 28, "vo": "And the / biggest obstacle? / Finding a buyer.",
+      "elements": [
+        { "type": "sticker", "icon": "chair", "x": 34, "y": 50, "w": 19, "t": 22.3 },
+        { "type": "tape", "text": "47%: can't find a buyer", "color": "red", "x": 68, "y": 44, "rot": 3, "size": 34, "t": 25.2 },
+        { "type": "source", "text": "CFIB, Oct. 2026", "x": 85, "y": 90, "t": 25.6 }
+      ] },
+    { "from": 28, "to": 34, "vo": "Meanwhile, / HVAC mechanics / face a strong risk / of shortage / through 2033.",
+      "elements": [
+        { "type": "sticker", "icon": "van", "x": 34, "y": 56, "w": 30, "t": 28.3 },
+        { "type": "sticker", "icon": "helpWanted", "x": 70, "y": 40, "w": 18, "rot": -6, "t": 29.6 },
+        { "type": "tape", "text": "Strong risk of shortage, 2024–2033", "color": "ink", "x": 50, "y": 86, "rot": -1, "size": 28, "t": 31.4 },
+        { "type": "source", "text": "Job Bank", "x": 90, "y": 10, "t": 31.8 }
+      ] },
+    { "from": 34, "to": 36, "vo": "Here's / what I do.",
+      "elements": [
+        { "type": "sticker", "icon": "notebook", "x": 50, "y": 50, "w": 16, "rot": -5, "t": 34.2 }
+      ] },
+    { "from": 36, "to": 46, "vo": "First: / I keep the name / and keep the team. / The owner stays on / for a year / to hand over / the relationships.",
+      "elements": [
+        { "type": "tape", "text": "First", "color": "green", "x": 12, "y": 10, "rot": -4, "t": 36.1 },
+        { "type": "sticker", "icon": "badgeOld", "x": 28, "y": 46, "w": 22, "t": 36.6, "label": "fictional example" },
+        { "type": "sticker", "icon": "handshake", "x": 70, "y": 40, "w": 26, "t": 40.2 },
+        { "type": "tape", "text": "Owner stays 12 months", "color": "yellow", "x": 70, "y": 66, "rot": 2, "size": 28, "t": 42.0 },
+        { "type": "text", "text": "87% of owners want their employees protected", "size": 26, "w": 62, "x": 68, "y": 86, "t": 43.6 },
+        { "type": "source", "text": "CFIB, Oct. 2026", "x": 20, "y": 90, "t": 43.8 }
+      ] },
+    { "from": 46, "to": 56, "vo": "Then: / I turn one-time repairs / into maintenance / memberships. / Predictable revenue, / fewer emergency calls.",
+      "elements": [
+        { "type": "tape", "text": "Then", "color": "green", "x": 11, "y": 10, "rot": -4, "t": 46.1 },
+        { "type": "sticker", "icon": "calendar", "x": 30, "y": 46, "w": 24, "t": 46.6 },
+        { "type": "sticker", "icon": "check", "x": 22, "y": 50, "w": 6, "t": 48.6 },
+        { "type": "sticker", "icon": "check", "x": 30, "y": 50, "w": 6, "t": 49.2 },
+        { "type": "sticker", "icon": "check", "x": 38, "y": 50, "w": 6, "t": 49.8 },
+        { "type": "sticker", "icon": "check", "x": 22, "y": 61, "w": 6, "t": 50.4 },
+        { "type": "bar", "label": "Recurring revenue", "x": 72, "y": 50, "w": 44, "t": 51.0, "fill": 3.6 }
+      ] },
+    { "from": 56, "to": 66, "vo": "Then: / I fix the labour problem / before it fixes me. / Paid apprenticeships / with the local college.",
+      "elements": [
+        { "type": "tape", "text": "Then", "color": "green", "x": 11, "y": 10, "rot": -4, "t": 56.1 },
+        { "type": "sticker", "icon": "veteran", "x": 20, "y": 48, "w": 15, "t": 56.6, "label": "the veteran" },
+        { "type": "sticker", "icon": "apprentice", "x": 42, "y": 50, "w": 15, "t": 60.6 },
+        { "type": "sticker", "icon": "apprentice2", "x": 56, "y": 50, "w": 15, "t": 61.0 },
+        { "type": "sticker", "icon": "apprentice3", "x": 70, "y": 50, "w": 15, "t": 61.4 },
+        { "type": "sticker", "icon": "gradCap", "x": 87, "y": 40, "w": 14, "rot": 8, "t": 62.4, "label": "local college" },
+        { "type": "tape", "text": "1 in 4 techs is 50+", "color": "red", "x": 30, "y": 82, "rot": -2, "size": 30, "t": 58.4 },
+        { "type": "source", "text": "Job Bank", "x": 88, "y": 90, "t": 58.8 }
+      ] },
+    { "from": 66, "to": 76, "vo": "Finally: / a brand refresh. / New van wraps, / online booking, / a real review strategy. / Same trusted company, / built for the / next thirty years.",
+      "elements": [
+        { "type": "tape", "text": "Finally", "color": "green", "x": 13, "y": 10, "rot": -4, "t": 66.1 },
+        { "type": "sticker", "icon": "vanOld", "x": 22, "y": 46, "w": 26, "t": 66.6, "label": "before" },
+        { "type": "sticker", "icon": "arrow", "x": 47, "y": 44, "w": 14, "t": 68.2 },
+        { "type": "sticker", "icon": "vanNew", "x": 73, "y": 44, "w": 30, "t": 68.8, "label": "concept" },
+        { "type": "sticker", "icon": "phone", "x": 40, "y": 80, "w": 8, "rot": -8, "t": 70.4 },
+        { "type": "sticker", "icon": "star", "x": 56, "y": 82, "w": 6, "t": 71.6 },
+        { "type": "sticker", "icon": "star", "x": 64, "y": 82, "w": 6, "t": 71.8 },
+        { "type": "sticker", "icon": "star", "x": 72, "y": 82, "w": 6, "t": 72.0 },
+        { "type": "sticker", "icon": "star", "x": 80, "y": 82, "w": 6, "t": 72.2 },
+        { "type": "sticker", "icon": "star", "x": 88, "y": 82, "w": 6, "t": 72.4 }
+      ] },
+    { "from": 76, "to": 82, "vo": "Boring business, / good bones, / new owner. / Which business / should I buy next?",
+      "elements": [
+        { "type": "sticker", "icon": "laundromat", "x": 20, "y": 44, "w": 14, "rot": -4, "t": 78.4 },
+        { "type": "sticker", "icon": "printer", "x": 40, "y": 44, "w": 14, "rot": 3, "t": 78.7 },
+        { "type": "sticker", "icon": "drivingSchool", "x": 60, "y": 44, "w": 15, "rot": -2, "t": 79.0 },
+        { "type": "sticker", "icon": "chair", "x": 80, "y": 44, "w": 11, "rot": 4, "t": 79.3 },
+        { "type": "tape", "text": "Comment the next one", "color": "yellow", "x": 50, "y": 82, "rot": -2, "size": 38, "t": 79.8 }
+      ] }
+  ]
+}
