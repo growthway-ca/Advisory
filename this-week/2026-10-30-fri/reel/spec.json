@@ -1,0 +1,13 @@
+{
+  "slug": "2026-10-30-this-week",
+  "caption": "This week in AI & schools 👇\n\n1. Lévis, Que.: about ten high school students were suspended for AI-altered images of school staff.\n2. Alberta: a proposed law (Bill 33) would cover AI-generated and digitally altered intimate images, with fines up to $10,000.\n3. Microsoft: binding AI protections for students take effect Nov. 1, but only in US schools.\n\nThe rules are catching up. The teaching has to come first. Three things to talk about with your teen this weekend, and if your school wants a plain-language AI night for parents or staff, that's what we do. Link in bio.\n\nSources: Radio-Canada; Government of Alberta (Bill 33, Oct. 27, 2026); Microsoft standards as reported by Yahoo News (Sept. 15, 2026).",
+  "hashtags": ["#AIinEducation", "#AIliteracy", "#Deepfakes", "#Parenting", "#K12", "#CanadianEducation", "#Growthway"],
+  "scenes": [
+    { "type": "hook", "kicker": "Friday roundup", "text": "This week in [[AI & schools.]]" },
+    { "type": "list", "kicker": "What happened", "title": "Three stories", "items": ["Lévis: AI fakes of teachers", "Alberta: a deepfake law", "Microsoft: US-only AI rules"] },
+    { "type": "stat", "kicker": "Alberta, Bill 33", "value": 10, "prefix": "$", "suffix": "K", "label": "max fine proposed for sharing AI-generated intimate images", "source": "Source: Government of Alberta" },
+    { "type": "point", "lead": "The rules are catching up.", "text": "The teaching has to [[come first.]]" },
+    { "type": "list", "kicker": "This weekend", "title": "Talk to your teen", "items": ["Fakes cause real harm", "Ask before using a face", "Seen one? Tell an adult"] },
+    { "type": "outro" }
+  ]
+}
