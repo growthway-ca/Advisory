@@ -1,7 +1,7 @@
 # Pilot: "If I ran a Nordic spa"
 
 Parreira Advisory's first on-camera reel, in the format of the reference reels: Matt on camera over full-bleed
-photos of an invented brand, word-by-word captions, a serif hook, and a comment call to action at the end.
+photos of an invented brand, word-by-word captions, a serif hook, and a follow call to action at the end.
 It retells The Nordic Fix with an invented spa, **Lumi Bath House**, so no real business is shown or named.
 
 Target length: about 45 seconds.
@@ -35,9 +35,9 @@ has room to cut.
 > And for first-timers, / it guides you around the circuit.
 >
 > **[CTA, full frame]**
-> The fix was already on every wrist. / Comment "FIX" / and I'll send you the playbook.
+> The fix was already on every wrist. / Follow for the next fix.
 
-About 130 words, which comes to roughly 45–50 seconds at a natural pace.
+About 125 words, which comes to roughly 45–50 seconds at a natural pace.
 
 ## Shot list (I make these; you only record yourself)
 
@@ -54,7 +54,7 @@ About 130 words, which comes to roughly 45–50 seconds at a natural pace.
 | 9 | "Tap in at your bay…" | Wrist tapping a small wooden post beside a stone bay; soft glow | Bottom corner |
 | 10 | "Tap your table…" | Bistro table with a "lumi" tap disc; a server arriving with a bowl | Bottom corner |
 | 11 | "…guides you around the circuit." | First-timer in a Lumi robe, a small glowing map on the bracelet, pools behind | Bottom corner |
-| 12 | "Comment 'FIX'…" | Folded Lumi towel and robe on a bench; "Comment FIX" on screen | Full frame |
+| 12 | "Follow for the next fix." | Folded Lumi towel and robe on a bench; "Follow for the next fix" on screen | Full frame |
 
 ## Recording it
 
@@ -78,13 +78,12 @@ About 130 words, which comes to roughly 45–50 seconds at a natural pace.
 > So I redesigned one. Meet Lumi: a free-bay board outside the stone room, a gentle buzz when your time's up,
 > tap-the-table lunch, and a guided circuit for first-timers. Same bracelet, doing real work.
 >
-> Comment FIX and I'll send you the playbook.
+> Follow for the next fix.
 >
 > #businessideas #customerexperience #smallbusiness #nordicspa #simcoecounty
 
 ## Before it goes live
 
-- **"Comment FIX":** this needs an auto-reply (ManyChat or similar) on the Parreira Advisory Instagram, plus the
-  playbook itself: a short PDF on spotting the fix that's already inside a business. I'll write the PDF. Until the
-  auto-reply is set up, end with "Follow for the next fix" instead.
+- The ending is "Follow for the next fix" for now. To switch to "Comment FIX and I'll send you the playbook" later,
+  set up an auto-reply (ManyChat or similar) on the Parreira Advisory Instagram, and I'll write the playbook PDF.
 - Lumi is invented. The caption and video never name or show the real spa.
