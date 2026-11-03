@@ -1,0 +1,12 @@
+{
+  "slug": "2026-11-03-us-got-it",
+  "caption": "On Nov. 1, Microsoft's new student AI standards took effect across its US school contracts. They're legally binding, with third-party audits, and they bar AI companions or features \"designed to foster emotional attachment or dependency,\" ban training AI on student or educator data (with a narrow exception for student safety), and stop that data being sold or used for ads.\n\nThey cover US schools. Canadian schools use the same tools, and our boards can ask for the same terms in their own contracts. Three questions every school leader can ask a vendor this week 👇 and if your board wants help writing AI and privacy terms, that's what we do. Link in bio.\n\nSource: Euronews via Yahoo News, \"Microsoft introduces AI guardrails for US schools amid growing backlash\" (Sept. 15, 2026).",
+  "hashtags": ["#AIinEducation", "#StudentPrivacy", "#EdTech", "#K12", "#SchoolLeaders", "#CanadianEducation", "#Growthway"],
+  "scenes": [
+    { "type": "hook", "kicker": "Why this matters", "text": "US students got AI protections Sunday. [[Canada didn't.]]" },
+    { "type": "list", "kicker": "Microsoft, US schools", "title": "Now in the contract", "items": ["No AI companions", "No training on student data", "No ads, no data sales", "Third-party audits"] },
+    { "type": "point", "lead": "Canadian schools use the same tools.", "text": "Boards can ask for [[the same terms.]]" },
+    { "type": "list", "kicker": "School leaders", "title": "Ask your vendor", "items": ["Do you train on our data?", "Any companion features?", "Who audits you?"] },
+    { "type": "outro" }
+  ]
+}
