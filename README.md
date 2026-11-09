@@ -4,310 +4,69 @@ A new brief every weekday by 6:30am ET, with a branded reel on Tuesdays and Frid
 Pick what you like, edit, post. Nothing here is posted automatically.
 This week's briefs stay here until Monday, then move to "Last week". After that they're deleted.
 
-## This week (from 2026-11-02)
+## This week (from 2026-11-09)
 
 ---
 
-## Fri, Nov 6
+## Mon, Nov 9
 
-🎬 **Reel:** [reel.mp4](this-week/2026-11-06-fri/reel/reel.mp4) · [folder](this-week/2026-11-06-fri/reel)
+_Weekend scan (72 hours): budget reactions fill in what Friday's brief couldn't verify. One education story, one politics story._
 
-<img src="this-week/2026-11-06-fri/reel/cover.png" width="200">
+**Top pick:** The university teachers' association (CAUT) says Budget 2026 has "no new measures for students or academic staff," and that without new funding the maximum Canada Student Grant "will revert to $3,000 next year" from $4,200. The budget's AI for All piece does give post-secondary students access to "trusted AI agents."
 
-```text
-This week in AI & schools 👇
+### 1. Budget 2026 gives students AI agents, but grants are set to drop · score 8/10
+In a Nov. 6 release, CAUT says the maximum student grant "has not grown past $4,200, a temporary measure first promised in 2019. Without new funding, that amount will revert to $3,000 next year," with undergraduate tuition averaging $9,000 a year. It counts "at least 15,000 post-secondary jobs" lost and "over 600 programs" cut since December 2025. What the budget does include, per CAUT: longer EI benefits for apprentices (14 to 18 weeks), and under the AI for All strategy, access to "trusted AI agents" for students at universities, colleges and CEGEPs, plus 10,000 co-funded work placements. · [primary source (CAUT)](https://www.caut.ca/news/federal-budget-2026-silent-on-student-affordability-and-public-funding-shortfall-in-post-secondary-education/) · [budget key measures](https://www.canada.ca/en/department-finance/news/2026/11/budget-2026-key-measures.html)
+**Why it matters:** Students get AI tools but not more help with costs. For high schools, the takeaway is that AI agents are now federal policy for post-secondary students, which raises the stakes for teaching AI use well before they get there.
 
-1. Google: Search, Gemini and Gemini in Classroom will be off for K-12 student accounts until schools turn them on, and Google says that to keep its search, AI-boosted search will soon be the only option.
-2. Microsoft: binding student AI protections took effect Nov. 1, for US school contracts only.
-3. Budget 2026: the key measures don't list anything new for AI literacy in schools.
-
-The choice is coming to every school board. Three questions parents can ask their school, and if your board wants help writing its AI policy, that's what we do. Link in bio.
-
-Sources: Google (Nov. 3, 2026); CBC (Nov. 5, 2026); Euronews via Yahoo (Sept. 15, 2026); Department of Finance, Budget 2026 key measures (Nov. 5, 2026).
-
-#AIinEducation #AIliteracy #EdTech #Parenting #K12 #CanadianEducation #Growthway
-```
-
-_Friday: the budget landed yesterday. Two education stories, one politics story, and the weekly reel._
-
-**Top pick:** Canadian experts weigh in on Google's "AI search or no search" for schools. McGill's Adam Dubé: "I don't think you can understate how big of a thing it would be to suddenly have Google search just not be available." Google and Microsoft dominate Canadian classrooms, so this is a decision every board here will face.
-
-### 1. Canadian researchers on Google's AI-or-no-Search choice for schools · score 9/10
-CBC (Nov. 5) reports that to keep using Google Search inside its school tools, "an AI-boosted version will soon be the only option." Google's Chris Phillips told Chalkbeat: "If a school is not comfortable with that and simply wants AI off, then they have the choice to not have search on at all." U of T's Beyhan Farhadi says Google and Microsoft are the dominant tech players in Canadian schools, and boards are often "beholden" to them "because they have already invested so much money into the technology." Former Ottawa Catholic director of education Tom D'Amico: "Students are going to go for the easy route. We need our teachers to teach them why that's not the right path." · [coverage (CBC via Yahoo)](https://ca.news.yahoo.com/google-offers-schools-ai-boosted-181653667.html)
-**Why it matters:** Boards can't wait for Google's Canadian timeline. Decide now what students should use, and how teachers will teach AI-assisted search.
+⚠️ CAUT is an advocacy group; its figures are its own reading of the budget. Confirm the grant reverting to $3,000 in the budget document before stating it without attribution.
 
 **Matt · Bluesky** (sharper)
 ```text
-Google's message to schools: take our AI, or your students lose Search. Canadian boards are "beholden" to these platforms because they've already paid for them, as one U of T researcher put it. This is what happens when we outsource the classroom to two companies.
+Budget 2026 gives post-secondary students "trusted AI agents." It doesn't keep their grants from falling: CAUT says the max Canada Student Grant drops from $4,200 to $3,000 next year without new money. An AI agent doesn't pay tuition.
 ```
 **Matt · Bluesky** (more measured)
 ```text
-If AI-boosted search becomes the only Google search in schools, the job shifts to teachers: showing students when an AI answer helps and when it skips the thinking. That needs training and time, and Canadian boards should be planning it now.
+Post-secondary in Budget 2026, per CAUT: AI agents for students, longer EI for apprentices, 10,000 work placements, and no new student aid, with the max grant set to fall to $3,000. Students are being prepared for an AI economy they can't afford to study for.
 ```
 **Matt · X**
 ```text
-Google to schools: take our AI or lose Search. Boards are "beholden" because they've already paid for the platform. That's what outsourcing the classroom to two companies looks like.
+Budget 2026: post-secondary students get "trusted AI agents." CAUT says the max student grant falls from $4,200 to $3,000 next year. An AI agent doesn't pay tuition.
 ```
 **Growthway · X**
 ```text
-Google says AI-boosted search will soon be the only Google search option in its school tools, or schools can turn Search off. Canadian experts call it a big deal. For boards: plan your AI policy and teacher support now. https://ca.news.yahoo.com/google-offers-schools-ai-boosted-181653667.html
-```
-
-### 2. Budget 2026 is quiet on schools, students and AI literacy · score 7/10
-The budget's key measures list includes $44.7 billion over 11 years for housing and a path to end homelessness, more than $18 billion over six years for Indigenous education and skills training, health and other supports, and a mention of the national AI strategy (no dollar figure). The key measures don't mention AI literacy, schools, Canada Student Grants or child care. · [primary source (key measures)](https://www.canada.ca/en/department-finance/news/2026/11/budget-2026-key-measures.html)
-**Why it matters:** For schools and student aid, the news is what's missing. Check the full budget document before saying a program wasn't funded.
-
-**Matt · Bluesky**
-```text
-Budget 2026's key measures: a national AI strategy, no dollar figure, and nothing on AI literacy in schools, student grants or child care. We keep saying AI is the future of work. The classroom is where that future starts, and it wasn't on the list.
-```
-**Matt · X**
-```text
-Budget 2026's key measures: nothing on AI literacy in schools, student grants or child care. If AI is the future of work, the classroom is where it starts.
-```
-**Growthway · X**
-```text
-Budget 2026's key measures include $44.7B over 11 years for housing and homelessness and $18B+ over six years for Indigenous education, skills and supports. No new K-12 AI literacy measure is listed. https://www.canada.ca/en/department-finance/news/2026/11/budget-2026-key-measures.html
+Budget 2026, per CAUT: AI agents for post-secondary students and 10,000 co-funded work placements under AI for All; no new student aid, with the max Canada Student Grant set to revert to $3,000. For high schools: AI readiness starts before post-secondary. https://www.caut.ca/news/federal-budget-2026-silent-on-student-affordability-and-public-funding-shortfall-in-post-secondary-education/
 ```
 
 ## Politics (Matt · Bluesky only)
 
-### P1. Budget 2026: a path to end homelessness, and the corporate mega-deduction stays · score 10/10
-Finance says the budget puts Canada "on a path to end homelessness in 10 years," with $44.7 billion over 11 years for that, non-market housing and the housing market. The Productivity Mega Deduction goes ahead, lowering the marginal effective tax rate on new business investment from 13% to 6.4%. Income support is a one-time 50% increase to the Canada Groceries and Essentials Benefit (up to $339 for a single person) and a new Build Canada Workers Benefit the government says lifts an estimated 240,000 people out of poverty. The government says it stays on track to balance operating spending by 2027-28. · [primary source (key measures)](https://www.canada.ca/en/department-finance/news/2026/11/budget-2026-key-measures.html) · [release](https://www.canada.ca/en/department-finance/news/2026/11/government-of-canada-releases-budget-2026-masters-of-our-destiny.html)
+### P1. Budget 2026 and child care: no new money, per CUPE · score 9/10
+CUPE (Nov. 6) says Budget 2026 "recycles" the $5.4-billion child care announcement made earlier this year, "delivers no new funding while allowing the child care infrastructure fund to expire," and that "without a long-term plan to recruit more workers and build new facilities, the program risks falling apart." CUPE also says the Productivity Mega Deduction will cost $36 billion over five years, more than double the annual increase in health care spending, and that the budget "sticks to the plan to cut health care funding by $1.8 billion annually." · [primary source (CUPE)](https://cupe.ca/news/budget-2026-plenty-big-investors-little-workers) · [budget key measures](https://www.canada.ca/en/department-finance/news/2026/11/budget-2026-key-measures.html)
+
+⚠️ CUPE is a union and these are its characterizations; the federal key measures list doesn't mention child care at all, which is consistent with "no new funding." Attribute the figures to CUPE.
 
 **Matt · Bluesky** (sharper)
 ```text
-Budget 2026: $44.7B to put Canada on a path to end homelessness. Good, and overdue. But the corporate mega-deduction stays, while people in poverty get a one-time grocery top-up of up to $339. A permanent tax break for business, a one-time cheque for everyone else.
+Budget 2026, child care: no new money and the infrastructure fund expires (CUPE). The corporate mega-deduction: $36B over five years. We found billions for the write-off and nothing new for the daycare spaces families are still waiting for.
 ```
 **Matt · Bluesky** (more measured)
 ```text
-Credit where due: a 10-year path to end homelessness, with $44.7B behind it, and a workers' benefit Ottawa says lifts 240,000 people out of poverty. Now the hard part: housing, treatment and food actually delivered, and a basic income as the next step.
+$10-a-day child care only works if there are spaces and staff. CUPE says Budget 2026 adds no new child care money and lets the infrastructure fund expire. A program that's half built doesn't stay standing on its own. Free, universal child care needs a build plan.
 ```
 
 **Watchlist:**
-- **Full budget document:** check child care, student aid and AI-literacy lines before posting anything about what wasn't funded.
-- **B.C.:** final count; watch for cabinet and an education minister.
-- **Google K-12 defaults:** watch for Canadian timing.
-- **Quebec:** religious-symbols bill.
-- **Nov. 15 to ~22:** new Ontario trustee term.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
-
----
-
-## Thu, Nov 5
-
-_Budget day: Champagne tables it this afternoon, after this brief, so the politics section is a pre-budget take and tomorrow's brief will have the real numbers. One education story (a follow-up with real news), and the Thursday Parreira.ca pitches._
-
-**Top pick:** For Matt's Bluesky, budget day. The CCPA says the "productivity mega-deduction" is a corporate tax break worth $36 billion over five years, over $7 billion a year, with 40% of the benefit going to oil and gas and mining. Its list of what $7 billion a year could buy instead starts with a basic income for working-age Canadians in poverty ($9 billion). That's Matt's position, with a price tag.
-
-### 1. Google's "no AI, no Search" plan for schools draws backlash; Google says schools can choose · score 8/10
-After Google announced that Gemini, Gemini Notebook, Gemini in Classroom and Search will be off for K-12 student accounts until admins turn them on, its education VP Chris Phillips told The New York Times that "Search and AI are deeply integrated" and students at schools that don't opt in to AI "will not have access to search." Sen. Bernie Sanders called it "extortion"; former FTC chair Lina Khan called it "the danger of allowing an unregulated monopolist to control an essential service." Google then posted that "today's announcements give schools more choice, not less" and, per TechCrunch, that schools can turn on Gemini, Gemini Notebook and Search individually. TechCrunch notes the two statements aren't reconciled. · [coverage (TechCrunch)](https://techcrunch.com/2026/11/04/google-faces-backlash-for-plan-that-would-turn-off-search-for-schools-that-restrict-ai/) · [primary source (Google)](https://blog.google/products-and-platforms/products/education/ai-learning-era-updates-2026/)
-**Why it matters:** Canadian boards on Google Workspace still don't know whether they can offer Search without AI, or when this reaches Canada. Get the answer in writing before changing any policy.
-
-**Matt · Bluesky**
-```text
-Google says schools get "more choice, not less." Its own education VP says schools that don't opt in to AI lose Search. Both can't be true. Canadian boards: get Google's answer in writing before the switch, and decide your AI policy yourselves.
-```
-**Matt · X**
-```text
-Google says schools get "more choice, not less." Its own education VP says no AI, no Search. Both can't be true. Canadian boards: get the answer in writing before the switch.
-```
-**Growthway · X**
-```text
-Google says K-12 schools can turn on Gemini and Search individually; its education VP told the NYT schools that don't opt in to AI lose Search. For Canadian boards: ask Google in writing which applies here, and when. https://techcrunch.com/2026/11/04/google-faces-backlash-for-plan-that-would-turn-off-search-for-schools-that-restrict-ai/
-```
-
-## Politics (Matt · Bluesky only)
-
-### P1. Budget day: what $7 billion a year could buy instead · score 10/10
-CCPA economist David Macdonald writes (Nov. 4) that the productivity mega-deduction, announced in September, is "effectively a massive corporate tax break worth $36 billion over five years—over $7 billion a year," and that 40% of its benefits go to oil and gas and mining. Citing the Alternative Federal Budget, he lists what $7 billion a year could fund instead: a basic income for working-age Canadians in poverty ($9 billion), a Canada Child Benefit boost lifting 330,000 children out of poverty ($6.3 billion), primary care ($5.2 billion), the Canada Student Grant ($5.2 billion), and properly funding $10-a-day child care expansion ($4 billion). The PBO projects a $63.3-billion deficit for 2026-27 going in. · [primary source (CCPA)](https://www.policyalternatives.ca/news-research/canadas-federal-budget-is-about-to-give-billions-of-dollars-to-fossil-fuel-companies/) · [PBO outlook](https://www.pbo-dpb.ca/en/publications/RP-2627-011-S--economic-fiscal-outlook-october-2026--perspectives-economiques-financieres-octobre-2026)
-
-⚠️ The budget is tabled this afternoon and may change the deduction or these costs. Post before it lands as a "what I'll be watching for" take, or wait and check tomorrow's brief.
-
-**Matt · Bluesky** (sharper)
-```text
-Before today's budget: the "productivity mega-deduction" is a $7B-a-year corporate tax break, 40% to oil, gas and mining (CCPA). For $9B we could fund a basic income for working-age Canadians in poverty. A budget is a choice about who gets the break.
-```
-**Matt · Bluesky** (more measured)
-```text
-What I'm watching for in today's budget: does the $36B corporate mega-deduction stay as is? The CCPA estimates what the same money could do: $4B a year would properly fund $10-a-day child care, $5.2B would massively improve student grants. Those are choices too.
-```
-
-## Parreira.ca episode pitches
-
-### "If I was finance minister for one budget" · politics
-**Hook:** A board of budget envelopes labelled with sectors; Matt taps the fattest one, "Corporate tax breaks." *"Today Ottawa decides who gets $7 billion a year."*
-**Tension:** a $36B five-year mega-deduction, 40% to oil and gas and mining ([CCPA](https://www.policyalternatives.ca/news-research/canadas-federal-budget-is-about-to-give-billions-of-dollars-to-fossil-fuel-companies/)); a $63.3B deficit going in ([PBO](https://www.pbo-dpb.ca/en/publications/RP-2627-011-S--economic-fiscal-outlook-october-2026--perspectives-economiques-financieres-octobre-2026)).
-**Moves:** First, cap the mega-deduction to real productivity investments, not extraction. Then, put $4B a year into finishing $10-a-day child care. Finally, start a basic income for working-age people in poverty ($9B a year, CCPA's estimate).
-**Screen:** a $7B stack sliced into labelled envelopes; an oil-derrick sticker with "40%" tape; a daycare and a cheque sticker filling in; a receipt printing "who got the break."
-**Note:** re-check the numbers against the tabled budget before filming.
-
-### "If I launched an AI-policy-in-a-box for school boards" · business
-**Hook:** A board of school-board logos (generic) with blank policy sheets; Matt slaps a "SOLD OUT" sticker on one. *"Google just made every school board in Canada need the same document."*
-**Tension:** Google is turning Gemini and Search off for K-12 students until admins choose, and its own messages on whether Search works without AI conflict ([Google](https://blog.google/products-and-platforms/products/education/ai-learning-era-updates-2026/), [TechCrunch](https://techcrunch.com/2026/11/04/google-faces-backlash-for-plan-that-would-turn-off-search-for-schools-that-restrict-ai/)).
-**Moves:** First, a template AI-use policy, parent letter and vendor checklist each board can adapt. Then, a two-hour admin workshop to make the Workspace choices. Finally, an annual retainer to update it whenever a vendor changes the rules (they will).
-**Screen:** a "policy in a box" sticker; three docs popping out; a Google-style toggle switch flipping; a calendar with renewal checkmarks.
-**Note:** this is close to Growthway's own offer; decide whether Matt pitches it as Growthway or as a general business idea.
-
-### "If I fixed student aid" · post-secondary
-**Hook:** A board of student-loan statements; Matt crumples one. *"We keep asking students to borrow their way into the jobs we say we need."*
-**Tension:** the CCPA prices a major Canada Student Grant improvement at $5.2 billion a year, the same as primary care and less than the mega-deduction ([CCPA](https://www.policyalternatives.ca/news-research/canadas-federal-budget-is-about-to-give-billions-of-dollars-to-fossil-fuel-companies/)).
-**Moves:** First, grants, not loans, for students from low-income families. Then, free tuition in shortage programs (nursing, medicine, trades, ECE) in exchange for a few years of service. Finally, fund it from the corporate break, not from international fees.
-**Screen:** a loan statement turning into a grant cheque; nurse, doctor, electrician and ECE cut-outs; a "$5.2B" tag next to a "$7B" tag.
-
-**Watchlist:**
-- **Today, Thu. Nov. 5:** federal budget (afternoon).
-- **~Nov. 6:** B.C. final count; watch for B.C. cabinet and an education minister.
-- **Google K-12 defaults:** watch for Canadian timing and a clear answer on Search without AI.
-- **Quebec:** watch for the religious-symbols bill.
-- **Nov. 15 to ~22:** new Ontario trustee term.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
-
----
-
-## Wed, Nov 4
-
-_One big story today, from Google; nothing new I could verify from the provinces. Budget is tomorrow (see watchlist)._
-
-**Top pick:** Google says Gemini, Gemini Notebook, Gemini in Classroom and Google Search will be "entirely off for K-12 student accounts until school administrators explicitly turn them on." Reports say a school that keeps AI off would lose Search for students too. Every Canadian board on Google Workspace now has a decision to make, and it may not be a clean "AI or no AI" choice.
-
-### 1. Google will switch off Search and Gemini for K-12 students until schools opt in · score 9/10
-In a Nov. 3 post, Google's education VP Chris Phillips wrote that access to Gemini, Gemini Notebook, Gemini in Classroom and Google Search "will be entirely off for K-12 student accounts until school administrators explicitly turn them on," with specifics for schools "in the coming months." Guided Learning is now globally available in Google Classroom, and a Search pilot starts in select US schools this month. Google's post doesn't say whether Search can be turned on without its AI features, or whether the change applies outside the US. Secondary reports say Phillips told The New York Times that at a school that has banned AI, students "will not have access to search," and that Google later said on X that schools can turn the three services on individually. · [primary source (Google)](https://blog.google/products-and-platforms/products/education/ai-learning-era-updates-2026/) · [coverage (PPC Land)](https://ppc.land/google-will-cut-search-for-k-12-students-in-schools-that-keep-ai-off/)
-**Why it matters:** Boards that limited AI may be about to lose student Search, or have to accept AI Mode and AI Overviews to keep it. Admins should ask Google now what the settings will be in Canada and when.
-
-⚠️ **Check before posting:** the "no AI means no Search" line is reported, not in Google's own post, and Google's later clarification is only known second-hand. Keep that framing as "reports say."
-
-**Matt · Bluesky** (sharper)
-```text
-Google is turning Search and Gemini off for K-12 students until schools opt in. Reports say schools that keep AI off lose Search too. That isn't a choice about AI. It's a choice about whether kids can look things up. Boards need a policy before Google writes one for them.
-```
-**Matt · Bluesky** (more measured)
-```text
-Google's new K-12 defaults put the decision where it belongs, with schools: Search and Gemini stay off until admins turn them on. But the details matter. Can you have Search without AI Overviews? Does this apply in Canada? Boards should be asking Google this week.
-```
-**Matt · X**
-```text
-Google is switching off Search and Gemini for K-12 students until schools opt in. Reports say keep AI off, lose Search. That's not an AI choice; it's a can-kids-look-things-up choice.
-```
-**Growthway · X**
-```text
-Google says Gemini, Gemini in Classroom and Search will be off for K-12 student accounts until admins turn them on; details due "in the coming months." For boards: ask Google whether Search works without AI, and when this reaches Canada. https://blog.google/products-and-platforms/products/education/ai-learning-era-updates-2026/
-```
-**Instagram** (carousel, "Why this matters"):
-1. Google is changing how students get Search and AI at school.
-2. Search and Gemini: off for K-12 students until the school turns them on.
-3. Reports say no AI could mean no Search.
-4. Parents: ask your school what it plans to turn on.
-5. Ask whether AI answers come with Search.
-6. Schools: decide your policy before the switch.
-7. Growthway: plain-language AI policy help for boards.
-
-### Lead to check (not drafted): what trustees at supervised Ontario boards can and can't do
-CTV Toronto (Nov. 3, Bryann Aguilar) reports on a leaked memo setting out newly elected trustees' responsibilities at the supervised boards. The article body wouldn't load for me, so I have no details. · [CTV](https://ctvnews.ca/toronto/politics/queens-park/article/what-elected-trustees-at-supervised-school-boards-can-and-cant-do-according-to-a-leaked-memo)
-
-**Watchlist:**
-- **Thu. Nov. 5:** federal budget. For schools and post-secondary: AI literacy funding, student aid, child care transfers, health workforce training.
-- **~Nov. 6:** B.C. final count; watch for B.C. cabinet and an education minister.
+- **Budget document:** confirm the student grant change and child care lines before posting without attribution.
 - **Google K-12 defaults:** watch for Canadian timing and Workspace admin details.
-- **Quebec:** watch for the religious-symbols bill.
-- **Nov. 15 to ~22:** new Ontario trustee term.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
-
----
-
-## Tue, Nov 3
-
-🎬 **Reel:** [reel.mp4](this-week/2026-11-03-tue/reel/reel.mp4) · [folder](this-week/2026-11-03-tue/reel)
-
-<img src="this-week/2026-11-03-tue/reel/cover.png" width="200">
-
-```text
-On Nov. 1, Microsoft's new student AI standards took effect across its US school contracts. They're legally binding, with third-party audits, and they bar AI companions or features "designed to foster emotional attachment or dependency," ban training AI on student or educator data (with a narrow exception for student safety), and stop that data being sold or used for ads.
-
-They cover US schools. Canadian schools use the same tools, and our boards can ask for the same terms in their own contracts. Three questions every school leader can ask a vendor this week 👇 and if your board wants help writing AI and privacy terms, that's what we do. Link in bio.
-
-Source: Euronews via Yahoo News, "Microsoft introduces AI guardrails for US schools amid growing backlash" (Sept. 15, 2026).
-
-#AIinEducation #StudentPrivacy #EdTech #K12 #SchoolLeaders #CanadianEducation #Growthway
-```
-
-_Quiet for AI-and-schools news. One K-12 policy story out of Quebec, and today's reel explains the Microsoft student AI rules that took effect Sunday for US schools only. Budget is Thursday (see watchlist)._
-
-**Top pick:** Quebec's new Parti Québécois government says banning conspicuous religious symbols for elementary students is "non négociable." No bill has been tabled yet, and a coalition of rights groups calls it state discrimination that undermines children's right to education.
-
-### 1. Quebec confirms plan to ban religious symbols for elementary students · score 8/10
-After the latest cabinet meeting, Education Minister Joël Arseneau confirmed the government intends to ban conspicuous religious symbols for elementary school students, calling it non-negotiable; no bill or timeline has been announced. In an Oct. 30 release, the Ligue des droits et libertés, the Canadian Civil Liberties Association and other groups called it state discrimination that would seriously undermine children's right to education and asked for the province's secularism laws (21, 94 and 9) to be withdrawn. Le Devoir reports Christian, Jewish, Muslim and Sikh community representatives oppose it. · [primary source (rights coalition release)](https://www.newswire.ca/fr/news-releases/interdiction-du-port-de-signes-religieux-par-les-eleves-des-ecoles-primaires-au-quebec-la-laicite-ne-doit-pas-servir-de-pretexte-pour-discriminer-et-bafouer-le-droit-a-l-education-des-enfants-846638022.html) · [coverage (Le Devoir)](https://www.ledevoir.com/politique/quebec/1020890/pq-accuse-attaquer-enfants-interdisant-signes-religieux-primaire)
-**Why it matters:** It would make Quebec the first province to restrict what young students wear for religious reasons. Teachers and principals would be the ones enforcing it, with children.
-
-⚠️ **Check before posting:** I read the coalition's release; I couldn't open Le Devoir or a government statement directly, and the government's wording comes via the release and other reports. There's no bill text yet, so details (private schools, enforcement) are unknown.
-⚠️ **Positions / Growthway:** This is a strong political stance for Matt, consistent with his views but not yet in positions.md. Growthway has no position on secularism laws; its draft just reports, and skipping it on the Growthway account is reasonable.
-
-**Matt · Bluesky** (sharper)
-```text
-Quebec's new government says banning religious symbols for elementary kids is "non-negotiable." For children in elementary school. A school's job is to welcome every child and teach them, not to make some of them choose between their faith and their classroom.
-```
-**Matt · Bluesky** (more measured)
-```text
-Quebec plans to ban conspicuous religious symbols for elementary students. No bill yet, but think about who enforces it: teachers and principals, with children. That's a hard thing to ask of schools that are supposed to be where every kid belongs.
-```
-**Matt · X**
-```text
-Quebec's government says banning religious symbols for elementary students is "non-negotiable." A school's job is to welcome every child, not make some choose between faith and class.
-```
-**Growthway · X**
-```text
-Quebec's education minister has confirmed plans to ban conspicuous religious symbols for elementary students. No bill has been tabled yet. Rights groups including the CCLA oppose it. What it means for schools: details on enforcement are still unknown. https://www.newswire.ca/fr/news-releases/interdiction-du-port-de-signes-religieux-par-les-eleves-des-ecoles-primaires-au-quebec-la-laicite-ne-doit-pas-servir-de-pretexte-pour-discriminer-et-bafouer-le-droit-a-l-education-des-enfants-846638022.html
-```
-
-**Watchlist:**
-- **Thu. Nov. 5:** federal budget. For schools and post-secondary: AI literacy funding, student aid, child care transfers, health workforce training.
-- **~Nov. 6:** B.C. final count; watch for B.C. cabinet and an education minister.
-- **Quebec:** watch for the religious-symbols bill and whether it covers private schools.
-- **Nov. 15 to ~22:** new Ontario trustee term.
-- **Alberta Bills 33 and 35:** debate this fall.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
-
----
-
-## Mon, Nov 2
-
-_Quiet weekend (72-hour scan): no new AI-and-schools story I could verify from a primary source, so there are no education drafts today. One strong lead is below for you to check, and Thursday's federal budget leads the politics section._
-
-**Top pick:** Thursday's federal budget (Nov. 5). The PBO projects a $63.3-billion deficit for 2026-27 and defence spending rising from $75 billion a year to $95.7 billion by 2030-31. It's a good moment for Matt to say what a budget built for people would fund.
-
-### Lead to check (not drafted): Ottawa's $13M AI course, partly AI-generated?
-Le Devoir has run a series on the federal "L'IA pour tous" (AI for All) literacy course delivered by Amii: that it was awarded a roughly $13-million contract without a tender, that parts of it appear to have been generated by AI, and that the French version was poor until Amii corrected it after the paper's questions. ISED reportedly hasn't confirmed the absence of a tender. I couldn't open any of the articles (the site blocks automated reads), so nothing here is verified and there are no drafts. If you can read them, this is a strong story for Matt and Growthway: an AI literacy course for 50,000 K-12 educators that may have been made with the shortcuts it's meant to teach about. · [Le Devoir: no-tender contract](https://www.ledevoir.com/politique/canada/1018337/ottawa-accorde-gre-gre-contrat-13-millions-formations-ia-generees-ia) · [Le Devoir: French and AI generation](https://www.ledevoir.com/politique/canada/1015616/ottawa-paie-millions-formation-ia-generee-ia-bafoue-francais) · [Le Devoir: disclosure](https://www.ledevoir.com/politique/canada/1017332/ottawa-garde-secret-usage-fait-ia-formation-ia)
-
-## Politics (Matt · Bluesky only)
-
-### P1. Budget Thursday: the PBO's numbers going in · score 9/10
-Finance Minister François-Philippe Champagne tables the federal budget on Nov. 5, the second under Prime Minister Carney. The Parliamentary Budget Officer's October outlook projects a $63.3-billion deficit in 2026-27 and $67.8 billion in 2030-31, with debt-to-GDP rising from 40.8% to 42.6% over that period; it says the government will miss its anchor of a declining deficit-to-GDP ratio. CP24, citing the PBO, reports defence spending rising from $75 billion a year to $95.7 billion by 2030-31. · [primary source (PBO, Oct. 20)](https://www.pbo-dpb.ca/en/publications/RP-2627-011-S--economic-fiscal-outlook-october-2026--perspectives-economiques-financieres-octobre-2026) · [coverage (CP24)](https://www.cp24.com/politics/2026/10/20/finance-minister-announces-date-for-new-federal-budget-to-be-tabled/)
-
-⚠️ The budget itself may change these numbers; re-check after Thursday before reusing any figure.
-
-**Matt · Bluesky** (sharper)
-```text
-Thursday's budget: defence is set to rise from $75B to $95.7B a year by 2030-31 (PBO). If we can find that kind of money for defence, we can find it for free training for nurses and doctors, child care spaces and homes. A budget is a list of who we decided matters.
-```
-**Matt · Bluesky** (more measured)
-```text
-Going into Thursday's budget, the PBO projects a $63.3B deficit and rising debt-to-GDP. Fine: deficits are choices. The question is what they buy. I'll be reading for health workforce training, child care spaces, housing and post-secondary, not just tax cuts and defence.
-```
-
-**Watchlist:**
-- **Thu. Nov. 5:** federal budget. For schools and post-secondary: AI literacy funding, student aid, child care transfers, health workforce training.
-- **~Nov. 6:** B.C. final count; watch for B.C. cabinet and an education minister.
+- **Quebec:** religious-symbols bill.
 - **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
-- **Alberta Bills 33 and 35:** debate this fall.
-- **C-34:** watch for a committee and witness list.
+- **B.C.:** watch for cabinet and an education minister.
 - **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
 
 ---
 
 ## Last week
 
-- [Fri, Oct 30](last-week/2026-10-30-fri/brief.md) · [reel](last-week/2026-10-30-fri/reel/reel.mp4)
-- [Thu, Oct 29](last-week/2026-10-29-thu/brief.md)
-- [Wed, Oct 28](last-week/2026-10-28-wed/brief.md)
-- [Tue, Oct 27](last-week/2026-10-27-tue/brief.md) · [reel](last-week/2026-10-27-tue/reel/reel.mp4)
-- [Mon, Oct 26](last-week/2026-10-26-mon/brief.md)
+- [Fri, Nov 6](last-week/2026-11-06-fri/brief.md) · [reel](last-week/2026-11-06-fri/reel/reel.mp4)
+- [Thu, Nov 5](last-week/2026-11-05-thu/brief.md)
+- [Wed, Nov 4](last-week/2026-11-04-wed/brief.md)
+- [Tue, Nov 3](last-week/2026-11-03-tue/brief.md) · [reel](last-week/2026-11-03-tue/reel/reel.mp4)
+- [Mon, Nov 2](last-week/2026-11-02-mon/brief.md)
