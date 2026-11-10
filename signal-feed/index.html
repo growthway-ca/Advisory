@@ -3,400 +3,784 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Signal Feed: Simcoe County building projects, months before tender</title>
+<title>Signal Feed | Simcoe County building projects, months before tender</title>
 <meta name="description" content="A weekly feed of commercial, industrial and multi-residential projects filed with Barrie, Orillia and Simcoe County councils, sent to building suppliers months before the tender.">
+<meta name="theme-color" content="#05070a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --green:#0d4a38;      /* highway-sign green */
-  --green-deep:#083528;
-  --board:#ffffff;      /* notice-sign board */
-  --concrete:#e8ecea;
-  --ink:#14201c;
-  --muted:#5d6b66;
-  --line:#c5cecb;
-  --flag:#ff5a1f;       /* survey flagging tape */
-  --display:"Barlow Condensed","Arial Narrow",sans-serif;
-  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --wrap:1120px;
+  --bg:#05070a;
+  --bg-2:#0b0e13;
+  --text:#f2f0eb;
+  --dim:rgba(242,240,235,.64);
+  --faint:rgba(242,240,235,.4);
+  --hair:rgba(242,240,235,.12);
+  --signal:#ff5b23;
+  --paper:#f3f3f0;
+  --ink:#0e1114;
+  --ink-dim:rgba(14,17,20,.62);
+  --ink-hair:rgba(14,17,20,.13);
+  --sans:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --wrap:1200px;
+  --pad:clamp(20px,4vw,48px);
 }
 *{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--body);font-size:17px;line-height:1.55;color:var(--ink);background:var(--concrete);-webkit-font-smoothing:antialiased}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--flag);outline-offset:3px}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
-.display{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.95;letter-spacing:.005em}
-.mono{font-family:var(--mono);font-size:13px;letter-spacing:.02em}
-.label{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+html{background:var(--bg)}
+body{font-family:var(--sans);font-weight:300;font-size:17px;line-height:1.55;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--signal);outline-offset:4px;border-radius:2px}
+.wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.tag b{font-weight:400;color:var(--signal)}
+.h{font-weight:200;letter-spacing:-.035em;line-height:1.03;text-wrap:balance}
+.h1{font-size:clamp(40px,5.3vw,78px)}
+.h2{font-size:clamp(34px,4.3vw,62px)}
+.h em{font-style:normal;color:var(--signal)}
 
-/* buttons */
-.btn{display:inline-block;font:700 16px/1 var(--body);padding:16px 22px;border:0;border-radius:4px;background:var(--flag);color:#1a0d06;text-decoration:none;cursor:pointer}
-.btn:hover{background:#ff7340}
-.btn[disabled]{opacity:.6;cursor:default}
+/* reveal on scroll (only when JS runs) */
+.js [data-r]{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js [data-r].in{opacity:1;transform:none}
 
-/* top bar */
-.top{background:var(--green);color:#fff}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:18px;padding-bottom:18px}
-.mark{font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.04em;text-decoration:none}
-.mark small{font:400 12px var(--mono);letter-spacing:.09em;opacity:.75;margin-left:10px}
-.top a.link{font-weight:600;font-size:15px;text-underline-offset:4px}
+/* button */
+.cta{display:inline-flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:17px 22px;border:1px solid rgba(242,240,235,.38);border-radius:2px;background:transparent;cursor:pointer;transition:background .25s,border-color .25s,color .25s}
+.cta i{display:inline-block;width:18px;height:1px;background:currentColor;position:relative;transition:width .25s}
+.cta i::after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}
+.cta:hover{background:var(--text);border-color:var(--text);color:var(--bg)}
+.cta:hover i{width:26px}
+.cta.solid{background:var(--signal);border-color:var(--signal);color:#160802}
+.cta.solid:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.cta[disabled]{opacity:.55;cursor:default}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .3s,backdrop-filter .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav.stuck{background:rgba(5,7,10,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hair)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.mark{display:flex;align-items:center;gap:12px;font-weight:500;letter-spacing:-.01em;font-size:17px}
+.mark svg{display:block}
+.mark span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:400;padding-left:12px;border-left:1px solid var(--hair)}
+.nav nav{display:flex;align-items:center;gap:34px}
+.nav nav a{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+.nav nav a:hover{color:var(--text)}
+.nav nav a.go{color:var(--text);padding:11px 16px;border:1px solid rgba(242,240,235,.3);border-radius:2px}
+.nav nav a.go:hover{background:var(--text);color:var(--bg)}
 
 /* hero */
-.hero{background:var(--green);color:#fff;position:relative;overflow:hidden}
-.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:end;padding-top:40px}
-.hero-copy{padding-bottom:88px}
-.hero h1{font-size:clamp(46px,6.6vw,88px);margin-bottom:22px}
-.hero h1 em{font-style:normal;color:var(--flag)}
-.hero p.lede{font-size:19px;max-width:33em;color:#dfeae6;margin-bottom:30px}
-.hero .fine{margin-top:14px;font-size:14px;color:#b9cdc6}
+.hero{position:relative;min-height:max(100svh,660px);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+#map{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,rgba(5,7,10,.9) 22%,rgba(5,7,10,0) 50%),linear-gradient(0deg,var(--bg) 0%,rgba(5,7,10,0) 26%)}
+.hero-copy{position:relative;z-index:2;padding-bottom:clamp(120px,17vh,190px);max-width:min(600px,50vw)}
+.hero-copy .tag{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+.live{width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 0 rgba(255,91,35,.6);animation:live 2.2s ease-out infinite}
+@keyframes live{to{box-shadow:0 0 0 12px rgba(255,91,35,0)}}
+.hero-copy p.lede{margin:26px 0 36px;max-width:31em;color:var(--dim);font-size:18px}
+.hero-copy small{display:block;margin-top:18px;font-size:13.5px;color:var(--faint)}
+.map-note{position:absolute;right:var(--pad);bottom:86px;z-index:2}
 
-/* the notice sign */
-.sign{position:relative;align-self:end}
-.board{position:relative;background:var(--board);color:var(--ink);border:4px solid var(--ink);border-radius:3px;box-shadow:0 18px 0 -10px rgba(0,0,0,.25)}
-.board header{background:var(--ink);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.board header b{font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.03em;line-height:1}
-.board header span{font-family:var(--mono);font-size:12px;opacity:.8;white-space:nowrap}
-.board dl{padding:6px 18px 14px}
-.board dl div{display:grid;grid-template-columns:104px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
-.board dl div:last-child{border-bottom:0}
-.board dt{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding-top:3px}
-.board dd{font-size:15.5px;line-height:1.4}
-.board dd strong{font-weight:700}
-.tape{position:absolute;top:-14px;right:-18px;transform:rotate(4deg);background:var(--flag);color:#1a0d06;font:500 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;padding:7px 12px;z-index:2}
-.posts{display:flex;justify-content:space-between;padding:0 18%;height:64px}
-.posts i{width:14px;background:#2a3833;border-left:3px solid #1a2420}
-.ground{height:14px;background:repeating-linear-gradient(-45deg,var(--green-deep) 0 8px,transparent 8px 16px);border-top:3px solid var(--green-deep)}
+/* council strip */
+.strip{position:absolute;left:0;right:0;bottom:0;z-index:2;border-top:1px solid var(--hair);display:flex;align-items:center;height:62px;background:rgba(5,7,10,.5)}
+.strip .tag{flex:none;padding:0 26px 0 var(--pad);border-right:1px solid var(--hair);height:100%;display:flex;align-items:center;background:var(--bg);position:relative;z-index:1}
+.belt{overflow:hidden;flex:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.belt ul{display:flex;gap:46px;list-style:none;padding:0 0 0 46px;width:max-content;animation:belt 60s linear infinite}
+.belt li{font-size:15px;font-weight:300;color:var(--dim);white-space:nowrap}
+@keyframes belt{to{transform:translateX(-50%)}}
 
-/* sections */
-.sec{padding:84px 0}
-.sec.alt{background:#fff}
-.sec h2{font-size:clamp(34px,4.4vw,54px);max-width:16em;margin-bottom:16px}
-.sec p.intro{max-width:40em;color:#33423d;margin-bottom:40px}
+/* pinned timeline */
+.tl{height:360vh;position:relative}
+.tl-pin{position:sticky;top:0;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.tl-head{max-width:760px;margin-bottom:clamp(40px,8vh,84px)}
+.tl-head .tag{margin-bottom:20px;display:block}
+.stagebox{position:relative;height:150px;margin-bottom:38px}
+.stage{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity .45s,transform .45s}
+.stage.on{opacity:1;transform:none}
+.stage .tag{display:block;margin-bottom:12px}
+.stage h3{font-weight:200;font-size:clamp(30px,3.6vw,50px);letter-spacing:-.03em;line-height:1.05}
+.stage p{margin-top:12px;color:var(--dim);max-width:34em}
+.track{position:relative;height:2px;background:var(--hair);margin:0 6px}
+.track .fill,.track .early{position:absolute;left:0;top:0;height:100%;width:0}
+.track .fill{background:rgba(242,240,235,.75)}
+.track .early{background:var(--signal);box-shadow:0 0 18px rgba(255,91,35,.55)}
+.track .dot{position:absolute;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:var(--bg);border:1px solid rgba(242,240,235,.35);transition:background .3s,border-color .3s,box-shadow .3s}
+.track .dot.on{background:var(--text);border-color:var(--text)}
+.track .dot.on.e{background:var(--signal);border-color:var(--signal);box-shadow:0 0 0 6px rgba(255,91,35,.14)}
+.track .head{position:absolute;top:50%;width:1px;height:26px;margin-top:-13px;background:var(--text);left:0}
+.names{position:relative;height:16px;margin:20px 6px 0}
+.names span{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);transition:color .3s;position:absolute;top:0;transform:translateX(-50%);white-space:nowrap}
+.names span:first-child{transform:none}
+.names span:last-child{transform:translateX(-100%)}
+.names span.on{color:var(--text)}
+.zone{margin-top:clamp(34px,6vh,60px);height:30px;position:relative}
+.zone p{position:absolute;inset:0;font-size:clamp(18px,1.7vw,22px);font-weight:300;opacity:0;transition:opacity .4s;display:flex;align-items:center;gap:14px}
+.zone p.on{opacity:1}
+.zone p::before{content:"";width:34px;height:1px;background:currentColor;flex:none}
+.zone .z1{color:var(--signal)}
+.zone .z2{color:var(--dim)}
 
-/* timeline */
-.stages{list-style:none;padding:0;display:grid;grid-template-columns:repeat(6,1fr);position:relative}
-.stages::before{content:"";position:absolute;left:0;right:0;top:9px;height:3px;background:var(--ink)}
-.stages li{position:relative;padding:34px 14px 0 0}
-.stages li::before{content:"";position:absolute;top:0;left:0;width:21px;height:21px;border-radius:50%;background:var(--concrete);border:3px solid var(--ink)}
-.stages li.early::before{background:var(--flag);border-color:var(--flag)}
-.stages li.first::after{content:"";position:absolute;top:0;left:0;width:21px;height:21px;border-radius:50%;border:3px solid var(--flag);animation:ping 2.4s ease-out infinite}
-.stages li.late::before{background:var(--ink)}
-.stages b{display:block;font-family:var(--display);font-size:23px;text-transform:uppercase;line-height:1.05;margin-bottom:6px}
-.stages span{display:block;font-size:14px;color:var(--muted);line-height:1.4}
-.spans{display:grid;grid-template-columns:repeat(6,1fr);margin-top:28px;gap:0}
-.spans div{padding:12px 14px;font-size:14.5px;line-height:1.4}
-.spans .you{grid-column:1/4;border-top:4px solid var(--flag);background:#fff1ea}
-.spans .gap{grid-column:4/5;border-top:4px solid var(--line);color:var(--muted)}
-.spans .them{grid-column:5/7;border-top:4px solid var(--ink);background:#dfe5e3}
-.spans b{display:block;font-weight:700}
-@keyframes ping{0%{transform:scale(1);opacity:.9}80%,100%{transform:scale(2.6);opacity:0}}
+/* iris reveal into the light section */
+.iris{height:190vh;position:relative}
+.iris-pin{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--bg)}
+.iris-light{position:absolute;inset:0;background:var(--paper);color:var(--ink);clip-path:circle(var(--r,0px) at 50% 52%);display:flex;align-items:center;justify-content:center;text-align:center;padding:0 var(--pad)}
+.iris-light .tag{color:var(--ink-dim);display:block;margin-bottom:22px}
+.iris-light .h2{max-width:14em}
+.iris-ring{position:absolute;left:50%;top:52%;width:120px;height:120px;margin:-60px 0 0 -60px;border:1px solid var(--hair);border-radius:50%;display:grid;place-items:center}
+.iris-ring span{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
 
-/* feed table */
-.feed{border:3px solid var(--ink);background:#fff;border-radius:3px}
-.feed-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 18px;background:var(--ink);color:#fff}
-.feed-head .label b{color:var(--flag);font-weight:500}
-.row{display:grid;grid-template-columns:150px 1.3fr 1fr 1.4fr;gap:18px;padding:16px 18px;border-top:1px solid var(--line);font-size:15px;line-height:1.4}
-.row:first-of-type{border-top:0}
-.row .stage{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase}
-.row .stage i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--flag);margin-right:7px}
-.row .stage.moved i{background:var(--green)}
-.row strong{display:block}
-.row small{font-size:13.5px;color:var(--muted)}
-.row .needs{color:#33423d}
-.note{margin-top:14px;font-size:14px;color:var(--muted)}
+/* light section */
+.paper{background:var(--paper);color:var(--ink);padding:0 0 clamp(90px,12vw,150px);margin-top:-1px}
+.paper .tag{color:var(--ink-dim)}
+.bento{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.card{background:#fff;border-radius:14px;border:1px solid var(--ink-hair);overflow:hidden;position:relative}
+.card.issue{grid-row:span 3}
+.issue-top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 24px;border-bottom:1px solid var(--ink-hair)}
+.issue-top .tag b{color:#c93c0d}
+.item{display:grid;grid-template-columns:132px 1fr;gap:20px;padding:20px 24px;border-bottom:1px solid var(--ink-hair)}
+.item:last-child{border-bottom:0}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:inline-flex;align-items:center;gap:7px;align-self:start;padding-top:5px;color:var(--ink-dim)}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal)}
+.chip.moved::before{background:var(--ink)}
+.item h4{font-weight:500;font-size:17px;letter-spacing:-.01em}
+.item p{font-size:14.5px;color:var(--ink-dim);margin-top:3px}
+.item .needs{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.item .needs span{font-size:12.5px;padding:3px 9px;border:1px solid var(--ink-hair);border-radius:99px;color:rgba(14,17,20,.78);font-weight:400}
+.card.feat{padding:24px 24px 26px;display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:200px}
+.card.feat h4{font-weight:300;font-size:22px;letter-spacing:-.02em;line-height:1.15}
+.card.feat p{font-size:14.5px;color:var(--ink-dim);margin-top:8px}
+.viz{height:64px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.viz .pill{font-size:12.5px;padding:5px 11px;border-radius:99px;border:1px solid var(--ink-hair);color:var(--ink-dim);font-weight:400}
+.viz .pill.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.viz.steps{gap:0;flex-wrap:nowrap}
+.viz.steps i{width:11px;height:11px;border-radius:50%;border:1px solid rgba(14,17,20,.35);flex:none}
+.viz.steps i.d{background:var(--ink);border-color:var(--ink)}
+.viz.steps i.n{background:var(--signal);border-color:var(--signal);box-shadow:0 0 0 5px rgba(255,91,35,.16)}
+.viz.steps b{height:1px;flex:1;background:rgba(14,17,20,.25)}
+.viz.steps b.d{background:var(--ink)}
+.viz.doc{gap:12px;flex-wrap:nowrap}
+.viz.doc .sheet{width:46px;height:60px;border:1px solid rgba(14,17,20,.3);border-radius:3px;padding:9px 7px;display:flex;flex-direction:column;gap:5px;flex:none}
+.viz.doc .sheet u{height:1px;background:rgba(14,17,20,.3);display:block}
+.viz.doc .sheet u:first-child{width:60%;background:var(--signal);height:2px}
+.viz.doc .who{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);line-height:1.9}
 
-/* who + coverage */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
-.plain{list-style:none;padding:0}
-.plain li{padding:14px 0;border-top:1px solid var(--line)}
-.plain li:last-child{border-bottom:1px solid var(--line)}
-.plain b{display:block}
-.plain span{font-size:15px;color:var(--muted)}
-.towns{columns:2;column-gap:28px;list-style:none;padding:0;font-size:16px}
-.towns li{padding:7px 0;border-top:1px solid var(--line);break-inside:avoid}
-h3{font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:28px;line-height:1;margin-bottom:18px}
+.who-sec{margin-top:clamp(80px,10vw,130px);display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(30px,6vw,90px)}
+.who-sec .h2{font-size:clamp(30px,3.4vw,46px)}
+.who-sec .tag{display:block;margin-bottom:18px}
+.rows{list-style:none;padding:0}
+.rows li{display:grid;grid-template-columns:1fr 1.2fr;gap:24px;padding:22px 0;border-top:1px solid var(--ink-hair)}
+.rows li:last-child{border-bottom:1px solid var(--ink-hair)}
+.rows b{font-weight:400;font-size:19px;letter-spacing:-.015em;line-height:1.25}
+.rows span{font-size:15.5px;color:var(--ink-dim)}
+
+/* coverage */
+.cover{padding:clamp(100px,13vw,170px) 0;position:relative}
+.cover-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,6vw,90px);align-items:start}
+.cover .tag{display:block;margin-bottom:20px}
+.cover p.body{color:var(--dim);margin-top:22px;max-width:28em}
+.towns{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hair)}
+.towns li{padding:15px 0;border-bottom:1px solid var(--hair);font-size:15.5px;color:var(--dim);display:flex;align-items:center;gap:10px}
+.towns li::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--signal);opacity:.85;flex:none}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:clamp(70px,9vw,110px);border-top:1px solid var(--hair)}
+.fact{padding:30px 30px 0 0}
+.fact + .fact{padding-left:30px;border-left:1px solid var(--hair)}
+.fact .num{font-weight:200;font-size:clamp(54px,6.4vw,92px);letter-spacing:-.045em;line-height:1}
+.fact .tag{margin:14px 0 10px;color:var(--signal)}
+.fact p{font-size:15px;color:var(--dim);max-width:22em}
+
+/* questions */
+.qa{padding:0 0 clamp(100px,13vw,170px)}
+.qa-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(30px,6vw,90px)}
+.qa .tag{display:block;margin-bottom:20px}
+details{border-top:1px solid var(--hair)}
+details:last-child{border-bottom:1px solid var(--hair)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;font-size:20px;font-weight:300;letter-spacing:-.015em}
+summary::-webkit-details-marker{display:none}
+summary i{position:relative;width:13px;height:13px;flex:none}
+summary i::before,summary i::after{content:"";position:absolute;left:0;top:6px;width:13px;height:1px;background:var(--text);transition:transform .3s}
+summary i::after{transform:rotate(90deg)}
+details[open] summary i::after{transform:rotate(0)}
+details p{padding:0 40px 26px 0;color:var(--dim);max-width:40em}
 
 /* signup */
-.signup{background:var(--green);color:#fff}
-.signup .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.signup h2{color:#fff}
-.price{font-family:var(--display);font-weight:700;font-size:64px;line-height:1;margin:26px 0 6px}
-.price span{font:400 17px var(--body);color:#b9cdc6}
-.signup ul{list-style:none;padding:0;margin-top:18px;color:#dfeae6}
-.signup ul li{padding:8px 0 8px 22px;position:relative}
-.signup ul li::before{content:"";position:absolute;left:0;top:17px;width:10px;height:3px;background:var(--flag)}
-form{background:#fff;color:var(--ink);border:4px solid var(--ink);border-radius:3px;padding:26px}
-form h3{margin-bottom:6px}
-form p.sub{font-size:15px;color:var(--muted);margin-bottom:18px}
-form label{display:block;font-weight:600;font-size:14.5px;margin:14px 0 6px}
-form input,form select{width:100%;font:400 16px var(--body);padding:13px 12px;border:2px solid #8f9b97;border-radius:3px;background:#fff;color:var(--ink)}
-form input:focus,form select:focus{border-color:var(--ink)}
-form .btn{width:100%;margin-top:22px}
+.join{background:var(--paper);color:var(--ink);padding:clamp(90px,12vw,150px) 0}
+.join-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,110px);align-items:start}
+.join .tag{color:var(--ink-dim);display:block;margin-bottom:20px}
+.join p.body{color:var(--ink-dim);margin-top:22px;max-width:28em}
+.price{display:flex;align-items:baseline;gap:14px;margin-top:44px;padding-top:28px;border-top:1px solid var(--ink-hair)}
+.price b{font-weight:200;font-size:clamp(54px,6vw,84px);letter-spacing:-.045em;line-height:1}
+.price span{color:var(--ink-dim);font-size:15.5px}
+.terms{list-style:none;padding:0;margin-top:22px}
+.terms li{padding:9px 0 9px 26px;position:relative;font-size:16px}
+.terms li::before{content:"";position:absolute;left:0;top:21px;width:14px;height:1px;background:var(--signal)}
+form .tag{margin-bottom:6px}
+.field{position:relative;margin-top:26px}
+.field label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px}
+.field input,.field select{width:100%;font:300 19px var(--sans);color:var(--ink);background:transparent;border:0;border-bottom:1px solid rgba(14,17,20,.35);border-radius:0;padding:8px 0 12px;appearance:none;-webkit-appearance:none;transition:border-color .25s}
+.field select{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none' stroke='%230e1114'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 4px center;cursor:pointer}
+.field input:focus,.field select:focus{outline:0;border-bottom-color:var(--signal);box-shadow:0 1px 0 var(--signal)}
+form .cta{margin-top:38px}
 .hp{position:absolute;left:-9999px}
-.status{margin-top:14px;font-size:15px;font-weight:600}
-.status.ok{color:var(--green)}
-.status.err{color:#a3260a}
+.status{margin-top:18px;font-size:15px;min-height:1.5em;font-weight:400}
+.status.ok{color:#0b6b46}
+.status.err{color:#b02a08}
 
-/* faq */
-.faq{max-width:780px}
-details{border-top:1px solid var(--line);padding:18px 0}
-details:last-child{border-bottom:1px solid var(--line)}
-summary{font-weight:700;font-size:18px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-family:var(--mono);font-size:20px;line-height:1.2}
-details[open] summary::after{content:"\2212"}
-details p{margin-top:10px;color:#33423d;max-width:42em}
-
-footer{padding:34px 0 46px;font-size:14px;color:var(--muted)}
-footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer{padding:44px 0 54px;border-top:1px solid var(--hair)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer .tag{letter-spacing:.14em}
 
 @media (max-width:900px){
-  .hero .wrap,.two,.signup .wrap{grid-template-columns:1fr;gap:40px}
-  .hero-copy{padding-bottom:8px}
-  .tape{right:-6px}
-  .sec{padding:60px 0}
-  .stages{grid-template-columns:1fr}
-  .stages::before{left:9px;right:auto;top:0;bottom:0;width:3px;height:auto}
-  .stages li{padding:0 0 22px 40px}
-  .spans{grid-template-columns:1fr}
-  .spans .you,.spans .gap,.spans .them{grid-column:auto}
-  .row{grid-template-columns:1fr;gap:6px}
-  .mark small{display:none}
+  .nav nav a:not(.go){display:none}
+  .mark span{display:none}
+  .hero{justify-content:flex-end}
+  .hero::after{background:linear-gradient(0deg,var(--bg) 30%,rgba(5,7,10,.5) 52%,rgba(5,7,10,0) 70%)}
+  .hero-copy{padding-top:calc(40svh + 140px);padding-bottom:100px;max-width:none}
+  .map-note{display:none}
+  .strip .tag{display:none}
+  .bento,.who-sec,.cover-grid,.qa-grid,.join-grid{grid-template-columns:1fr}
+  .card.issue{grid-row:auto}
+  .towns{grid-template-columns:repeat(2,1fr)}
+  .facts{grid-template-columns:1fr}
+  .fact,.fact + .fact{padding:26px 0;border-left:0;border-bottom:1px solid var(--hair)}
+  .names{display:none}
+  .stagebox{height:190px}
+  .rows li{grid-template-columns:1fr;gap:6px}
 }
-@media (max-width:480px){
-  .board dl div{grid-template-columns:1fr;gap:2px}
-  .towns{columns:1}
-  .price{font-size:52px}
+@media (max-width:520px){
+  .item{grid-template-columns:1fr;gap:8px}
+  .towns{grid-template-columns:1fr 1fr}
+  .towns li{font-size:14px}
+  summary{font-size:18px}
 }
 @media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .stages li.first::after{animation:none;display:none}
+  .js [data-r]{opacity:1;transform:none;transition:none}
+  .belt ul{animation:none}
+  .live{animation:none}
+  .iris{height:auto}
+  .iris-pin{position:static;height:auto;padding:120px 0 60px;background:var(--paper)}
+  .iris-light{position:static;clip-path:none}
+  .iris-ring{display:none}
 }
 </style>
 </head>
 <body>
 
-<div class="top">
+<header class="nav" id="nav">
   <div class="wrap">
-    <a class="mark" href="#top">CorridorLogic<small>Signal Feed</small></a>
-    <a class="link" href="#sample">Send me a sample issue</a>
+    <a class="mark" href="#top" aria-label="CorridorLogic Signal Feed, home">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" stroke="#f2f0eb" stroke-opacity=".35"/><circle cx="11" cy="11" r="5.5" stroke="#f2f0eb" stroke-opacity=".6"/><circle cx="11" cy="11" r="2" fill="#ff5b23"/></svg>
+      CorridorLogic <span>Signal Feed</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#issue">The issue</a>
+      <a href="#coverage">Coverage</a>
+      <a href="#questions">Questions</a>
+      <a class="go" href="#sample">Sample issue</a>
+    </nav>
   </div>
-</div>
+</header>
 
 <main id="top">
+
 <section class="hero">
+  <canvas id="map" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="hero-copy">
-      <h1 class="display">Hear about the build while it&rsquo;s still a <em>planning file</em>.</h1>
-      <p class="lede">Signal Feed reads every council agenda and planning application in Barrie, Orillia and Simcoe County. Each week it sends your sales team the commercial, industrial and multi-residential projects that will need what you supply, months before a tender exists.</p>
-      <a class="btn" href="#sample">Send me a sample issue</a>
-      <p class="fine">Free sample. No card, no call.</p>
-    </div>
-
-    <div class="sign" aria-label="Sample alert, shown as a planning notice sign">
-      <div class="board">
-        <span class="tape">Sample alert &middot; not a live file</span>
-        <header><b>Notice of application</b><span>New this week</span></header>
-        <dl>
-          <div><dt>Proposed</dt><dd><strong>Industrial building, 234,000 sq ft</strong>, 28 dock doors, 9 acres</dd></div>
-          <div><dt>Where</dt><dd>South Barrie, Highway 400 corridor</dd></div>
-          <div><dt>Stage</dt><dd>Site plan application received. Council decision expected in about 10 weeks.</dd></div>
-          <div><dt>Likely needs</dt><dd>Structural steel, precast panels, roofing, dock levellers, rooftop units, high-bay lighting</dd></div>
-          <div><dt>On file</dt><dd>Owner, planner and architect, named, with a link to the source document</dd></div>
-        </dl>
+      <p class="tag" data-r><span class="live"></span> Barrie &middot; Orillia &middot; Simcoe County</p>
+      <h1 class="h h1" data-r style="--d:.08s">Hear about the build while it&rsquo;s still a <em>planning file</em>.</h1>
+      <p class="lede" data-r style="--d:.16s">Signal Feed reads every council agenda and planning application across 18 municipalities. Each week your sales team gets the commercial, industrial and multi-residential projects that will need what you supply, months before a tender exists.</p>
+      <div data-r style="--d:.24s">
+        <a class="cta" href="#sample">Send me a sample issue <i></i></a>
+        <small>Free sample. No card, no call.</small>
       </div>
-      <div class="posts" aria-hidden="true"><i></i><i></i></div>
     </div>
   </div>
-  <div class="ground" aria-hidden="true"></div>
+  <p class="tag map-note">Map activity is illustrative</p>
+  <div class="strip">
+    <span class="tag">Councils read every week</span>
+    <div class="belt" aria-hidden="true"><ul id="belt"></ul></div>
+  </div>
 </section>
 
-<section class="sec">
+<section class="tl" id="how" aria-label="Where Signal Feed sits in a project's life">
+  <div class="tl-pin">
+    <div class="wrap">
+      <div class="tl-head">
+        <span class="tag">How it works</span>
+        <h2 class="h h2">By the time it&rsquo;s out for tender, the spec is written.</h2>
+      </div>
+
+      <div class="stagebox" aria-live="polite">
+        <div class="stage on"><span class="tag">Stage 1 of 6</span><h3>Application filed</h3><p>A rezoning or site plan application lands at the municipality. From this day the project is public record.</p></div>
+        <div class="stage"><span class="tag">Stage 2 of 6</span><h3>Council decision</h3><p>Public meeting, staff report, vote. Size and use are settled in the open.</p></div>
+        <div class="stage"><span class="tag">Stage 3 of 6</span><h3>Site plan approved</h3><p>Layout, floor area and servicing are fixed. The design team starts choosing products.</p></div>
+        <div class="stage"><span class="tag">Stage 4 of 6</span><h3>Building permit</h3><p>Drawings and specifications are complete.</p></div>
+        <div class="stage"><span class="tag">Stage 5 of 6</span><h3>Tender</h3><p>Trades and suppliers are asked to price what has already been specified.</p></div>
+        <div class="stage"><span class="tag">Stage 6 of 6</span><h3>Construction</h3><p>Orders go to whoever won.</p></div>
+      </div>
+
+      <div class="track" id="track">
+        <div class="fill"></div><div class="early"></div><div class="head"></div>
+        <span class="dot" style="left:0%"></span><span class="dot" style="left:20%"></span><span class="dot" style="left:40%"></span><span class="dot" style="left:60%"></span><span class="dot" style="left:80%"></span><span class="dot" style="left:100%"></span>
+      </div>
+      <div class="names" aria-hidden="true"><span style="left:0%">Application</span><span style="left:20%">Council</span><span style="left:40%">Site plan</span><span style="left:60%">Permit</span><span style="left:80%">Tender</span><span style="left:100%">Construction</span></div>
+
+      <div class="zone">
+        <p class="z1 on">Signal Feed alerts you here, and again each time the file moves.</p>
+        <p class="z2">This is when the spec gets written.</p>
+        <p class="z3">Most suppliers find out here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="iris" id="issue" aria-label="The weekly issue">
+  <div class="iris-pin">
+    <div class="iris-ring" aria-hidden="true"><span>Open</span></div>
+    <div class="iris-light">
+      <div>
+        <span class="tag">The weekly issue</span>
+        <h2 class="h h2">One email a week. Only the projects worth a call.</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paper">
   <div class="wrap">
-    <h2 class="display">By the time it&rsquo;s out for tender, the spec is written.</h2>
-    <p class="intro">A project is public long before anyone asks you for a price. The owner, architect and engineer choose products during those months. Signal Feed tells you when the file opens, so you can be the name in the spec and not one of five quotes against it.</p>
+    <div class="bento">
+      <article class="card issue" data-r>
+        <div class="issue-top">
+          <span class="tag">Signal Feed &middot; Simcoe region</span>
+          <span class="tag"><b>Sample issue &middot; projects are illustrative</b></span>
+        </div>
+        <div class="item">
+          <span class="chip">New file</span>
+          <div><h4>Industrial building, 234,000 sq ft</h4><p>Site plan application &middot; South Barrie, Highway 400 corridor</p>
+          <div class="needs"><span>Steel</span><span>Precast</span><span>Roofing</span><span>Dock equipment</span><span>Rooftop units</span></div></div>
+        </div>
+        <div class="item">
+          <span class="chip moved">Council approved</span>
+          <div><h4>Two apartment towers, 410 units</h4><p>Zoning amendment passed &middot; Downtown Barrie</p>
+          <div class="needs"><span>Concrete</span><span>Rebar</span><span>Windows</span><span>Elevators</span><span>Boilers</span></div></div>
+        </div>
+        <div class="item">
+          <span class="chip">New file</span>
+          <div><h4>Cold-storage addition, 60,000 sq ft</h4><p>Site plan amendment &middot; Bradford West Gwillimbury</p>
+          <div class="needs"><span>Insulated panels</span><span>Refrigeration</span><span>Electrical service</span></div></div>
+        </div>
+        <div class="item">
+          <span class="chip moved">Site plan approved</span>
+          <div><h4>Retail plaza, 5 buildings</h4><p>Agreement registered &middot; Innisfil</p>
+          <div class="needs"><span>Block</span><span>Storefront glazing</span><span>Asphalt</span><span>Site lighting</span></div></div>
+        </div>
+        <div class="item">
+          <span class="chip">New file</span>
+          <div><h4>Long-term care home, 160 beds</h4><p>Official plan and zoning amendment &middot; Collingwood</p>
+          <div class="needs"><span>Mechanical</span><span>Commercial kitchen</span><span>Generators</span></div></div>
+        </div>
+      </article>
 
-    <ol class="stages">
-      <li class="early first"><b>Application filed</b><span>Rezoning or site plan lands at the municipality</span></li>
-      <li class="early"><b>Council decision</b><span>Public meeting, staff report, vote</span></li>
-      <li class="early"><b>Site plan approved</b><span>Size, layout and servicing are fixed</span></li>
-      <li><b>Building permit</b><span>Drawings and specs are complete</span></li>
-      <li class="late"><b>Tender</b><span>Trades and suppliers are asked to price</span></li>
-      <li class="late"><b>Construction</b><span>Orders placed with whoever won</span></li>
-    </ol>
-    <div class="spans">
-      <div class="you"><b>Signal Feed alerts you here</b>and again each time the file moves a stage.</div>
-      <div class="gap">Specs get written</div>
-      <div class="them"><b>Most suppliers find out here</b>from a bid request or a tender service.</div>
+      <article class="card feat" data-r style="--d:.08s">
+        <div class="viz"><span class="pill on">Mechanical</span><span class="pill">Electrical</span><span class="pill on">Roofing</span><span class="pill">Concrete</span><span class="pill">Glazing</span></div>
+        <div><h4>Filtered to what you sell.</h4><p>Pick your product categories. Projects outside them stay out of your inbox.</p></div>
+      </article>
+      <article class="card feat" data-r style="--d:.16s">
+        <div class="viz steps"><i class="d"></i><b class="d"></b><i class="d"></i><b class="d"></b><i class="n"></i><b></b><i></i><b></b><i></i></div>
+        <div><h4>Followed from filing to permit.</h4><p>When a file you follow moves a stage, you hear about it that week.</p></div>
+      </article>
+      <article class="card feat" data-r style="--d:.24s">
+        <div class="viz doc"><div class="sheet"><u></u><u></u><u></u><u></u><u></u></div><div class="who">Owner<br>Planner<br>Architect</div></div>
+        <div><h4>Names, and the source.</h4><p>Who is on the file, with a link to the municipal document it came from.</p></div>
+      </article>
     </div>
-  </div>
-</section>
 
-<section class="sec alt">
-  <div class="wrap">
-    <h2 class="display">One email a week. Only the projects worth a call.</h2>
-    <p class="intro">Every item says what is proposed, where, what stage it has reached, who is behind it and what it is likely to need. Each one links to the municipal document it came from.</p>
-
-    <div class="feed">
-      <div class="feed-head">
-        <span class="label">Signal Feed &middot; Simcoe region &middot; weekly issue</span>
-        <span class="label"><b>Sample issue. Projects are illustrative.</b></span>
+    <div class="who-sec">
+      <div data-r>
+        <span class="tag">Who subscribes</span>
+        <h2 class="h h2">Suppliers who win at the design stage.</h2>
       </div>
-      <div class="row">
-        <div class="stage"><i></i>New file</div>
-        <div><strong>Industrial building, 234,000 sq ft</strong><small>Site plan application</small></div>
-        <div>South Barrie<small style="display:block">Hwy 400 corridor</small></div>
-        <div class="needs">Steel, precast, roofing, dock equipment, rooftop units</div>
-      </div>
-      <div class="row">
-        <div class="stage moved"><i></i>Council approved</div>
-        <div><strong>Two apartment towers, 410 units</strong><small>Zoning amendment passed</small></div>
-        <div>Downtown Barrie</div>
-        <div class="needs">Concrete, rebar, windows, elevators, boilers, booster pumps</div>
-      </div>
-      <div class="row">
-        <div class="stage"><i></i>New file</div>
-        <div><strong>Cold-storage addition, 60,000 sq ft</strong><small>Site plan amendment</small></div>
-        <div>Bradford West Gwillimbury</div>
-        <div class="needs">Insulated panels, refrigeration, electrical service upgrade</div>
-      </div>
-      <div class="row">
-        <div class="stage moved"><i></i>Site plan approved</div>
-        <div><strong>Retail plaza, 5 buildings</strong><small>Agreement registered</small></div>
-        <div>Innisfil</div>
-        <div class="needs">Block, storefront glazing, asphalt, site lighting</div>
-      </div>
-      <div class="row">
-        <div class="stage"><i></i>New file</div>
-        <div><strong>Long-term care home, 160 beds</strong><small>Official plan and zoning amendment</small></div>
-        <div>Collingwood</div>
-        <div class="needs">Mechanical, commercial kitchen, generators, nurse call</div>
-      </div>
-    </div>
-    <p class="note">You pick the product categories you sell. Projects outside them stay out of your inbox.</p>
-  </div>
-</section>
-
-<section class="sec">
-  <div class="wrap two">
-    <div>
-      <h3>Who subscribes</h3>
-      <ul class="plain">
+      <ul class="rows" data-r style="--d:.1s">
         <li><b>Mechanical and HVAC distributors</b><span>Reach the engineer before the equipment schedule is set.</span></li>
         <li><b>Electrical wholesalers and lighting agents</b><span>Know which buildings need a new service or a lighting package.</span></li>
-        <li><b>Concrete, precast, steel and masonry</b><span>See square footage and storeys while structure is still being chosen.</span></li>
-        <li><b>Roofing, cladding, windows and doors</b><span>Get in front of the architect at the design stage.</span></li>
+        <li><b>Concrete, precast, steel and masonry</b><span>See floor area and storeys while the structure is still being chosen.</span></li>
+        <li><b>Roofing, cladding, windows and doors</b><span>Get in front of the architect while the envelope is on the drawing board.</span></li>
         <li><b>Equipment rental and site services</b><span>Plan fleet and crews around what is coming, quarter by quarter.</span></li>
       </ul>
     </div>
-    <div>
-      <h3>What it covers</h3>
-      <ul class="towns">
-        <li>Barrie</li><li>Orillia</li><li>Adjala-Tosorontio</li><li>Bradford West Gwillimbury</li><li>Clearview</li><li>Collingwood</li><li>Essa</li><li>Innisfil</li><li>Midland</li><li>New Tecumseth</li><li>Oro-Medonte</li><li>Penetanguishene</li><li>Ramara</li><li>Severn</li><li>Springwater</li><li>Tay</li><li>Tiny</li><li>Wasaga Beach</li>
-      </ul>
-      <p class="note">Industrial, commercial, institutional and multi-residential projects. No single-family homes, decks or minor variances.</p>
+  </div>
+</section>
+
+<section class="cover" id="coverage">
+  <div class="wrap">
+    <div class="cover-grid">
+      <div data-r>
+        <span class="tag">Coverage</span>
+        <h2 class="h h2">Eighteen councils. One feed.</h2>
+        <p class="body">Industrial, commercial, institutional and multi-residential projects. No single-family homes, decks or minor variances.</p>
+      </div>
+      <ul class="towns" id="towns" data-r style="--d:.1s"></ul>
+    </div>
+    <div class="facts">
+      <div class="fact" data-r><div class="num" data-count="18">18</div><p class="tag">Municipalities</p><p>Every council agenda and planning application, read each week.</p></div>
+      <div class="fact" data-r style="--d:.08s"><div class="num" data-count="4">4</div><p class="tag">Stages tracked</p><p>Application, council decision, site plan approval and building permit.</p></div>
+      <div class="fact" data-r style="--d:.16s"><div class="num" data-count="1">1</div><p class="tag">Email a week</p><p>Short enough to read before the Monday sales meeting.</p></div>
     </div>
   </div>
 </section>
 
-<section class="sec signup" id="sample">
-  <div class="wrap">
-    <div>
-      <h2 class="display">Read one issue before you decide.</h2>
-      <p style="color:#dfeae6;max-width:30em">We&rsquo;ll email you a sample issue for the Simcoe region. If the projects in it are worth a sales call, subscribe. If not, you&rsquo;ve lost nothing.</p>
-      <p class="price">$550 <span>a month, per region</span></p>
-      <ul>
+<section class="qa" id="questions">
+  <div class="wrap qa-grid">
+    <div data-r>
+      <span class="tag">Questions</span>
+      <h2 class="h h2">What suppliers ask first.</h2>
+    </div>
+    <div data-r style="--d:.1s">
+      <details open>
+        <summary>Isn&rsquo;t all of this public already? <i></i></summary>
+        <p>Yes. Every item comes from public council and planning records. It is spread across 18 municipal websites, inside agenda packages that can run to hundreds of pages. We read all of it each week so your sales team doesn&rsquo;t have to.</p>
+      </details>
+      <details>
+        <summary>How is this different from a tender service? <i></i></summary>
+        <p>A tender service tells you when a job is out for bids. By then the products are specified. Signal Feed tells you when the project is first filed, so you can talk to the owner, architect and engineer while those choices are still open.</p>
+      </details>
+      <details>
+        <summary>How do you know what a project will need? <i></i></summary>
+        <p>From what is on file: building type, floor area, storeys, units and servicing. The product tags are our read of that, not a spec. The source document is linked so you can check.</p>
+      </details>
+      <details>
+        <summary>We sell outside Simcoe County. Can you cover our region? <i></i></summary>
+        <p>Not yet. Reply to the sample issue with where you sell, and we&rsquo;ll let you know when that region opens.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="join" id="sample">
+  <div class="wrap join-grid">
+    <div data-r>
+      <span class="tag">Start here</span>
+      <h2 class="h h2">Read one issue before you decide.</h2>
+      <p class="body">We&rsquo;ll email you a sample issue for the Simcoe region. If the projects in it are worth a sales call, subscribe. If not, you&rsquo;ve lost nothing.</p>
+      <div class="price"><b>$550</b><span>a month, per region</span></div>
+      <ul class="terms">
         <li>Your whole sales team on one subscription</li>
         <li>Weekly issue, plus an alert when a file you follow moves</li>
         <li>No contract. Cancel any month.</li>
       </ul>
     </div>
 
-    <form name="sample-issue" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="sample-form">
+    <form name="sample-issue" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="sample-form" data-r style="--d:.1s">
       <input type="hidden" name="form-name" value="sample-issue">
       <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-      <h3>Send me a sample issue</h3>
-      <p class="sub">Three fields. We use them to send the right projects.</p>
-      <label for="email">Work email</label>
-      <input id="email" name="email" type="email" autocomplete="email" required>
-      <label for="company">Company</label>
-      <input id="company" name="company" type="text" autocomplete="organization" required>
-      <label for="supply">What you supply</label>
-      <select id="supply" name="supply" required>
-        <option value="" selected disabled>Choose one</option>
-        <option>Mechanical / HVAC</option>
-        <option>Electrical / lighting</option>
-        <option>Concrete, precast, steel or masonry</option>
-        <option>Roofing, cladding, windows or doors</option>
-        <option>Equipment rental / site services</option>
-        <option>Something else</option>
-      </select>
-      <button class="btn" type="submit">Send me a sample issue</button>
+      <p class="tag">Where to send it</p>
+      <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="company">Company</label><input id="company" name="company" type="text" autocomplete="organization" required></div>
+      <div class="field"><label for="supply">What you supply</label>
+        <select id="supply" name="supply" required>
+          <option value="" selected disabled>Choose one</option>
+          <option>Mechanical / HVAC</option>
+          <option>Electrical / lighting</option>
+          <option>Concrete, precast, steel or masonry</option>
+          <option>Roofing, cladding, windows or doors</option>
+          <option>Equipment rental / site services</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <button class="cta solid" type="submit">Send me a sample issue <i></i></button>
       <p class="status" id="status" role="status" aria-live="polite"></p>
     </form>
-  </div>
-</section>
-
-<section class="sec alt">
-  <div class="wrap">
-    <h2 class="display">Questions suppliers ask</h2>
-    <div class="faq">
-      <details open>
-        <summary>Isn&rsquo;t all of this public already?</summary>
-        <p>Yes. Every item comes from public council and planning records. It is spread across 18 municipal websites, inside agenda packages that can run to hundreds of pages. We read all of it each week so your sales team doesn&rsquo;t have to.</p>
-      </details>
-      <details>
-        <summary>How is this different from a tender service?</summary>
-        <p>A tender service tells you when a job is out for bids. By then the products are specified. Signal Feed tells you when the project is first filed, so you can talk to the owner, architect and engineer while those choices are still open.</p>
-      </details>
-      <details>
-        <summary>How do you know what a project will need?</summary>
-        <p>From what is on file: building type, floor area, storeys, units and servicing. &ldquo;Likely needs&rdquo; is our read of that, not a spec. The source document is linked so you can check.</p>
-      </details>
-      <details>
-        <summary>We sell outside Simcoe County. Can you cover our region?</summary>
-        <p>Not yet. Reply to the sample issue with where you sell, and we&rsquo;ll let you know when that region opens.</p>
-      </details>
-    </div>
   </div>
 </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>CorridorLogic Signal Feed &middot; Barrie, Ontario</span>
-    <span>Built from public municipal records.</span>
+    <a class="mark" href="#top">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" stroke="#f2f0eb" stroke-opacity=".35"/><circle cx="11" cy="11" r="5.5" stroke="#f2f0eb" stroke-opacity=".6"/><circle cx="11" cy="11" r="2" fill="#ff5b23"/></svg>
+      CorridorLogic
+    </a>
+    <span class="tag">Barrie, Ontario &middot; Built from public municipal records</span>
   </div>
 </footer>
 
 <script>
+document.documentElement.classList.add('js');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+/* ---------- places ---------- */
+// [name, lon, lat, label on the map?]
+const TOWNS = [
+  ['Barrie', -79.69, 44.39, 1], ['Orillia', -79.42, 44.61, 1], ['Innisfil', -79.58, 44.30, 1],
+  ['Bradford West Gwillimbury', -79.56, 44.115, 1], ['New Tecumseth', -79.87, 44.15, 1], ['Collingwood', -80.22, 44.50, 1],
+  ['Wasaga Beach', -80.02, 44.52, 1], ['Midland', -79.88, 44.75, 1], ['Penetanguishene', -79.935, 44.77, 0],
+  ['Clearview', -80.09, 44.42, 0], ['Essa', -79.88, 44.32, 1], ['Oro-Medonte', -79.55, 44.50, 0],
+  ['Springwater', -79.74, 44.45, 0], ['Tay', -79.77, 44.74, 0], ['Tiny', -79.99, 44.70, 0],
+  ['Severn', -79.64, 44.71, 0], ['Ramara', -79.20, 44.56, 1], ['Adjala-Tosorontio', -79.95, 44.19, 0],
+];
+const SHORT = { 'Bradford West Gwillimbury': 'Bradford', 'New Tecumseth': 'Alliston' };
+
+const names = TOWNS.map(t => t[0]);
+document.getElementById('towns').innerHTML = names.map(n => `<li>${n}</li>`).join('');
+document.getElementById('belt').innerHTML = [...names, ...names].map(n => `<li>${n}</li>`).join('');
+
+/* ---------- hero map ---------- */
+(() => {
+  const cv = document.getElementById('map'), ctx = cv.getContext('2d');
+  const B = { w: -80.36, e: -79.04, s: 44.0, n: 44.9 }, KX = 0.714; // lon shrink at this latitude
+  const ROADS = [
+    { hi: 1, p: [[-79.63,44.0],[-79.63,44.10],[-79.66,44.20],[-79.68,44.30],[-79.70,44.37],[-79.71,44.43],[-79.69,44.52],[-79.66,44.62],[-79.65,44.71],[-79.72,44.80],[-79.78,44.9]] },
+    { p: [[-79.70,44.40],[-79.60,44.47],[-79.50,44.54],[-79.43,44.60],[-79.37,44.68],[-79.33,44.76],[-79.30,44.9]] },
+    { p: [[-79.72,44.41],[-79.85,44.44],[-79.97,44.42],[-80.09,44.42],[-80.16,44.47],[-80.22,44.50],[-80.36,44.535]] },
+    { p: [[-80.36,44.09],[-80.05,44.12],[-79.87,44.15],[-79.70,44.19],[-79.60,44.20]] },
+    { p: [[-79.43,44.60],[-79.54,44.66],[-79.64,44.71],[-79.71,44.75],[-79.88,44.75]] },
+    { p: [[-79.70,44.43],[-79.75,44.55],[-79.80,44.65],[-79.90,44.74],[-79.935,44.77]] },
+  ];
+  const WATER = [
+    [[-79.685,44.385],[-79.63,44.40],[-79.55,44.43],[-79.47,44.50],[-79.42,44.56],[-79.40,44.60],[-79.33,44.60],[-79.25,44.58],[-79.19,44.50],[-79.16,44.43],[-79.20,44.35],[-79.30,44.32],[-79.38,44.31],[-79.47,44.25],[-79.50,44.19],[-79.54,44.22],[-79.55,44.28],[-79.53,44.31],[-79.51,44.385],[-79.60,44.372]],
+    [[-80.7,44.58],[-80.36,44.56],[-80.25,44.515],[-80.20,44.50],[-80.10,44.50],[-80.02,44.52],[-79.99,44.56],[-80.01,44.63],[-80.07,44.70],[-80.11,44.78],[-80.10,44.84],[-80.07,44.9],[-80.05,45.2],[-80.7,45.2]],
+    [[-79.99,45.2],[-79.97,44.9],[-79.95,44.83],[-79.93,44.79],[-79.90,44.77],[-79.87,44.755],[-79.80,44.76],[-79.77,44.75],[-79.71,44.76],[-79.72,44.80],[-79.76,44.9],[-79.78,45.2]],
+    [[-79.40,44.61],[-79.36,44.63],[-79.34,44.70],[-79.35,44.76],[-79.39,44.76],[-79.42,44.70],[-79.42,44.64]],
+  ];
+  const SAMPLES = ['NEW FILE · INDUSTRIAL · 234,000 SQ FT', 'COUNCIL APPROVED · 410 UNITS', 'NEW FILE · COLD STORAGE · 60,000 SQ FT',
+    'SITE PLAN APPROVED · RETAIL PLAZA', 'NEW FILE · LONG-TERM CARE · 160 BEDS', 'NEW FILE · WAREHOUSE · 156,000 SQ FT', 'PERMIT ISSUED · MEDICAL OFFICE'];
+
+  let W = 0, H = 0, dpr = 1, box, node, vertical, pings = [], last = 0, nextAt = 600, running = true, sIdx = 0;
+
+  const P = ([lon, lat]) => [box.x + ((lon - B.w) / (B.e - B.w)) * box.w, box.y + ((B.n - lat) / (B.n - B.s)) * box.h];
+
+  function size() {
+    const r = cv.getBoundingClientRect();
+    dpr = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    vertical = W < 900;
+    const aspect = ((B.e - B.w) * KX) / (B.n - B.s);
+    let h, w;
+    if (vertical) { w = Math.min(W * 0.96, H * 0.40 * aspect); h = w / aspect; box = { x: (W - w) / 2, y: 76, w, h }; node = [W / 2, box.y + h + 22]; }
+    else { h = Math.min(H * 0.8, (W * 0.5) / aspect); w = h * aspect; box = { x: W - w - Math.max(24, W * 0.03), y: (H - h) / 2 - 6, w, h }; node = [box.x, box.y + h * 0.56]; }
+    if (reduce) draw(0);
+  }
+
+  function smooth(pts, close) {
+    const q = pts.map(P);
+    ctx.beginPath();
+    if (close) {
+      const m = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      let s = m(q[q.length - 1], q[0]); ctx.moveTo(s[0], s[1]);
+      for (let i = 0; i < q.length; i++) { const e = m(q[i], q[(i + 1) % q.length]); ctx.quadraticCurveTo(q[i][0], q[i][1], e[0], e[1]); }
+      ctx.closePath();
+    } else {
+      ctx.moveTo(q[0][0], q[0][1]);
+      for (let i = 1; i < q.length - 1; i++) { const e = [(q[i][0] + q[i + 1][0]) / 2, (q[i][1] + q[i + 1][1]) / 2]; ctx.quadraticCurveTo(q[i][0], q[i][1], e[0], e[1]); }
+      ctx.lineTo(q[q.length - 1][0], q[q.length - 1][1]);
+    }
+  }
+
+  // curve from a town to the collecting node
+  function wire(x, y) {
+    const [nx, ny] = node;
+    return vertical ? [x, y, x, y + (ny - y) * 0.55, nx, ny - (ny - y) * 0.4, nx, ny]
+                    : [x, y, x - (x - nx) * 0.5, y, nx + (x - nx) * 0.36, ny, nx, ny];
+  }
+  function at(c, t) {
+    const u = 1 - t;
+    return [u*u*u*c[0] + 3*u*u*t*c[2] + 3*u*t*t*c[4] + t*t*t*c[6], u*u*u*c[1] + 3*u*u*t*c[3] + 3*u*t*t*c[5] + t*t*t*c[7]];
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+    // survey grid, clipped to the map box and faded
+    ctx.save();
+    ctx.beginPath(); ctx.rect(box.x - 40, box.y - 40, box.w + 80, box.h + 80); ctx.clip();
+    ctx.translate(box.x + box.w / 2, box.y + box.h / 2); ctx.rotate(-0.56);
+    ctx.strokeStyle = 'rgba(242,240,235,.035)'; ctx.lineWidth = 1;
+    const R = Math.max(box.w, box.h), step = Math.max(34, box.w / 22);
+    ctx.beginPath();
+    for (let i = -R; i <= R; i += step) { ctx.moveTo(i, -R); ctx.lineTo(i, R); ctx.moveTo(-R, i); ctx.lineTo(R, i); }
+    ctx.stroke(); ctx.restore();
+
+    // water
+    ctx.save();
+    ctx.beginPath(); ctx.rect(box.x, box.y, box.w, box.h); ctx.clip();
+    for (const w of WATER) {
+      smooth(w, true);
+      ctx.fillStyle = 'rgba(96,140,214,.07)'; ctx.fill();
+      ctx.strokeStyle = 'rgba(140,175,235,.3)'; ctx.lineWidth = 1; ctx.stroke();
+    }
+    // roads
+    for (const r of ROADS) {
+      smooth(r.p, false);
+      ctx.strokeStyle = r.hi ? 'rgba(242,240,235,.42)' : 'rgba(242,240,235,.16)'; ctx.lineWidth = r.hi ? 1.3 : 1; ctx.stroke();
+      if (r.hi && !reduce) { // light running up the 400
+        ctx.setLineDash([46, 900]); ctx.lineDashOffset = -(t * 0.09) % 946;
+        ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.lineWidth = 1.6; ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+    ctx.restore();
+
+    // soften the map into the page on all four sides
+    const fd = Math.min(90, box.w * 0.16), bgc = (o) => `rgba(5,7,10,${o})`;
+    for (const [x0, y0, x1, y1, rx, ry, rw, rh] of [
+      [box.x, 0, box.x + fd, 0, box.x - 2, box.y - 2, fd + 2, box.h + 4],
+      [box.x + box.w, 0, box.x + box.w - fd, 0, box.x + box.w - fd, box.y - 2, fd + 2, box.h + 4],
+      [0, box.y, 0, box.y + fd, box.x - 2, box.y - 2, box.w + 4, fd + 2],
+      [0, box.y + box.h, 0, box.y + box.h - fd, box.x - 2, box.y + box.h - fd, box.w + 4, fd + 2]]) {
+      const g = ctx.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, bgc(1)); g.addColorStop(1, bgc(0));
+      ctx.fillStyle = g; ctx.fillRect(rx, ry, rw, rh);
+    }
+
+    // standing wires from every council to the node
+    ctx.lineWidth = 1;
+    for (const tw of TOWNS) {
+      const [x, y] = P([tw[1], tw[2]]), c = wire(x, y);
+      ctx.beginPath(); ctx.moveTo(c[0], c[1]); ctx.bezierCurveTo(c[2], c[3], c[4], c[5], c[6], c[7]);
+      ctx.strokeStyle = 'rgba(255,120,70,.17)'; ctx.stroke();
+    }
+
+    // towns
+    ctx.font = `400 ${vertical ? 8.5 : 10}px "Geist Mono", ui-monospace, monospace`;
+    ctx.textBaseline = 'middle';
+    for (const tw of TOWNS) {
+      const [x, y] = P([tw[1], tw[2]]);
+      ctx.beginPath(); ctx.arc(x, y, 1.8, 0, 7); ctx.fillStyle = 'rgba(242,240,235,.8)'; ctx.fill();
+      if (tw[3]) {
+        ctx.fillStyle = 'rgba(242,240,235,.42)';
+        const label = (SHORT[tw[0]] || tw[0]).toUpperCase().split('').join(' ');
+        ctx.fillText(label, x + 9, y + 1);
+      }
+    }
+
+    // pings and the pulses they send down the wire
+    for (const p of pings) {
+      const a = (t - p.t0) / 4200; if (a < 0 || a > 1) continue;
+      const ring = clamp(a / 0.5), fade = 1 - ring;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4 + ring * 38, 0, 7); ctx.strokeStyle = `rgba(255,91,35,${0.7 * fade})`; ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4 + ring * 18, 0, 7); ctx.strokeStyle = `rgba(255,91,35,${0.5 * fade})`; ctx.stroke();
+      ctx.beginPath(); ctx.arc(p.x, p.y, 3.2, 0, 7); ctx.fillStyle = `rgba(255,91,35,${1 - clamp((a - 0.75) / 0.25)})`; ctx.fill();
+
+      const tr = clamp((a - 0.12) / 0.6);
+      if (tr > 0 && tr < 1) {
+        const c = wire(p.x, p.y), e = tr * tr * (3 - 2 * tr), tail = Math.max(0, e - 0.16);
+        ctx.beginPath();
+        for (let k = 0; k <= 14; k++) { const q = at(c, tail + (e - tail) * (k / 14)); k ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }
+        const h = at(c, e), g = at(c, tail), grad = ctx.createLinearGradient(g[0], g[1], h[0], h[1]);
+        grad.addColorStop(0, 'rgba(255,91,35,0)'); grad.addColorStop(1, 'rgba(255,140,90,1)');
+        ctx.strokeStyle = grad; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.beginPath(); ctx.arc(h[0], h[1], 1.8, 0, 7); ctx.fillStyle = '#fff'; ctx.fill();
+      }
+
+      if (!vertical) {
+        const la = clamp(a / 0.08) * (1 - clamp((a - 0.7) / 0.3));
+        ctx.font = '400 9.5px "Geist Mono", ui-monospace, monospace';
+        const text = p.label.split('').join(' '), tw = ctx.measureText(text).width, bx = Math.min(p.x + 14, W - tw - 30), by = p.y - 26;
+        ctx.fillStyle = `rgba(5,7,10,${0.82 * la})`; ctx.fillRect(bx - 8, by - 10, tw + 16, 20);
+        ctx.strokeStyle = `rgba(255,91,35,${0.55 * la})`; ctx.lineWidth = 1; ctx.strokeRect(bx - 7.5, by - 9.5, tw + 15, 19);
+        ctx.fillStyle = `rgba(255,214,196,${la})`; ctx.fillText(text, bx, by + 0.5);
+      }
+    }
+
+    // collecting node
+    const [nx, ny] = node, beat = reduce ? 0 : (Math.sin(t / 700) + 1) / 2;
+    ctx.beginPath(); ctx.arc(nx, ny, 15 + beat * 3, 0, 7); ctx.strokeStyle = 'rgba(242,240,235,.2)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath(); ctx.arc(nx, ny, 8, 0, 7); ctx.strokeStyle = 'rgba(242,240,235,.55)'; ctx.stroke();
+    ctx.beginPath(); ctx.arc(nx, ny, 3, 0, 7); ctx.fillStyle = '#ff5b23'; ctx.fill();
+  }
+
+  function spawn(t) {
+    const tw = TOWNS[Math.random() < 0.3 ? 0 : (Math.random() * TOWNS.length) | 0];
+    const [x, y] = P([tw[1] + (Math.random() - 0.5) * 0.05, tw[2] + (Math.random() - 0.5) * 0.04]);
+    pings.push({ x, y, t0: t, label: SAMPLES[sIdx++ % SAMPLES.length] });
+    if (pings.length > 8) pings.shift();
+  }
+
+  function frame(t) {
+    if (!running) return;
+    if (t - last > nextAt) { spawn(t); last = t; nextAt = 1300 + Math.random() * 1200; }
+    draw(t);
+    requestAnimationFrame(frame);
+  }
+
+  size();
+  addEventListener('resize', size);
+  if (reduce) {
+    [[0, 0.3], [5, 0.2], [3, 0.45], [1, 0.1]].forEach(([i, a]) => { const [x, y] = P([TOWNS[i][1], TOWNS[i][2]]); pings.push({ x, y, t0: -a * 4200, label: SAMPLES[i] }); });
+    draw(0);
+  } else {
+    new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was) requestAnimationFrame(frame); }).observe(cv);
+    requestAnimationFrame(frame);
+  }
+  document.fonts && document.fonts.ready.then(() => reduce && draw(0));
+})();
+
+/* ---------- scroll choreography ---------- */
+const nav = document.getElementById('nav');
+const tl = document.querySelector('.tl'), iris = document.querySelector('.iris');
+const stages = [...document.querySelectorAll('.stage')], dots = [...document.querySelectorAll('.track .dot')];
+const nameEls = [...document.querySelectorAll('.names span')], zones = [...document.querySelectorAll('.zone p')];
+const fill = document.querySelector('.track .fill'), early = document.querySelector('.track .early'), head = document.querySelector('.track .head');
+const irisPin = document.querySelector('.iris-pin');
+
+const progress = (el) => { const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
+
+let ticking = false;
+function onScroll() {
+  ticking = false;
+  nav.classList.toggle('stuck', scrollY > 40);
+
+  // timeline: hold a beat at each end, travel in between
+  const p = clamp((progress(tl) - 0.06) / 0.86);
+  fill.style.width = p * 100 + '%';
+  early.style.width = Math.min(p, 0.4) * 100 + '%';
+  head.style.left = p * 100 + '%';
+  const idx = Math.min(5, Math.floor(p * 5 + 0.35));
+  stages.forEach((s, i) => s.classList.toggle('on', i === idx));
+  nameEls.forEach((s, i) => s.classList.toggle('on', i === idx));
+  dots.forEach((d, i) => { d.classList.toggle('on', p >= i / 5 - 0.005); d.classList.toggle('e', i < 3); });
+  const z = idx < 3 ? 0 : idx === 3 ? 1 : 2;
+  zones.forEach((el, i) => el.classList.toggle('on', i === z));
+
+  // iris
+  if (!reduce) {
+    const q = clamp(progress(iris) / 0.8), e = q * q * (3 - 2 * q);
+    const max = Math.hypot(innerWidth, innerHeight) * 0.62;
+    irisPin.style.setProperty('--r', (e * max).toFixed(1) + 'px');
+  }
+}
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+addEventListener('resize', onScroll);
+onScroll();
+
+/* ---------- reveals and counters ---------- */
+const io = new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (!e.isIntersecting) continue;
+    e.target.classList.add('in'); io.unobserve(e.target);
+    const n = e.target.querySelector('[data-count]');
+    if (n && !reduce) {
+      const to = +n.dataset.count, t0 = performance.now(), dur = 900 + to * 40;
+      const tick = (t) => { const k = clamp((t - t0) / dur), v = Math.round((1 - Math.pow(1 - k, 3)) * to); n.textContent = v; if (k < 1) requestAnimationFrame(tick); };
+      n.textContent = '0'; requestAnimationFrame(tick);
+    }
+  }
+}, { threshold: 0.18 });
+document.querySelectorAll('[data-r]').forEach((el) => io.observe(el));
+
+/* ---------- sample request form ---------- */
 // Submits to Netlify Forms without leaving the page. On any other host the request fails and the form says so.
-const form = document.getElementById('sample-form');
-const statusEl = document.getElementById('status');
+const form = document.getElementById('sample-form'), statusEl = document.getElementById('status');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = form.querySelector('button');
-  btn.disabled = true;
-  statusEl.className = 'status';
-  statusEl.textContent = 'Sending…';
+  btn.disabled = true; statusEl.className = 'status'; statusEl.textContent = 'Sending…';
   try {
-    const res = await fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(new FormData(form)).toString(),
-    });
+    const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)).toString() });
     if (!res.ok) throw new Error(String(res.status));
-    form.reset();
-    statusEl.className = 'status ok';
-    statusEl.textContent = 'Sample issue requested. Watch your inbox.';
+    form.reset(); statusEl.className = 'status ok'; statusEl.textContent = 'Sample issue requested. Watch your inbox.';
   } catch {
-    statusEl.className = 'status err';
-    statusEl.textContent = 'That didn’t send. Check your connection and try again.';
-    btn.disabled = false;
+    statusEl.className = 'status err'; statusEl.textContent = 'That didn’t send. Check your connection and try again.'; btn.disabled = false;
   }
 });
 </script>
