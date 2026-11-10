@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signal Feed: Simcoe County building projects, months before tender</title>
+<meta name="description" content="A weekly feed of commercial, industrial and multi-residential projects filed with Barrie, Orillia and Simcoe County councils, sent to building suppliers months before the tender.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0d4a38;      /* highway-sign green */
+  --green-deep:#083528;
+  --board:#ffffff;      /* notice-sign board */
+  --concrete:#e8ecea;
+  --ink:#14201c;
+  --muted:#5d6b66;
+  --line:#c5cecb;
+  --flag:#ff5a1f;       /* survey flagging tape */
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --wrap:1120px;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);font-size:17px;line-height:1.55;color:var(--ink);background:var(--concrete);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--flag);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+.display{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.95;letter-spacing:.005em}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:.02em}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+
+/* buttons */
+.btn{display:inline-block;font:700 16px/1 var(--body);padding:16px 22px;border:0;border-radius:4px;background:var(--flag);color:#1a0d06;text-decoration:none;cursor:pointer}
+.btn:hover{background:#ff7340}
+.btn[disabled]{opacity:.6;cursor:default}
+
+/* top bar */
+.top{background:var(--green);color:#fff}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:18px;padding-bottom:18px}
+.mark{font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.04em;text-decoration:none}
+.mark small{font:400 12px var(--mono);letter-spacing:.09em;opacity:.75;margin-left:10px}
+.top a.link{font-weight:600;font-size:15px;text-underline-offset:4px}
+
+/* hero */
+.hero{background:var(--green);color:#fff;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:end;padding-top:40px}
+.hero-copy{padding-bottom:88px}
+.hero h1{font-size:clamp(46px,6.6vw,88px);margin-bottom:22px}
+.hero h1 em{font-style:normal;color:var(--flag)}
+.hero p.lede{font-size:19px;max-width:33em;color:#dfeae6;margin-bottom:30px}
+.hero .fine{margin-top:14px;font-size:14px;color:#b9cdc6}
+
+/* the notice sign */
+.sign{position:relative;align-self:end}
+.board{position:relative;background:var(--board);color:var(--ink);border:4px solid var(--ink);border-radius:3px;box-shadow:0 18px 0 -10px rgba(0,0,0,.25)}
+.board header{background:var(--ink);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.board header b{font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.03em;line-height:1}
+.board header span{font-family:var(--mono);font-size:12px;opacity:.8;white-space:nowrap}
+.board dl{padding:6px 18px 14px}
+.board dl div{display:grid;grid-template-columns:104px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.board dl div:last-child{border-bottom:0}
+.board dt{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.board dd{font-size:15.5px;line-height:1.4}
+.board dd strong{font-weight:700}
+.tape{position:absolute;top:-14px;right:-18px;transform:rotate(4deg);background:var(--flag);color:#1a0d06;font:500 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;padding:7px 12px;z-index:2}
+.posts{display:flex;justify-content:space-between;padding:0 18%;height:64px}
+.posts i{width:14px;background:#2a3833;border-left:3px solid #1a2420}
+.ground{height:14px;background:repeating-linear-gradient(-45deg,var(--green-deep) 0 8px,transparent 8px 16px);border-top:3px solid var(--green-deep)}
+
+/* sections */
+.sec{padding:84px 0}
+.sec.alt{background:#fff}
+.sec h2{font-size:clamp(34px,4.4vw,54px);max-width:16em;margin-bottom:16px}
+.sec p.intro{max-width:40em;color:#33423d;margin-bottom:40px}
+
+/* timeline */
+.stages{list-style:none;padding:0;display:grid;grid-template-columns:repeat(6,1fr);position:relative}
+.stages::before{content:"";position:absolute;left:0;right:0;top:9px;height:3px;background:var(--ink)}
+.stages li{position:relative;padding:34px 14px 0 0}
+.stages li::before{content:"";position:absolute;top:0;left:0;width:21px;height:21px;border-radius:50%;background:var(--concrete);border:3px solid var(--ink)}
+.stages li.early::before{background:var(--flag);border-color:var(--flag)}
+.stages li.first::after{content:"";position:absolute;top:0;left:0;width:21px;height:21px;border-radius:50%;border:3px solid var(--flag);animation:ping 2.4s ease-out infinite}
+.stages li.late::before{background:var(--ink)}
+.stages b{display:block;font-family:var(--display);font-size:23px;text-transform:uppercase;line-height:1.05;margin-bottom:6px}
+.stages span{display:block;font-size:14px;color:var(--muted);line-height:1.4}
+.spans{display:grid;grid-template-columns:repeat(6,1fr);margin-top:28px;gap:0}
+.spans div{padding:12px 14px;font-size:14.5px;line-height:1.4}
+.spans .you{grid-column:1/4;border-top:4px solid var(--flag);background:#fff1ea}
+.spans .gap{grid-column:4/5;border-top:4px solid var(--line);color:var(--muted)}
+.spans .them{grid-column:5/7;border-top:4px solid var(--ink);background:#dfe5e3}
+.spans b{display:block;font-weight:700}
+@keyframes ping{0%{transform:scale(1);opacity:.9}80%,100%{transform:scale(2.6);opacity:0}}
+
+/* feed table */
+.feed{border:3px solid var(--ink);background:#fff;border-radius:3px}
+.feed-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 18px;background:var(--ink);color:#fff}
+.feed-head .label b{color:var(--flag);font-weight:500}
+.row{display:grid;grid-template-columns:150px 1.3fr 1fr 1.4fr;gap:18px;padding:16px 18px;border-top:1px solid var(--line);font-size:15px;line-height:1.4}
+.row:first-of-type{border-top:0}
+.row .stage{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.row .stage i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--flag);margin-right:7px}
+.row .stage.moved i{background:var(--green)}
+.row strong{display:block}
+.row small{font-size:13.5px;color:var(--muted)}
+.row .needs{color:#33423d}
+.note{margin-top:14px;font-size:14px;color:var(--muted)}
+
+/* who + coverage */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.plain{list-style:none;padding:0}
+.plain li{padding:14px 0;border-top:1px solid var(--line)}
+.plain li:last-child{border-bottom:1px solid var(--line)}
+.plain b{display:block}
+.plain span{font-size:15px;color:var(--muted)}
+.towns{columns:2;column-gap:28px;list-style:none;padding:0;font-size:16px}
+.towns li{padding:7px 0;border-top:1px solid var(--line);break-inside:avoid}
+h3{font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:28px;line-height:1;margin-bottom:18px}
+
+/* signup */
+.signup{background:var(--green);color:#fff}
+.signup .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.signup h2{color:#fff}
+.price{font-family:var(--display);font-weight:700;font-size:64px;line-height:1;margin:26px 0 6px}
+.price span{font:400 17px var(--body);color:#b9cdc6}
+.signup ul{list-style:none;padding:0;margin-top:18px;color:#dfeae6}
+.signup ul li{padding:8px 0 8px 22px;position:relative}
+.signup ul li::before{content:"";position:absolute;left:0;top:17px;width:10px;height:3px;background:var(--flag)}
+form{background:#fff;color:var(--ink);border:4px solid var(--ink);border-radius:3px;padding:26px}
+form h3{margin-bottom:6px}
+form p.sub{font-size:15px;color:var(--muted);margin-bottom:18px}
+form label{display:block;font-weight:600;font-size:14.5px;margin:14px 0 6px}
+form input,form select{width:100%;font:400 16px var(--body);padding:13px 12px;border:2px solid #8f9b97;border-radius:3px;background:#fff;color:var(--ink)}
+form input:focus,form select:focus{border-color:var(--ink)}
+form .btn{width:100%;margin-top:22px}
+.hp{position:absolute;left:-9999px}
+.status{margin-top:14px;font-size:15px;font-weight:600}
+.status.ok{color:var(--green)}
+.status.err{color:#a3260a}
+
+/* faq */
+.faq{max-width:780px}
+details{border-top:1px solid var(--line);padding:18px 0}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{font-weight:700;font-size:18px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--mono);font-size:20px;line-height:1.2}
+details[open] summary::after{content:"\2212"}
+details p{margin-top:10px;color:#33423d;max-width:42em}
+
+footer{padding:34px 0 46px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .hero .wrap,.two,.signup .wrap{grid-template-columns:1fr;gap:40px}
+  .hero-copy{padding-bottom:8px}
+  .tape{right:-6px}
+  .sec{padding:60px 0}
+  .stages{grid-template-columns:1fr}
+  .stages::before{left:9px;right:auto;top:0;bottom:0;width:3px;height:auto}
+  .stages li{padding:0 0 22px 40px}
+  .spans{grid-template-columns:1fr}
+  .spans .you,.spans .gap,.spans .them{grid-column:auto}
+  .row{grid-template-columns:1fr;gap:6px}
+  .mark small{display:none}
+}
+@media (max-width:480px){
+  .board dl div{grid-template-columns:1fr;gap:2px}
+  .towns{columns:1}
+  .price{font-size:52px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .stages li.first::after{animation:none;display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">CorridorLogic<small>Signal Feed</small></a>
+    <a class="link" href="#sample">Send me a sample issue</a>
+  </div>
+</div>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1 class="display">Hear about the build while it&rsquo;s still a <em>planning file</em>.</h1>
+      <p class="lede">Signal Feed reads every council agenda and planning application in Barrie, Orillia and Simcoe County. Each week it sends your sales team the commercial, industrial and multi-residential projects that will need what you supply, months before a tender exists.</p>
+      <a class="btn" href="#sample">Send me a sample issue</a>
+      <p class="fine">Free sample. No card, no call.</p>
+    </div>
+
+    <div class="sign" aria-label="Sample alert, shown as a planning notice sign">
+      <div class="board">
+        <span class="tape">Sample alert &middot; not a live file</span>
+        <header><b>Notice of application</b><span>New this week</span></header>
+        <dl>
+          <div><dt>Proposed</dt><dd><strong>Industrial building, 234,000 sq ft</strong>, 28 dock doors, 9 acres</dd></div>
+          <div><dt>Where</dt><dd>South Barrie, Highway 400 corridor</dd></div>
+          <div><dt>Stage</dt><dd>Site plan application received. Council decision expected in about 10 weeks.</dd></div>
+          <div><dt>Likely needs</dt><dd>Structural steel, precast panels, roofing, dock levellers, rooftop units, high-bay lighting</dd></div>
+          <div><dt>On file</dt><dd>Owner, planner and architect, named, with a link to the source document</dd></div>
+        </dl>
+      </div>
+      <div class="posts" aria-hidden="true"><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="ground" aria-hidden="true"></div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <h2 class="display">By the time it&rsquo;s out for tender, the spec is written.</h2>
+    <p class="intro">A project is public long before anyone asks you for a price. The owner, architect and engineer choose products during those months. Signal Feed tells you when the file opens, so you can be the name in the spec and not one of five quotes against it.</p>
+
+    <ol class="stages">
+      <li class="early first"><b>Application filed</b><span>Rezoning or site plan lands at the municipality</span></li>
+      <li class="early"><b>Council decision</b><span>Public meeting, staff report, vote</span></li>
+      <li class="early"><b>Site plan approved</b><span>Size, layout and servicing are fixed</span></li>
+      <li><b>Building permit</b><span>Drawings and specs are complete</span></li>
+      <li class="late"><b>Tender</b><span>Trades and suppliers are asked to price</span></li>
+      <li class="late"><b>Construction</b><span>Orders placed with whoever won</span></li>
+    </ol>
+    <div class="spans">
+      <div class="you"><b>Signal Feed alerts you here</b>and again each time the file moves a stage.</div>
+      <div class="gap">Specs get written</div>
+      <div class="them"><b>Most suppliers find out here</b>from a bid request or a tender service.</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec alt">
+  <div class="wrap">
+    <h2 class="display">One email a week. Only the projects worth a call.</h2>
+    <p class="intro">Every item says what is proposed, where, what stage it has reached, who is behind it and what it is likely to need. Each one links to the municipal document it came from.</p>
+
+    <div class="feed">
+      <div class="feed-head">
+        <span class="label">Signal Feed &middot; Simcoe region &middot; weekly issue</span>
+        <span class="label"><b>Sample issue. Projects are illustrative.</b></span>
+      </div>
+      <div class="row">
+        <div class="stage"><i></i>New file</div>
+        <div><strong>Industrial building, 234,000 sq ft</strong><small>Site plan application</small></div>
+        <div>South Barrie<small style="display:block">Hwy 400 corridor</small></div>
+        <div class="needs">Steel, precast, roofing, dock equipment, rooftop units</div>
+      </div>
+      <div class="row">
+        <div class="stage moved"><i></i>Council approved</div>
+        <div><strong>Two apartment towers, 410 units</strong><small>Zoning amendment passed</small></div>
+        <div>Downtown Barrie</div>
+        <div class="needs">Concrete, rebar, windows, elevators, boilers, booster pumps</div>
+      </div>
+      <div class="row">
+        <div class="stage"><i></i>New file</div>
+        <div><strong>Cold-storage addition, 60,000 sq ft</strong><small>Site plan amendment</small></div>
+        <div>Bradford West Gwillimbury</div>
+        <div class="needs">Insulated panels, refrigeration, electrical service upgrade</div>
+      </div>
+      <div class="row">
+        <div class="stage moved"><i></i>Site plan approved</div>
+        <div><strong>Retail plaza, 5 buildings</strong><small>Agreement registered</small></div>
+        <div>Innisfil</div>
+        <div class="needs">Block, storefront glazing, asphalt, site lighting</div>
+      </div>
+      <div class="row">
+        <div class="stage"><i></i>New file</div>
+        <div><strong>Long-term care home, 160 beds</strong><small>Official plan and zoning amendment</small></div>
+        <div>Collingwood</div>
+        <div class="needs">Mechanical, commercial kitchen, generators, nurse call</div>
+      </div>
+    </div>
+    <p class="note">You pick the product categories you sell. Projects outside them stay out of your inbox.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap two">
+    <div>
+      <h3>Who subscribes</h3>
+      <ul class="plain">
+        <li><b>Mechanical and HVAC distributors</b><span>Reach the engineer before the equipment schedule is set.</span></li>
+        <li><b>Electrical wholesalers and lighting agents</b><span>Know which buildings need a new service or a lighting package.</span></li>
+        <li><b>Concrete, precast, steel and masonry</b><span>See square footage and storeys while structure is still being chosen.</span></li>
+        <li><b>Roofing, cladding, windows and doors</b><span>Get in front of the architect at the design stage.</span></li>
+        <li><b>Equipment rental and site services</b><span>Plan fleet and crews around what is coming, quarter by quarter.</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3>What it covers</h3>
+      <ul class="towns">
+        <li>Barrie</li><li>Orillia</li><li>Adjala-Tosorontio</li><li>Bradford West Gwillimbury</li><li>Clearview</li><li>Collingwood</li><li>Essa</li><li>Innisfil</li><li>Midland</li><li>New Tecumseth</li><li>Oro-Medonte</li><li>Penetanguishene</li><li>Ramara</li><li>Severn</li><li>Springwater</li><li>Tay</li><li>Tiny</li><li>Wasaga Beach</li>
+      </ul>
+      <p class="note">Industrial, commercial, institutional and multi-residential projects. No single-family homes, decks or minor variances.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec signup" id="sample">
+  <div class="wrap">
+    <div>
+      <h2 class="display">Read one issue before you decide.</h2>
+      <p style="color:#dfeae6;max-width:30em">We&rsquo;ll email you a sample issue for the Simcoe region. If the projects in it are worth a sales call, subscribe. If not, you&rsquo;ve lost nothing.</p>
+      <p class="price">$550 <span>a month, per region</span></p>
+      <ul>
+        <li>Your whole sales team on one subscription</li>
+        <li>Weekly issue, plus an alert when a file you follow moves</li>
+        <li>No contract. Cancel any month.</li>
+      </ul>
+    </div>
+
+    <form name="sample-issue" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="sample-form">
+      <input type="hidden" name="form-name" value="sample-issue">
+      <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <h3>Send me a sample issue</h3>
+      <p class="sub">Three fields. We use them to send the right projects.</p>
+      <label for="email">Work email</label>
+      <input id="email" name="email" type="email" autocomplete="email" required>
+      <label for="company">Company</label>
+      <input id="company" name="company" type="text" autocomplete="organization" required>
+      <label for="supply">What you supply</label>
+      <select id="supply" name="supply" required>
+        <option value="" selected disabled>Choose one</option>
+        <option>Mechanical / HVAC</option>
+        <option>Electrical / lighting</option>
+        <option>Concrete, precast, steel or masonry</option>
+        <option>Roofing, cladding, windows or doors</option>
+        <option>Equipment rental / site services</option>
+        <option>Something else</option>
+      </select>
+      <button class="btn" type="submit">Send me a sample issue</button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<section class="sec alt">
+  <div class="wrap">
+    <h2 class="display">Questions suppliers ask</h2>
+    <div class="faq">
+      <details open>
+        <summary>Isn&rsquo;t all of this public already?</summary>
+        <p>Yes. Every item comes from public council and planning records. It is spread across 18 municipal websites, inside agenda packages that can run to hundreds of pages. We read all of it each week so your sales team doesn&rsquo;t have to.</p>
+      </details>
+      <details>
+        <summary>How is this different from a tender service?</summary>
+        <p>A tender service tells you when a job is out for bids. By then the products are specified. Signal Feed tells you when the project is first filed, so you can talk to the owner, architect and engineer while those choices are still open.</p>
+      </details>
+      <details>
+        <summary>How do you know what a project will need?</summary>
+        <p>From what is on file: building type, floor area, storeys, units and servicing. &ldquo;Likely needs&rdquo; is our read of that, not a spec. The source document is linked so you can check.</p>
+      </details>
+      <details>
+        <summary>We sell outside Simcoe County. Can you cover our region?</summary>
+        <p>Not yet. Reply to the sample issue with where you sell, and we&rsquo;ll let you know when that region opens.</p>
+      </details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>CorridorLogic Signal Feed &middot; Barrie, Ontario</span>
+    <span>Built from public municipal records.</span>
+  </div>
+</footer>
+
+<script>
+// Submits to Netlify Forms without leaving the page. On any other host the request fails and the form says so.
+const form = document.getElementById('sample-form');
+const statusEl = document.getElementById('status');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = form.querySelector('button');
+  btn.disabled = true;
+  statusEl.className = 'status';
+  statusEl.textContent = 'Sending…';
+  try {
+    const res = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString(),
+    });
+    if (!res.ok) throw new Error(String(res.status));
+    form.reset();
+    statusEl.className = 'status ok';
+    statusEl.textContent = 'Sample issue requested. Watch your inbox.';
+  } catch {
+    statusEl.className = 'status err';
+    statusEl.textContent = 'That didn’t send. Check your connection and try again.';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
