@@ -89,7 +89,7 @@ button{font:inherit;color:inherit}
 @keyframes belt{to{transform:translateX(-50%)}}
 
 /* pinned timeline */
-.tl{height:360vh;position:relative}
+.tl{height:210vh;position:relative}
 .tl-pin{position:sticky;top:0;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
 .tl-head{max-width:760px;margin-bottom:clamp(40px,8vh,84px)}
 .tl-head .tag{margin-bottom:20px;display:block}
@@ -120,7 +120,7 @@ button{font:inherit;color:inherit}
 .zone .z2{color:var(--dim)}
 
 /* iris reveal into the light section */
-.iris{height:190vh;position:relative}
+.iris{height:120vh;position:relative}
 .iris-pin{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--bg)}
 .iris-light{position:absolute;inset:0;background:var(--paper);color:var(--ink);clip-path:circle(var(--r,0px) at 50% 52%);display:flex;align-items:center;justify-content:center;text-align:center;padding:0 var(--pad)}
 .iris-light .tag{color:var(--ink-dim);display:block;margin-bottom:22px}
@@ -137,7 +137,6 @@ button{font:inherit;color:inherit}
 .issue-top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 24px;border-bottom:1px solid var(--ink-hair)}
 .issue-top .tag b{color:#c93c0d}
 .item{display:grid;grid-template-columns:132px 1fr;gap:20px;padding:20px 24px;border-bottom:1px solid var(--ink-hair)}
-.item:last-child{border-bottom:0}
 .chip{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:inline-flex;align-items:center;gap:7px;align-self:start;padding-top:5px;color:var(--ink-dim)}
 .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal)}
 .chip.moved::before{background:var(--ink)}
@@ -145,12 +144,22 @@ button{font:inherit;color:inherit}
 .item p{font-size:14.5px;color:var(--ink-dim);margin-top:3px}
 .item .needs{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
 .item .needs span{font-size:12.5px;padding:3px 9px;border:1px solid var(--ink-hair);border-radius:99px;color:rgba(14,17,20,.78);font-weight:400}
+.item{transition:opacity .35s}
+.item.off{opacity:.28}
+.item .needs span{transition:background .25s,color .25s,border-color .25s}
+.item .needs span.hit{background:var(--ink);border-color:var(--ink);color:#fff}
+.item p.meta{margin-top:14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-dim)}
+.meta i{display:inline-block;height:8px;border-radius:2px;background:rgba(14,17,20,.17);margin-left:7px;vertical-align:middle}
+.meta .src{color:#c93c0d}
+.issue-foot{padding:15px 24px;font-size:13.5px;color:var(--ink-dim)}
 .card.feat{padding:24px 24px 26px;display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:200px}
 .card.feat h4{font-weight:300;font-size:22px;letter-spacing:-.02em;line-height:1.15}
 .card.feat p{font-size:14.5px;color:var(--ink-dim);margin-top:8px}
 .viz{height:64px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.viz .pill{font-size:12.5px;padding:5px 11px;border-radius:99px;border:1px solid var(--ink-hair);color:var(--ink-dim);font-weight:400}
-.viz .pill.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.viz .pill{font:400 12.5px var(--sans);padding:6px 12px;border-radius:99px;border:1px solid rgba(14,17,20,.22);color:var(--ink-dim);background:transparent;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.viz .pill:hover{border-color:var(--ink);color:var(--ink)}
+.viz .pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.card.feat .tag{display:block;margin-top:14px;color:#c93c0d}
 .viz.steps{gap:0;flex-wrap:nowrap}
 .viz.steps i{width:11px;height:11px;border-radius:50%;border:1px solid rgba(14,17,20,.35);flex:none}
 .viz.steps i.d{background:var(--ink);border-color:var(--ink)}
@@ -177,6 +186,7 @@ button{font:inherit;color:inherit}
 .cover-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,6vw,90px);align-items:start}
 .cover .tag{display:block;margin-bottom:20px}
 .cover p.body{color:var(--dim);margin-top:22px;max-width:28em}
+.cover p.body + p.body{margin-top:12px}
 .towns{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hair)}
 .towns li{padding:15px 0;border-bottom:1px solid var(--hair);font-size:15.5px;color:var(--dim);display:flex;align-items:center;gap:10px}
 .towns li::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--signal);opacity:.85;flex:none}
@@ -357,33 +367,39 @@ footer .tag{letter-spacing:.14em}
         <div class="item">
           <span class="chip">New file</span>
           <div><h4>Industrial building, 234,000 sq ft</h4><p>Site plan application &middot; South Barrie, Highway 400 corridor</p>
-          <div class="needs"><span>Steel</span><span>Precast</span><span>Roofing</span><span>Dock equipment</span><span>Rooftop units</span></div></div>
+          <div class="needs"><span data-cat="structure">Steel</span><span data-cat="structure">Precast</span><span data-cat="roofing">Roofing</span><span>Dock equipment</span><span data-cat="mechanical">Rooftop units</span></div>
+          <p class="meta"><span>Owner<i style="width:78px"></i></span><span>Planner<i style="width:62px"></i></span><span>Architect<i style="width:70px"></i></span><span class="src">Staff report (PDF) &nearr;</span></p></div>
         </div>
         <div class="item">
           <span class="chip moved">Council approved</span>
           <div><h4>Two apartment towers, 410 units</h4><p>Zoning amendment passed &middot; Downtown Barrie</p>
-          <div class="needs"><span>Concrete</span><span>Rebar</span><span>Windows</span><span>Elevators</span><span>Boilers</span></div></div>
+          <div class="needs"><span data-cat="structure">Concrete</span><span data-cat="structure">Rebar</span><span data-cat="glazing">Windows</span><span>Elevators</span><span data-cat="mechanical">Boilers</span></div>
+          <p class="meta"><span>Owner<i style="width:64px"></i></span><span>Planner<i style="width:84px"></i></span><span>Architect<i style="width:58px"></i></span><span class="src">Staff report (PDF) &nearr;</span></p></div>
         </div>
         <div class="item">
           <span class="chip">New file</span>
           <div><h4>Cold-storage addition, 60,000 sq ft</h4><p>Site plan amendment &middot; Bradford West Gwillimbury</p>
-          <div class="needs"><span>Insulated panels</span><span>Refrigeration</span><span>Electrical service</span></div></div>
+          <div class="needs"><span>Insulated panels</span><span data-cat="mechanical">Refrigeration</span><span data-cat="electrical">Electrical service</span></div>
+          <p class="meta"><span>Owner<i style="width:88px"></i></span><span>Planner<i style="width:56px"></i></span><span>Architect<i style="width:74px"></i></span><span class="src">Staff report (PDF) &nearr;</span></p></div>
         </div>
         <div class="item">
           <span class="chip moved">Site plan approved</span>
           <div><h4>Retail plaza, 5 buildings</h4><p>Agreement registered &middot; Innisfil</p>
-          <div class="needs"><span>Block</span><span>Storefront glazing</span><span>Asphalt</span><span>Site lighting</span></div></div>
+          <div class="needs"><span data-cat="structure">Block</span><span data-cat="glazing">Storefront glazing</span><span>Asphalt</span><span data-cat="electrical">Site lighting</span></div>
+          <p class="meta"><span>Owner<i style="width:70px"></i></span><span>Planner<i style="width:72px"></i></span><span>Architect<i style="width:60px"></i></span><span class="src">Staff report (PDF) &nearr;</span></p></div>
         </div>
         <div class="item">
           <span class="chip">New file</span>
           <div><h4>Long-term care home, 160 beds</h4><p>Official plan and zoning amendment &middot; Collingwood</p>
-          <div class="needs"><span>Mechanical</span><span>Commercial kitchen</span><span>Generators</span></div></div>
+          <div class="needs"><span data-cat="mechanical">Mechanical</span><span>Commercial kitchen</span><span data-cat="electrical">Generators</span></div>
+          <p class="meta"><span>Owner<i style="width:82px"></i></span><span>Planner<i style="width:60px"></i></span><span>Architect<i style="width:80px"></i></span><span class="src">Staff report (PDF) &nearr;</span></p></div>
         </div>
+        <p class="issue-foot">Names and source links are filled in on every project in a real issue.</p>
       </article>
 
       <article class="card feat" data-r style="--d:.08s">
-        <div class="viz"><span class="pill on">Mechanical</span><span class="pill">Electrical</span><span class="pill on">Roofing</span><span class="pill">Concrete</span><span class="pill">Glazing</span></div>
-        <div><h4>Filtered to what you sell.</h4><p>Pick your product categories. Projects outside them stay out of your inbox.</p></div>
+        <div class="viz" id="filter" role="group" aria-label="Filter the sample issue by what you sell"><button type="button" class="pill" data-cat="mechanical" aria-pressed="true">Mechanical</button><button type="button" class="pill" data-cat="electrical" aria-pressed="false">Electrical</button><button type="button" class="pill" data-cat="roofing" aria-pressed="true">Roofing</button><button type="button" class="pill" data-cat="structure" aria-pressed="false">Structure</button><button type="button" class="pill" data-cat="glazing" aria-pressed="false">Glazing</button></div>
+        <div><h4>Filtered to what you sell.</h4><p>Pick your categories and watch the sample issue change. Projects outside them stay out of your inbox.</p><span class="tag" id="match" aria-live="polite"></span></div>
       </article>
       <article class="card feat" data-r style="--d:.16s">
         <div class="viz steps"><i class="d"></i><b class="d"></b><i class="d"></i><b class="d"></b><i class="n"></i><b></b><i></i><b></b><i></i></div>
@@ -417,6 +433,7 @@ footer .tag{letter-spacing:.14em}
       <div data-r>
         <span class="tag">Coverage</span>
         <h2 class="h h2">Eighteen councils. One feed.</h2>
+        <p class="body">All 16 towns and townships of Simcoe County, plus the separated cities of Barrie and Orillia.</p>
         <p class="body">Industrial, commercial, institutional and multi-residential projects. No single-family homes, decks or minor variances.</p>
       </div>
       <ul class="towns" id="towns" data-r style="--d:.1s"></ul>
@@ -767,6 +784,24 @@ const io = new IntersectionObserver((entries) => {
   }
 }, { threshold: 0.18 });
 document.querySelectorAll('[data-r]').forEach((el) => io.observe(el));
+
+/* ---------- sample issue filter ---------- */
+(() => {
+  const pills = [...document.querySelectorAll('#filter .pill')], items = [...document.querySelectorAll('.issue .item')], out = document.getElementById('match');
+  const apply = () => {
+    const on = pills.filter((p) => p.getAttribute('aria-pressed') === 'true').map((p) => p.dataset.cat);
+    let n = 0;
+    for (const it of items) {
+      let hit = false;
+      it.querySelectorAll('.needs span').forEach((t) => { const h = on.includes(t.dataset.cat); t.classList.toggle('hit', h); hit = hit || h; });
+      it.classList.toggle('off', on.length > 0 && !hit);
+      if (!on.length || hit) n++;
+    }
+    out.textContent = on.length ? `${n} of ${items.length} sample projects match` : `Showing all ${items.length} sample projects`;
+  };
+  pills.forEach((p) => p.addEventListener('click', () => { p.setAttribute('aria-pressed', p.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); apply(); }));
+  apply();
+})();
 
 /* ---------- sample request form ---------- */
 // Submits to Netlify Forms without leaving the page. On any other host the request fails and the form says so.
