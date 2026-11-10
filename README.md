@@ -8,6 +8,38 @@ This week's briefs stay here until Monday, then move to "Last week". After that 
 
 ---
 
+## Tue, Nov 10
+
+🎬 **Reel:** [reel.mp4](this-week/2026-11-10-tue/reel/reel.mp4) · [folder](this-week/2026-11-10-tue/reel)
+
+<img src="this-week/2026-11-10-tue/reel/cover.png" width="200">
+
+```text
+Google is turning Search and Gemini off for K-12 student accounts until schools switch them on, and says AI-boosted search will soon be the only Google search in its school tools. Schools that want AI off may have to give up Search.
+
+If AI answers come with search, teachers will be the ones showing students how to use them well. "Students are going to go for the easy route. We need our teachers to teach them why that's not the right path," says Tom D'Amico, a former Ottawa Catholic director of education, to CBC.
+
+Three habits worth teaching now 👇 and if your school wants PD on AI-assisted research, that's what we do. Link in bio.
+
+Sources: Google, "Designing responsible AI for learning" (Nov. 3, 2026); CBC, "Google offers schools AI-boosted search or none at all" (Nov. 5, 2026).
+
+#AIinEducation #AIliteracy #Teachers #EdTech #K12 #CanadianEducation #Growthway
+```
+
+_Quiet day: nothing new on AI and schools or on the politics side in the last 48 hours that I could verify from a primary source. Today's reel turns last week's biggest story, Google's "AI search or no search" change, into three classroom habits for teachers. No new drafts; last week's Google and budget drafts are still current if you didn't post them._
+
+**Reel:** "AI search, or no search." What's changing for K-12 students on Google's tools, why it lands on teachers, and three habits to teach: check the AI answer, find the original source, know when to skip AI. Sources: [Google (Nov. 3)](https://blog.google/products-and-platforms/products/education/ai-learning-era-updates-2026/) and [CBC via Yahoo (Nov. 5)](https://ca.news.yahoo.com/google-offers-schools-ai-boosted-181653667.html), including the D'Amico quote in the caption.
+
+**Watchlist:**
+- **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
+- **Budget document:** confirm the student grant change and child care lines before posting without attribution.
+- **Google K-12 defaults:** watch for Canadian timing and Workspace admin details.
+- **Quebec:** religious-symbols bill.
+- **B.C.:** watch for cabinet and an education minister.
+- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
+
+---
+
 ## Mon, Nov 9
 
 _Weekend scan (72 hours): budget reactions fill in what Friday's brief couldn't verify. One education story, one politics story._

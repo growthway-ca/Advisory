@@ -1,0 +1,12 @@
+{
+  "slug": "2026-11-10-ai-search",
+  "caption": "Google is turning Search and Gemini off for K-12 student accounts until schools switch them on, and says AI-boosted search will soon be the only Google search in its school tools. Schools that want AI off may have to give up Search.\n\nIf AI answers come with search, teachers will be the ones showing students how to use them well. \"Students are going to go for the easy route. We need our teachers to teach them why that's not the right path,\" says Tom D'Amico, a former Ottawa Catholic director of education, to CBC.\n\nThree habits worth teaching now 👇 and if your school wants PD on AI-assisted research, that's what we do. Link in bio.\n\nSources: Google, \"Designing responsible AI for learning\" (Nov. 3, 2026); CBC, \"Google offers schools AI-boosted search or none at all\" (Nov. 5, 2026).",
+  "hashtags": ["#AIinEducation", "#AIliteracy", "#Teachers", "#EdTech", "#K12", "#CanadianEducation", "#Growthway"],
+  "scenes": [
+    { "type": "hook", "kicker": "Google, K-12", "text": "AI search, [[or no search.]]" },
+    { "type": "list", "kicker": "What's changing", "title": "For K-12 students", "items": ["Search and Gemini start off", "Schools switch them on", "Search comes with AI"] },
+    { "type": "point", "lead": "If AI answers come with search,", "text": "teachers have to [[teach the habits.]]" },
+    { "type": "list", "kicker": "In class", "title": "Three habits to teach", "items": ["Check the AI answer", "Find the original source", "Know when to skip AI"] },
+    { "type": "outro" }
+  ]
+}
