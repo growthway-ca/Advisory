@@ -4,9 +4,11 @@
   "type": "module",
   "scripts": {
     "reel:nordic": "node reels/nordic-fix/build.mjs",
-    "reel:maison": "node reels/maison-lave/build.mjs"
+    "reel:maison": "node reels/maison-lave/build.mjs",
+    "carousel:parlour": "node reels/parlour-guild/build.mjs"
   },
   "dependencies": {
+    "@fontsource/anton": "^5.2.7",
     "@fontsource/inter": "5.2.8",
     "@fontsource/newsreader": "5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
