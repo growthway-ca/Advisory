@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "reel:nordic": "node reels/nordic-fix/build.mjs"
+    "reel:nordic": "node reels/nordic-fix/build.mjs",
+    "reel:maison": "node reels/maison-lave/build.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",
