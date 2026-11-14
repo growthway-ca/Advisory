@@ -18,10 +18,12 @@ export const THEMES = {
   sage: { bg: COLORS.sage, glow: '#e6f3cf', text: COLORS.forest, accent: COLORS.rust, marker: COLORS.forest, markText: COLORS.sage, mark: COLORS.forest },
   cream: { bg: COLORS.cream, glow: '#ffffff', text: COLORS.forest, accent: COLORS.rust, marker: COLORS.sage, markText: COLORS.forest, mark: COLORS.forest },
   rust: { bg: COLORS.rust, glow: '#d8834f', text: COLORS.cream, accent: COLORS.deep, marker: COLORS.cream, markText: COLORS.rust, mark: COLORS.cream },
+  // Notebook paper: ruled lines and a margin, with a hand-drawn circle instead of the marker sweep.
+  paper: { bg: '#FBF8F1', glow: '#ffffff', text: COLORS.forest, accent: COLORS.rust, marker: COLORS.sage, markText: COLORS.forest, mark: COLORS.forest, paper: true },
 };
 
 // Default theme per scene type, so a spec can leave it out and still get the house rhythm.
-const DEFAULT_THEME = { hook: 'forest', stat: 'sage', gap: 'forest', point: 'rust', list: 'cream', outro: 'deep' };
+const DEFAULT_THEME = { hook: 'forest', stat: 'sage', gap: 'forest', point: 'rust', list: 'cream', outro: 'deep', quote: 'paper', kinetic: 'deep', versus: 'cream' };
 
 export async function fonts() {
   const face = async (pkg, file, family, weight, style = 'normal') => {
@@ -50,13 +52,17 @@ export function logo(color, { size = 64, build = false, delay = 0 } = {}) {
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // Splits a line into rising words. Text inside [[double brackets]] gets the marker.
-function words(text, { start = 0, step = 0.09 } = {}) {
+function words(text, { start = 0, step = 0.09, circle = false } = {}) {
   let i = 0;
   return esc(text).split(/(\[\[.*?\]\])/).map((part) => {
     const marked = part.startsWith('[[');
     const html = (marked ? part.slice(2, -2) : part).split(/\s+/).filter(Boolean)
       .map((w) => `<span class="w" style="--t:${(start + step * i++).toFixed(2)}s">${w}</span>`).join(' ');
-    return marked ? `<span class="mk" style="--t:${(start + step * i).toFixed(2)}s">${html}</span>` : html;
+    if (!marked) return html;
+    const t = (start + step * i).toFixed(2);
+    return circle
+      ? `<span class="mkc" style="--t:${t}s">${html}<svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M8 24C4 9 52 3 90 9c12 3 8 22-14 26-30 6-70 4-68-13" pathLength="100"/></svg></span>`
+      : `<span class="mk" style="--t:${t}s">${html}</span>`;
   }).join(' ');
 }
 
@@ -69,7 +75,7 @@ function counter(value, { prefix = '', suffix = '', t = 0.3, dur = 1.1 } = {}) {
 }
 
 const SCENES = {
-  hook: (s) => `<div class="content mid">${kicker(s.kicker)}<h1 class="headline">${words(s.text, { start: 0.35 })}</h1>
+  hook: (s, th) => `<div class="content mid">${kicker(s.kicker)}<h1 class="headline">${words(s.text, { start: 0.35, circle: th.paper })}</h1>
 ${s.sub ? `<p class="sub" style="--t:${0.6 + s.text.split(/\s+/).length * 0.09}s">${esc(s.sub)}</p>` : ''}</div>`,
 
   stat: (s) => `<div class="content mid">${kicker(s.kicker)}${counter(s.value, { prefix: s.prefix, suffix: s.suffix })}
@@ -87,11 +93,44 @@ ${s.sub ? `<p class="sub" style="--t:${0.6 + s.text.split(/\s+/).length * 0.09}s
 ${source(s.source, 2.6)}</div>`;
   },
 
-  point: (s) => `<div class="content mid">${kicker(s.kicker)}<p class="serif">${words(s.lead, { start: 0.35, step: 0.08 })}</p>
-<h1 class="headline punch">${words(s.text, { start: 0.8 + s.lead.split(/\s+/).length * 0.08, step: 0.1 })}</h1></div>`,
+  point: (s, th) => `<div class="content mid">${kicker(s.kicker)}<p class="serif">${words(s.lead, { start: 0.35, step: 0.08 })}</p>
+<h1 class="headline punch">${words(s.text, { start: 0.8 + s.lead.split(/\s+/).length * 0.08, step: 0.1, circle: th.paper })}</h1></div>`,
 
   list: (s) => `<div class="content mid">${kicker(s.kicker)}<h2 class="title">${words(s.title, { start: 0.2, step: 0.05 })}</h2>
 <ol class="items">${s.items.map((x, k) => `<li style="--t:${0.8 + k * 0.7}s"><span class="ix">${String(k + 1).padStart(2, '0')}</span><span class="it">${esc(x)}</span></li>`).join('')}</ol></div>`,
+
+  // A pull quote: oversized quotation mark, the quote in serif, then a rule and the speaker.
+  quote: (s, th) => {
+    const n = s.text.split(/\s+/).length;
+    const size = n > 14 ? 72 : n > 8 ? 88 : 104;
+    const at = 0.5 + n * 0.08;
+    return `<div class="content mid">${kicker(s.kicker)}<div class="qmark">&ldquo;</div>
+<p class="quote" style="font-size:${size}px">${words(s.text, { start: 0.45, step: 0.08, circle: th.paper })}</p>
+<div class="who" style="--t:${(at + 0.3).toFixed(2)}s"><i></i><div><b>${esc(s.name ?? '')}</b>${s.role ? `<span>${esc(s.role)}</span>` : ''}</div></div></div>`;
+  },
+
+  // Kinetic type: one short phrase at a time, full screen, on a beat. [[brackets]] colour a word.
+  kinetic: (s) => {
+    const n = s.phrases.length;
+    const beat = s.beat ?? (s.seconds - 0.6) / n;
+    return `<div class="content kin">${s.phrases.map((p, k) => {
+      const len = p.replace(/\[\[|\]\]/g, '').length;
+      const size = len <= 8 ? 230 : len <= 14 ? 170 : len <= 22 ? 128 : 100;
+      const tin = (0.2 + k * beat).toFixed(2);
+      const tout = (0.2 + (k + 1) * beat - 0.12).toFixed(2);
+      const html = esc(p).replace(/\[\[(.*?)\]\]/g, '<em>$1</em>');
+      const anim = k < n - 1 ? `kin-in .32s ${tin}s cubic-bezier(.2,1.3,.4,1) both, kin-out .16s ${tout}s ease-in forwards` : `kin-in .32s ${tin}s cubic-bezier(.2,1.3,.4,1) both`;
+      return `<div class="kp" style="font-size:${size}px;animation:${anim}">${html}</div>`;
+    }).join('')}</div>`;
+  },
+
+  // Before / after: the old way appears and gets struck through, then the new way lands.
+  versus: (s) => {
+    const col = (c, k, cls) => `<div class="vs ${cls}" style="--t:${0.3 + k * 1.6}s"><div class="vs-label">${esc(c.label)}</div>
+<ul>${c.items.map((x, j) => `<li style="--t:${(0.5 + k * 1.6 + j * 0.25).toFixed(2)}s;--s:${(1.3 + j * 0.15).toFixed(2)}s">${esc(x)}</li>`).join('')}</ul></div>`;
+    return `<div class="content mid">${kicker(s.kicker)}${s.title ? `<h2 class="title vs-title">${words(s.title, { start: 0.15, step: 0.05 })}</h2>` : ''}
+${col(s.before, 0, 'before')}<div class="vs-arrow" style="--t:1.7s">↓</div>${col(s.after, 1, 'after')}</div>`;
+  },
 
   outro: (s, th) => `<div class="content center">${logo(th.mark, { size: 300, build: true, delay: 0.25 })}
 <div class="wordmark" style="--t:1.35s">Growthway</div>
@@ -107,6 +146,13 @@ html,body{width:1080px;height:1920px;overflow:hidden}
 body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
 .scene{position:absolute;inset:0;background:var(--bg);overflow:hidden;animation:reveal .85s cubic-bezier(.7,0,.25,1) both}
 .first .scene{animation:none}
+.scene.t-wipe{animation-name:wipe;animation-duration:.6s}
+.scene.t-slide{animation-name:slide;animation-duration:.55s}
+.scene.t-cut{animation:none}
+@keyframes wipe{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes slide{from{transform:translateX(100%)}to{transform:none}}
+.scene.paper{background-image:linear-gradient(90deg,transparent 46px,rgba(196,99,47,.35) 46px,rgba(196,99,47,.35) 49px,transparent 49px),repeating-linear-gradient(transparent 0 78px,rgba(21,60,42,.09) 78px 80px)}
+.scene.paper .grain{opacity:.14}
 @keyframes reveal{from{clip-path:circle(0% at 50% 46%)}to{clip-path:circle(75% at 50% 46%)}}
 .glow{position:absolute;width:1500px;height:1500px;left:-210px;top:200px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 62%);opacity:.75;animation:breathe var(--d) ease-in-out both}
 @keyframes breathe{from{transform:scale(.92) translateY(30px)}to{transform:scale(1.08) translateY(-30px)}}
@@ -171,6 +217,39 @@ body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
 @keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
 .url{margin-top:36px;font:500 32px/1 Mono,monospace;letter-spacing:.16em;opacity:.75;animation:fadeUp .6s var(--t) both}
 
+/* circle marker (paper look) */
+.mkc{position:relative;display:inline-block;white-space:nowrap}
+.mkc svg{position:absolute;left:-7%;top:-14%;width:114%;height:128%;overflow:visible;pointer-events:none}
+.mkc path{fill:none;stroke:var(--accent);stroke-width:5;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:draw .7s calc(var(--t) + .3s) cubic-bezier(.6,0,.3,1) forwards}
+
+/* quote */
+.qmark{font:italic 500 420px/0.6 Newsreader,serif;color:var(--accent);opacity:.9;height:190px;padding-top:150px;margin-bottom:30px;animation:fadeUp .5s .2s both}
+.quote{font:italic 500 96px/1.12 Newsreader,serif;letter-spacing:-.01em}
+.who{display:flex;gap:28px;align-items:center;margin-top:64px;animation:fadeUp .6s var(--t) both}
+.who i{display:block;width:90px;height:5px;background:var(--accent);border-radius:3px}
+.who b{display:block;font-weight:800;font-size:44px;letter-spacing:-.02em}
+.who span{display:block;margin-top:8px;font:500 26px/1.3 Mono,monospace;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+
+/* kinetic */
+.content.kin{right:84px}
+.kp{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);font-weight:800;line-height:.98;letter-spacing:-.045em;text-align:left}
+.kp em{font-style:normal;color:var(--accent)}
+@keyframes kin-in{from{opacity:0;transform:translateY(-50%) scale(1.25)}to{opacity:1;transform:translateY(-50%) scale(1)}}
+@keyframes kin-out{from{opacity:1}to{opacity:0;transform:translateY(-50%) scale(.92)}}
+
+/* versus */
+.vs-title{margin-bottom:44px}
+.vs{border-radius:30px;padding:44px 46px;animation:fadeUp .6s var(--t) both}
+.vs.before{background:color-mix(in srgb,var(--text) 7%,var(--bg))}
+.vs.after{background:var(--accent);color:var(--bg)}
+.vs-label{font:500 32px/1 Mono,monospace;letter-spacing:.22em;text-transform:uppercase;opacity:.8;margin-bottom:22px}
+.vs ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.vs li{font-weight:800;font-size:60px;line-height:1.15;letter-spacing:-.02em;animation:fadeUp .5s var(--t) both}
+.vs.before li{position:relative;width:fit-content;opacity:.75}
+.vs.before li::after{content:"";position:absolute;left:-4px;right:-4px;top:54%;height:6px;border-radius:3px;background:${COLORS.rust};transform-origin:left;animation:strike .35s var(--s) cubic-bezier(.6,0,.3,1) both}
+@keyframes strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.vs-arrow{font-weight:800;font-size:80px;line-height:1;text-align:center;margin:18px 0;color:var(--accent);animation:fadeUp .4s var(--t) both}
+
 /* the mark building itself */
 .logo.build .ring{stroke-dasharray:100;animation:draw .9s var(--ld) cubic-bezier(.6,0,.3,1) both}
 @keyframes draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
@@ -194,7 +273,7 @@ export function scenePage(fontCss, s, { index, count, prev, cover = false }) {
   const vars = `--bg:${th.bg};--glow:${th.glow};--text:${th.text};--accent:${th.accent};--marker:${th.marker};--markText:${th.markText};--prev:${prev ?? th.bg};--d:${s.seconds}s`;
   const segs = Array.from({ length: count }, (_, k) => `<div class="seg ${k < index ? 'done' : k === index ? 'now' : ''}"><i></i></div>`).join('');
   return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}${CSS}</style></head>
-<body class="${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''}" style="${vars}"><div class="scene">
+<body class="${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''}" style="${vars}"><div class="scene t-${s.transition ?? 'ring'}${th.paper ? ' paper' : ''}">
 <div class="glow"></div>${s.type === 'outro' ? '' : `<div class="water">${logo(th.mark)}</div>`}<div class="grain"></div>
 <div class="progress">${segs}</div>
 ${s.type === 'outro' ? '' : `<div class="tag">${logo(th.text, { size: 46 })}<span>Growthway</span></div>`}

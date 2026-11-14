@@ -16,7 +16,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CHROMIUM = process.env.PW_CHROMIUM ?? (existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
 
 // Default seconds per scene type, long enough to read at a normal pace.
-const SECONDS = { hook: 5, stat: 4.6, gap: 6, point: 4.8, list: 6.4, outro: 4 };
+const SECONDS = { hook: 5, stat: 4.6, gap: 6, point: 4.8, list: 6.4, outro: 4, quote: 5.6, kinetic: 4, versus: 6.4 };
 
 async function still(browser, html, file, at) {
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });

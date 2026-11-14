@@ -35,6 +35,17 @@ In any text, wrap the key phrase in `[[double brackets]]` to give it the marker.
 | `list` | `title`, `items` (2–4, short) | What to do about it. |
 | `outro` | `tagline`, `cta` (both optional) | Always last. |
 
+| `quote` | `text`, `name`, `role` | A pull quote: oversized quotation mark, serif text, speaker line. Defaults to the paper look. |
+| `kinetic` | `phrases` (2–5 short phrases), `beat` (optional seconds per phrase) | Full-screen words, one phrase at a time. Good for hooks and lists of single words. `[[brackets]]` colour a word. |
+| `versus` | `before` and `after` (each `{label, items}`), optional `title` | The old way appears and gets struck through, then the new way lands. |
+
+### Variation
+
+Mix these so reels don't all feel the same:
+- `transition` on any scene: `ring` (default, the circle reveal), `wipe` (up from the bottom), `slide` (in from the right) or `cut` (no transition; good between kinetic beats).
+- `theme: "paper"`: notebook paper with ruled lines and a margin, and a hand-drawn circle instead of the marker sweep. Works with any scene type.
+- Pace: set `seconds` per scene; kinetic scenes read best at 3–4 seconds.
+
 A good reel is 5–7 scenes and 25–35 seconds: hook → evidence (stat or gap) → the take (point) → what to do (list) → outro.
 
 ## Rules
