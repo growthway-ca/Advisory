@@ -4,242 +4,111 @@ A new brief every weekday by 6:30am ET, with a branded reel on Tuesdays and Frid
 Pick what you like, edit, post. Nothing here is posted automatically.
 This week's briefs stay here until Monday, then move to "Last week". After that they're deleted.
 
-## This week (from 2026-11-09)
+## This week (from 2026-11-16)
 
 ---
 
-## Fri, Nov 13
+## Mon, Nov 16
 
-🎬 **Reel:** [reel.mp4](this-week/2026-11-13-fri/reel/reel.mp4) · [folder](this-week/2026-11-13-fri/reel)
+**Top pick:** Alberta is overhauling what every student needs to graduate (fewer core credits, more electives, new required financial literacy and wellness credits), and the coverage doesn't mention digital or AI literacy anywhere. That's the gap, and it's a clean, non-partisan Growthway story.
 
-<img src="this-week/2026-11-13-fri/reel/cover.png" width="200">
+### 1. Alberta cuts core high school credits from 56 to 47, starting in 2028 · score 9/10
+Announced Friday: from fall 2028, Grade 10 students need 47 core credits instead of 56 (still 100 in total), with optional credits rising from 44 to 53. In Grades 11–12, individual required courses become broader areas: 10 humanities credits (English or social studies), 5 math or science credits, plus required physical education, wellness and financial literacy credits and at least one diploma exam. Grade 11 follows in 2029 and all senior grades by 2030. The Alberta Teachers' Association says the changes came without consulting educators. · [Global News](https://ca.news.yahoo.com/more-gym-less-humanities-alberta-184433449.html) · [Calgary Herald](https://ca.news.yahoo.com/province-alters-high-school-graduation-185639270.html) · [DiscoverAirdrie](https://discoverairdrie.com/articles/alberta-announces-new-high-school-graduation-requirements-for-2028)
+**Why it matters:** A province is rewriting what every graduate must learn, and the new list names financial literacy, wellness and career planning but, in the coverage, not digital or AI literacy. If it's not in the requirements, it depends on which electives a school can staff.
 
-```text
-This week in AI & schools 👇
-
-1. Budget 2026: post-secondary students get access to "trusted AI agents" under the federal AI strategy, plus 10,000 co-funded work placements (per CAUT's reading of the budget).
-2. Also per CAUT: no new student aid, and without new funding the maximum Canada Student Grant reverts from $4,200 to $3,000 next year.
-3. Google: AI-boosted search will soon be the only Google search in its school tools, or schools can turn Search off.
-
-The tools are arriving faster than the support. Three questions for your school, and if your board wants help planning AI teaching, that's what we do. Link in bio.
-
-Sources: Canadian Association of University Teachers (Nov. 6, 2026); CBC (Nov. 5, 2026); Google (Nov. 3, 2026).
-
-#AIinEducation #AIliteracy #Budget2026 #StudentAid #K12 #CanadianEducation #Growthway
-```
-
-_Friday: one new education-policy story from Quebec. The weekly reel rounds up the week in AI and schools._
-
-**Top pick:** Quebec's PQ government says it will table a bill in 2027 that could restrict English-language CEGEPs to students legally eligible to study in English. As a minority government it needs at least one opposition party, and the Conservatives, Liberals and Québec Solidaire have all spoken against it.
-
-### 1. Quebec plans a bill to restrict access to English CEGEPs · score 8/10
-French-language minister Pascal Bérubé said Wednesday that "2027 will see the PQ government table a bill to further protect French," with "strong" measures such as restricting English-language CEGEPs to students legally eligible to study in English; Premier Paul St-Pierre Plamondon supports it. Conservative leader Éric Duhaime: "Adults should make their own decisions." Liberal critic Madwa-Nika Cadet says it "would not increase the number of French speakers." Québec Solidaire says it opposes applying the Charter at the CEGEP level. Bérubé also said the government will support renewing the notwithstanding clause on Bill 96, which expires next June. · [coverage (CBC via Yahoo)](https://ca.news.yahoo.com/pq-government-signals-language-reform-213514592.html)
-**Why it matters:** CEGEP is where most Quebec students go at 17. For high school students in Quebec, the rules about where they can study next may change.
-
-⚠️ **Positions:** Matt's stance is free, accessible post-secondary; restricting which public college an adult can attend isn't in positions.md, and language policy in Quebec is sensitive. The drafts focus on student choice and access, not on French. Growthway's post just reports.
+_No alberta.ca release was linked in the coverage; worth pasting the official release link before posting if you find it._
 
 **Matt · Bluesky** (sharper)
 ```text
-Quebec wants to restrict English CEGEPs to students "legally eligible" to study in English. These are 17-year-olds choosing a public college. Protecting French matters. Telling young adults which public college they're allowed to attend isn't how you do it.
+Alberta just rewrote what every high school grad must learn by 2030: financial literacy, wellness, career planning. Good. But in a province where students already use AI daily, AI literacy isn't on the required list. Optional means it depends on who your school can staff.
 ```
-**Matt · Bluesky** (more measured)
+**Matt · Bluesky** (measured)
 ```text
-Quebec's PQ plans a 2027 bill that could limit English CEGEPs to students eligible for English schooling. It needs opposition votes, and all three opposition parties have objections. Access to public post-secondary should be about opening doors, not narrowing them.
+Alberta's new grad requirements (47 core credits, down from 56) are a real chance to ask what every student needs by 2030. Financial literacy made the list. I'd want to see AI and digital literacy there too, and an answer to the ATA's question: what evidence informed this?
 ```
 **Matt · X**
 ```text
-Quebec plans to restrict English CEGEPs to students "legally eligible" for English schooling. These are 17-year-olds choosing a public college. Access should open doors, not narrow them.
+Alberta's new grad rules: 47 core credits (down from 56), required financial literacy and wellness, from 2028. AI literacy isn't on the required list. If it's optional, it depends on who your school can staff.
 ```
 **Growthway · X**
 ```text
-Quebec's government plans a 2027 bill that could restrict English-language CEGEPs to students legally eligible to study in English. As a minority, it needs opposition support; all three opposition parties have raised objections. https://ca.news.yahoo.com/pq-government-signals-language-reform-213514592.html
+Alberta is changing high school graduation requirements: 47 core credits (down from 56), 53 optional, new required financial literacy and wellness credits, at least one diploma exam. Starts with Grade 10 in fall 2028. What it means for schools: https://ca.news.yahoo.com/more-gym-less-humanities-alberta-184433449.html
 ```
+**Instagram** carousel, "Alberta's new grad rules, explained":
+1. Alberta is changing what students need to graduate.
+2. Core credits drop from 56 to 47. Still 100 credits in total.
+3. More choice: up to 53 credits in electives (from 44).
+4. New must-haves: physical education, wellness, financial literacy, at least one diploma exam.
+5. Starts with Grade 10 in fall 2028; all grades by 2030.
+6. Teachers ask: what evidence is this based on?
+7. Our question: where does AI literacy fit?
 
-**Watchlist:**
-- **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
-- **Dec. 7:** federal by-elections in six ridings.
-- **Quebec:** religious-symbols bill; Bill 96 notwithstanding-clause renewal (expires next June).
-- **Google K-12 defaults:** watch for Canadian timing.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
+### 2. Ontario's teacher and education-worker unions finish strike votes this week · score 8/10
+All five major Ontario education unions are voting on strike mandates: OSSTF/FEESO closes today (Nov. 16), AEFO votes Nov. 16–17, and ETFO (about 84,000 members) and CUPE-OSBCU (about 57,000 education workers) close Nov. 18. OECTA voted Nov. 12–13. As of Nov. 15 no results or strike dates had been announced; contracts expired Aug. 31 and talks are stalled while the Ontario Labour Relations Board decides which issues are bargained centrally. · [NOW Toronto](https://nowtoronto.com/news/ontario-education-unions-strike-votes-november-2026/) · [vote tracker (End the Wait Ontario, updated Nov. 15)](https://www.endthewaitontario.com/education/strike-2026/tracker)
+**Why it matters:** Parents will see "strike vote" headlines all week. A plain explainer ("a vote is not a strike") is useful and neutral. Growthway should stay out of the bargaining itself.
 
----
-
-## Thu, Nov 12
-
-_Quiet day (Remembrance Day yesterday): nothing new on AI and schools or politics that I could verify from a primary source in the last 48 hours. Thursday's Parreira.ca pitches are below, built on sources already checked. Today Hamilton's boards and police sign their school resource officer MOU (see yesterday's brief)._
-
-## Parreira.ca episode pitches
-
-### "If I was Canada's housing minister" · politics
-**Hook:** A board of moving boxes with city names; Matt taps "Canada." *"The government quietly dropped its housing promise. Here's the one I'd make."*
-**Tension:** Budget 2026 "dropped any mention" of doubling the pace of home building; CMHC's business-as-usual forecast of 231,000 homes a year leaves the market up to 238,000 homes short of affordable by 2036; the new non-market target is 24,000 starts a year ([Canadian Press](https://infonews.ca/news/7981219/budget-2026-shifts-liberal-governments-language-on-home-construction-targets/)).
-**Moves:** First, put a public number back on it and report against it every quarter. Then, go well past 24,000 non-market homes a year, built on public land. Finally, train the trades to build them (ties to the HVAC and college episodes).
-**Screen:** a "TARGET" sticker peeling off a budget book; a "238,000 short" counter; public-land map pins; a hard-hat crew cut-out row.
-
-### "If I bought a tutoring centre" · business
-**Hook:** A board of "for sale" storefronts; Matt taps a tutoring centre. *"Every teacher in Canada just told us what parents will pay for next."*
-**Tension:** In a Leger survey for the Fraser Institute of 756 grade 6–12 teachers, nearly 84% said students' critical thinking has declined, and nearly 56% of students thought to use AI use it "to do their work for them" ([Toronto Sun via Yahoo, Aug. 2026](https://ca.news.yahoo.com/canadian-teachers-worry-ai-students-090011793.html)).
-**Moves:** First, rebrand it as in-person thinking and writing coaching, no screens. Then, an AI-skills track that teaches kids to check AI answers rather than copy them. Finally, sell parent workshops: how to talk to your kid about AI.
-**Screen:** a "TUTORING" sign repainted "THINK LAB"; a pencil-and-paper sticker; an "84%" counter; a parent-night sticker.
-**Note:** the survey ran Nov. 2025 to Jan. 2026; say "a survey this year," not "new."
-
-### "If I ran a faculty of education" · post-secondary
-**Hook:** A board of generic university crests; Matt taps "Faculty of Education." *"We're sending new teachers into AI classrooms with no AI training."*
-**Tension:** In the same survey, nearly 64% of teachers report no training on teaching students to use AI reasonably, and about the same share have none on spotting AI use; just over 42% say their school has a student AI policy ([Toronto Sun via Yahoo](https://ca.news.yahoo.com/canadian-teachers-worry-ai-students-090011793.html)).
-**Moves:** First, a required course on teaching with and around AI in every BEd. Then, practicum placements that include writing a classroom AI policy. Finally, free summer refreshers for working teachers, run with school boards.
-**Screen:** a diploma sticker with "AI?" tape; a "64% no training" bar; a lesson-plan sticker; a summer-sun calendar.
-
-**Watchlist:**
-- **Today, Thu. Nov. 12:** Hamilton boards and police sign the school resource officer MOU.
-- **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
-- **Dec. 7:** federal by-elections in six ridings (Ontario, Quebec, Saskatchewan).
-- **Google K-12 defaults:** watch for Canadian timing.
-- **Quebec:** religious-symbols bill.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
-
----
-
-## Wed, Nov 11
-
-_Quiet for AI-and-schools news. One Ontario K-12 story and one housing story for Matt._
-
-**Top pick:** For Matt's Bluesky: Budget 2026 quietly dropped the Liberals' promise to double the pace of home building. CMHC says starts are "well short" of what's needed to restore pre-pandemic affordability in 10 years, leaving the market up to 238,000 homes short by 2036. The budget's new non-market target is 24,000 starts a year.
-
-### 1. Police officers return to Hamilton schools in September 2027 under a provincial directive · score 7/10
-Hamilton's four public school boards and Hamilton Police are signing a memorandum of understanding this Thursday to bring back the Police Liaison Program, which "will come into effect in September 2027" with four officers serving schools across all four boards. It responds to a Ford government directive reintroducing school resource officer programs; community engagement starts in December. The Hamilton-Wentworth District School Board cancelled its program after the 2020 killing of George Floyd. · [coverage (Bay Observer)](https://bayobserver.ca/police-in-schools-program-to-make-a-comeback-in-hamilton/) · [CBC](https://www.cbc.ca/news/canada/hamilton/school-resource-officers-hamilton-9.7417130)
-
-⚠️ I couldn't open CBC's article; details come from the Bay Observer, which quotes no officials or advocates. Police in schools isn't in Matt's positions.md, so the Matt drafts are cautious; posting a firm stance would be a new public position.
-
-**Why it matters:** Ontario boards now have to build these programs whether or not their communities want them. The December engagement is where students and families get a say.
+_The tracker is an advocacy compilation; check each union's own release before quoting results later this week._
 
 **Matt · Bluesky**
 ```text
-Hamilton's school boards are bringing police back into schools in 2027, because the province told them to. The community engagement starts in December. I hope it's real: students, especially the ones most affected, should shape this, not just be consulted after.
+Ontario's education unions finish strike votes this week. Worth remembering: a strike mandate is not a strike, and the actual fight right now is at the Labour Board over what gets bargained centrally. Contracts expired Aug. 31. Kids deserve a negotiated deal, not another standoff.
 ```
 **Matt · X**
 ```text
-Hamilton schools get police officers back in 2027 under a provincial directive. Community engagement starts in December. Students should shape it, not just be consulted after.
+Ontario's 5 education unions finish strike votes this week. A mandate isn't a strike: contracts expired Aug. 31 and talks are stuck at the Labour Board over what's bargained centrally. Students need a negotiated deal.
 ```
 **Growthway · X**
 ```text
-Hamilton's four school boards and police are signing an MOU to return officers to schools in September 2027, under a provincial directive. Community engagement begins in December. For families: that's the time to weigh in. https://bayobserver.ca/police-in-schools-program-to-make-a-comeback-in-hamilton/
+Ontario parents: five education unions are holding strike votes, closing between Nov. 16 and 18. No strike date has been announced, and a passed vote does not automatically mean job action. What to know: https://nowtoronto.com/news/ontario-education-unions-strike-votes-november-2026/
+```
+
+### 3. Teachers' federation launches the first national survey on AI in public schools · score 8/10
+The Canadian Teachers' Federation (CTF/FCE), with the Dais at Toronto Metropolitan University and SFU's Dialogue on Technology Project, is running a "Pan-Canadian Educator Survey on Artificial Intelligence" open Nov. 2–30 to K-12 public school teachers, education workers, principals and vice-principals. Its stated reason: there is "currently no national picture of how AI systems are impacting educators and students in Canadian public schools." · [CTF/FCE survey page](https://www.ctf-fce.ca/take-action/artificial-intelligence-canada-educator-survey/) · [context: BCTF 2026 member survey](https://www.bctf.ca/news-and-opportunities/news-details/2026/08/21/2026-bctf-membership-survey-results--teachers-call-for-thoughtful-approach-to-ai-in-schools)
+**Why it matters:** This is the national baseline the policy conversation has been missing, and two weeks are left to shape it. Context from B.C.: in the BCTF's survey (4,423 responses), more than 80% of teachers worried students could become overly dependent on AI, and nearly four in five worried it would make it harder to assess what students truly understand.
+
+**Matt · Bluesky**
+```text
+Canada still has no national picture of how AI is actually landing in classrooms. The teachers' federation is building one: a national educator survey, open to Nov. 30. If you work in a K-12 public school, 10 minutes. Data beats anecdotes when the policy fights come.
+```
+**Matt · X**
+```text
+No national picture of how AI is landing in Canadian classrooms, so teachers are building one. CTF/FCE's educator survey is open to Nov. 30, about 10–12 minutes. If you teach in a public school, take it.
+```
+**Growthway · X**
+```text
+Teachers, education workers and principals in Canadian public schools: the CTF/FCE national survey on AI in K-12 is open until Nov. 30 (about 10–12 minutes). The goal: the first national picture of how AI is affecting schools. https://www.ctf-fce.ca/take-action/artificial-intelligence-canada-educator-survey/
 ```
 
 ## Politics (Matt · Bluesky only)
 
-### P1. Budget 2026 drops the "double home building" target · score 9/10
-The Canadian Press reports the 511-page budget "dropped any mention" of the target from the Liberals' 2025 platform to double the pace of home building, and instead plans to triple non-market housing construction to 24,000 starts a year over the decade, with $13 billion over 10 years for Build Canada Homes. CMHC's fall report says starts are "well short" of what's needed to restore pre-pandemic affordability in 10 years: its business-as-usual forecast of 231,000 homes a year would leave the market up to 238,000 homes short by 2036. The housing minister's office pointed to a May statement about "working toward doubling homebuilding over the next decade." · [coverage (Canadian Press via iNFOnews)](https://infonews.ca/news/7981219/budget-2026-shifts-liberal-governments-language-on-home-construction-targets/)
+### P1. Ottawa offers Stellantis more public money if it keeps the Brampton plant · score 9/10
+Stellantis plans to sell its Brampton assembly plant, idled since 2023, to armoured-vehicle maker Roshel. PM Carney called it a "betrayal." On CTV's Question Period (Nov. 15), Industry Minister Mélanie Joly said more money could follow if Stellantis keeps the plant: "If it's to save the plant, we would be actually doing what we've done with Ford, what we've done with Honda," while also saying "We can't give money to a company that is actually going against its contractual obligations." Conservative critic Kyle Seeback said there would need to be "better guarantees." · [BNN Bloomberg (Nov. 14)](https://www.bnnbloomberg.ca/business/2026/11/14/joly-says-stellantis-could-get-more-government-money-if-it-promised-to-keep-brampton-plant-open/) · [Globe: notice of default](https://www.theglobeandmail.com/business/article-stellantis-roshel-joly-brampton-auto-plant-november-12/)
+
+_Flagged: the subsidy amounts and Stellantis's repayment offer are reported (CBC, Globe) but I couldn't open those pages, so the drafts leave the numbers out. Add them only from an article you've read._
 
 **Matt · Bluesky** (sharper)
 ```text
-The promise to double home building quietly vanished from Budget 2026. CMHC says at today's pace we'll be up to 238,000 homes short of affordable by 2036. Tripling non-market housing is a good start. Dropping the overall target isn't a plan, it's an admission.
+Stellantis took public money, idled Brampton since 2023, and is now selling the plant. Ottawa's answer: maybe more money if they stay. No. Public money should come with a public stake: equity, clawbacks, job guarantees written so they actually bite. Otherwise we're just renting promises.
 ```
-**Matt · Bluesky** (more measured)
+**Matt · Bluesky** (measured)
 ```text
-Budget 2026 drops the "double home building" target but triples non-market housing to 24,000 starts a year. That's the right kind of housing to build. It just isn't enough: CMHC says the market stays up to 238,000 homes short by 2036 at this pace.
+I want the Brampton jobs saved. But if Ottawa puts more money on the table for Stellantis, the deal has to be different from the last one: enforceable job guarantees, real clawbacks, maybe an equity stake. Workers shouldn't carry the risk while shareholders keep the upside.
 ```
 
 **Watchlist:**
-- **Thu. Nov. 12:** Hamilton boards and police sign the school resource officer MOU.
-- **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
-- **Budget document:** confirm the student grant and child care lines before posting without attribution.
-- **Google K-12 defaults:** watch for Canadian timing.
-- **Quebec:** religious-symbols bill.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
-
----
-
-## Tue, Nov 10
-
-🎬 **Reel:** [reel.mp4](this-week/2026-11-10-tue/reel/reel.mp4) · [folder](this-week/2026-11-10-tue/reel)
-
-<img src="this-week/2026-11-10-tue/reel/cover.png" width="200">
-
-```text
-Google is turning Search and Gemini off for K-12 student accounts until schools switch them on, and says AI-boosted search will soon be the only Google search in its school tools. Schools that want AI off may have to give up Search.
-
-If AI answers come with search, teachers will be the ones showing students how to use them well. "Students are going to go for the easy route. We need our teachers to teach them why that's not the right path," says Tom D'Amico, a former Ottawa Catholic director of education, to CBC.
-
-Three habits worth teaching now 👇 and if your school wants PD on AI-assisted research, that's what we do. Link in bio.
-
-Sources: Google, "Designing responsible AI for learning" (Nov. 3, 2026); CBC, "Google offers schools AI-boosted search or none at all" (Nov. 5, 2026).
-
-#AIinEducation #AIliteracy #Teachers #EdTech #K12 #CanadianEducation #Growthway
-```
-
-_Quiet day: nothing new on AI and schools or on the politics side in the last 48 hours that I could verify from a primary source. Today's reel turns last week's biggest story, Google's "AI search or no search" change, into three classroom habits for teachers. No new drafts; last week's Google and budget drafts are still current if you didn't post them._
-
-**Reel:** "AI search, or no search." What's changing for K-12 students on Google's tools, why it lands on teachers, and three habits to teach: check the AI answer, find the original source, know when to skip AI. Sources: [Google (Nov. 3)](https://blog.google/products-and-platforms/products/education/ai-learning-era-updates-2026/) and [CBC via Yahoo (Nov. 5)](https://ca.news.yahoo.com/google-offers-schools-ai-boosted-181653667.html), including the D'Amico quote in the caption.
-
-**Watchlist:**
-- **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
-- **Budget document:** confirm the student grant change and child care lines before posting without attribution.
-- **Google K-12 defaults:** watch for Canadian timing and Workspace admin details.
-- **Quebec:** religious-symbols bill.
-- **B.C.:** watch for cabinet and an education minister.
-- **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
-
----
-
-## Mon, Nov 9
-
-_Weekend scan (72 hours): budget reactions fill in what Friday's brief couldn't verify. One education story, one politics story._
-
-**Top pick:** The university teachers' association (CAUT) says Budget 2026 has "no new measures for students or academic staff," and that without new funding the maximum Canada Student Grant "will revert to $3,000 next year" from $4,200. The budget's AI for All piece does give post-secondary students access to "trusted AI agents."
-
-### 1. Budget 2026 gives students AI agents, but grants are set to drop · score 8/10
-In a Nov. 6 release, CAUT says the maximum student grant "has not grown past $4,200, a temporary measure first promised in 2019. Without new funding, that amount will revert to $3,000 next year," with undergraduate tuition averaging $9,000 a year. It counts "at least 15,000 post-secondary jobs" lost and "over 600 programs" cut since December 2025. What the budget does include, per CAUT: longer EI benefits for apprentices (14 to 18 weeks), and under the AI for All strategy, access to "trusted AI agents" for students at universities, colleges and CEGEPs, plus 10,000 co-funded work placements. · [primary source (CAUT)](https://www.caut.ca/news/federal-budget-2026-silent-on-student-affordability-and-public-funding-shortfall-in-post-secondary-education/) · [budget key measures](https://www.canada.ca/en/department-finance/news/2026/11/budget-2026-key-measures.html)
-**Why it matters:** Students get AI tools but not more help with costs. For high schools, the takeaway is that AI agents are now federal policy for post-secondary students, which raises the stakes for teaching AI use well before they get there.
-
-⚠️ CAUT is an advocacy group; its figures are its own reading of the budget. Confirm the grant reverting to $3,000 in the budget document before stating it without attribution.
-
-**Matt · Bluesky** (sharper)
-```text
-Budget 2026 gives post-secondary students "trusted AI agents." It doesn't keep their grants from falling: CAUT says the max Canada Student Grant drops from $4,200 to $3,000 next year without new money. An AI agent doesn't pay tuition.
-```
-**Matt · Bluesky** (more measured)
-```text
-Post-secondary in Budget 2026, per CAUT: AI agents for students, longer EI for apprentices, 10,000 work placements, and no new student aid, with the max grant set to fall to $3,000. Students are being prepared for an AI economy they can't afford to study for.
-```
-**Matt · X**
-```text
-Budget 2026: post-secondary students get "trusted AI agents." CAUT says the max student grant falls from $4,200 to $3,000 next year. An AI agent doesn't pay tuition.
-```
-**Growthway · X**
-```text
-Budget 2026, per CAUT: AI agents for post-secondary students and 10,000 co-funded work placements under AI for All; no new student aid, with the max Canada Student Grant set to revert to $3,000. For high schools: AI readiness starts before post-secondary. https://www.caut.ca/news/federal-budget-2026-silent-on-student-affordability-and-public-funding-shortfall-in-post-secondary-education/
-```
-
-## Politics (Matt · Bluesky only)
-
-### P1. Budget 2026 and child care: no new money, per CUPE · score 9/10
-CUPE (Nov. 6) says Budget 2026 "recycles" the $5.4-billion child care announcement made earlier this year, "delivers no new funding while allowing the child care infrastructure fund to expire," and that "without a long-term plan to recruit more workers and build new facilities, the program risks falling apart." CUPE also says the Productivity Mega Deduction will cost $36 billion over five years, more than double the annual increase in health care spending, and that the budget "sticks to the plan to cut health care funding by $1.8 billion annually." · [primary source (CUPE)](https://cupe.ca/news/budget-2026-plenty-big-investors-little-workers) · [budget key measures](https://www.canada.ca/en/department-finance/news/2026/11/budget-2026-key-measures.html)
-
-⚠️ CUPE is a union and these are its characterizations; the federal key measures list doesn't mention child care at all, which is consistent with "no new funding." Attribute the figures to CUPE.
-
-**Matt · Bluesky** (sharper)
-```text
-Budget 2026, child care: no new money and the infrastructure fund expires (CUPE). The corporate mega-deduction: $36B over five years. We found billions for the write-off and nothing new for the daycare spaces families are still waiting for.
-```
-**Matt · Bluesky** (more measured)
-```text
-$10-a-day child care only works if there are spaces and staff. CUPE says Budget 2026 adds no new child care money and lets the infrastructure fund expire. A program that's half built doesn't stay standing on its own. Free, universal child care needs a build plan.
-```
-
-**Watchlist:**
-- **Budget document:** confirm the student grant change and child care lines before posting without attribution.
-- **Google K-12 defaults:** watch for Canadian timing and Workspace admin details.
-- **Quebec:** religious-symbols bill.
-- **Nov. 15 to ~22:** new Ontario trustee term; first meetings, except at the eight supervised boards.
-- **B.C.:** watch for cabinet and an education minister.
+- **Nov. 16–18:** Ontario strike votes close (OSSTF Nov. 16, AEFO Nov. 17, ETFO and CUPE-OSBCU Nov. 18); OECTA result pending. Ontario Labour Relations Board scope decision expected soon; OSBCU reports bargaining dates Nov. 30 and Dec. 15–16.
+- **Nov. 30:** CTF/FCE national educator AI survey closes.
+- **Alberta:** consultations this fall on new PE, wellness and financial literacy courses; public info sessions from spring 2027.
+- **Stellantis/Brampton:** Ottawa's default notice and the promised "aggressive package."
+- **Dec. 7:** federal by-elections in six ridings.
 - **Jan. 20, 2027:** OPC Children's Privacy Code comments close.
 
 ---
 
 ## Last week
 
-- [Fri, Nov 6](last-week/2026-11-06-fri/brief.md) · [reel](last-week/2026-11-06-fri/reel/reel.mp4)
-- [Thu, Nov 5](last-week/2026-11-05-thu/brief.md)
-- [Wed, Nov 4](last-week/2026-11-04-wed/brief.md)
-- [Tue, Nov 3](last-week/2026-11-03-tue/brief.md) · [reel](last-week/2026-11-03-tue/reel/reel.mp4)
-- [Mon, Nov 2](last-week/2026-11-02-mon/brief.md)
+- [Fri, Nov 13](last-week/2026-11-13-fri/brief.md) · [reel](last-week/2026-11-13-fri/reel/reel.mp4)
+- [Thu, Nov 12](last-week/2026-11-12-thu/brief.md)
+- [Wed, Nov 11](last-week/2026-11-11-wed/brief.md)
+- [Tue, Nov 10](last-week/2026-11-10-tue/brief.md) · [reel](last-week/2026-11-10-tue/reel/reel.mp4)
+- [Mon, Nov 9](last-week/2026-11-09-mon/brief.md)
