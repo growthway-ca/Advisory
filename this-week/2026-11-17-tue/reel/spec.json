@@ -1,0 +1,85 @@
+{
+  "slug": "2026-11-17-alberta-grad-rules",
+  "caption": "Alberta is changing what every high school student needs to graduate.\n\nStarting with Grade 10 in fall 2028: 47 core credits instead of 56, up to 53 optional credits instead of 44, still 100 in total. New required credits in physical education, wellness and financial literacy, and at least one diploma exam. All senior grades follow by 2030.\n\nThe Alberta Teachers' Association says flexibility \"should expand students' futures, not weaken the foundation they need.\"\n\nOne thing we didn't see on the required list in the coverage: AI literacy. If it's optional, it depends on what each school can staff. Three questions for Alberta schools 👇 and if your school wants help building AI literacy into the plan, that's what we do. Link in bio.\n\nSources: Global News, Calgary Herald and DiscoverAirdrie, Nov. 13, 2026.",
+  "hashtags": [
+    "#AlbertaEducation",
+    "#AIliteracy",
+    "#HighSchool",
+    "#K12",
+    "#CanadianEducation",
+    "#Growthway"
+  ],
+  "scenes": [
+    {
+      "type": "kinetic",
+      "phrases": [
+        "Alberta is",
+        "rewriting",
+        "what every grad",
+        "[[must learn.]]"
+      ],
+      "beat": 0.9,
+      "seconds": 4
+    },
+    {
+      "type": "versus",
+      "kicker": "Fall 2028 · Source: Global News",
+      "before": {
+        "label": "Today",
+        "items": [
+          "56 core credits",
+          "44 optional credits"
+        ]
+      },
+      "after": {
+        "label": "New rules",
+        "items": [
+          "47 core credits",
+          "53 optional credits"
+        ]
+      },
+      "transition": "wipe"
+    },
+    {
+      "type": "list",
+      "kicker": "New must-haves",
+      "title": "Required to graduate",
+      "items": [
+        "Physical education",
+        "Wellness",
+        "Financial literacy",
+        "At least one diploma exam"
+      ],
+      "transition": "slide"
+    },
+    {
+      "type": "quote",
+      "kicker": "The teachers' view",
+      "text": "Flexibility in course choices should expand students' futures, not [[weaken the foundation]] they need in order to succeed.",
+      "name": "Jason Schilling",
+      "role": "President, Alberta Teachers' Association",
+      "transition": "wipe"
+    },
+    {
+      "type": "point",
+      "lead": "Not on the required list:",
+      "text": "[[AI literacy.]]",
+      "theme": "rust",
+      "transition": "ring"
+    },
+    {
+      "type": "list",
+      "kicker": "Ask your school",
+      "title": "Three questions",
+      "items": [
+        "Who teaches AI literacy?",
+        "Can we staff electives?",
+        "How do we tell parents?"
+      ],
+      "transition": "slide"
+    },
+    {
+      "type": "outro"
+    }
+  ]
+}
