@@ -1,0 +1,83 @@
+{
+  "slug": "2026-11-20-this-week",
+  "caption": "This week in AI & schools 👇\n\n1. Alberta: new graduation requirements from fall 2028, 47 core credits instead of 56, with new required financial literacy, wellness and PE credits. AI literacy isn't on the required list in the coverage we read.\n2. Ontario: five major education unions voted for strike mandates this week. A mandate isn't a strike; central bargaining starts Nov. 30.\n3. Google: AI tools go off by default for K-12 student accounts starting in early 2027, and keeping plain Search means accepting AI features.\n\nOne term to decide what your school turns on. Three questions to start with, and if your school wants help with an AI plan, that's what we do. Link in bio.\n\nSources: Global News (Nov. 13, 2026); CP24 (Nov. 19, 2026); The Conversation (Nov. 17, 2026).",
+  "hashtags": [
+    "#AIinEducation",
+    "#AIliteracy",
+    "#K12",
+    "#OntarioEducation",
+    "#AlbertaEducation",
+    "#CanadianEducation",
+    "#Growthway"
+  ],
+  "scenes": [
+    {
+      "type": "kinetic",
+      "phrases": [
+        "This week",
+        "in AI",
+        "& [[schools.]]"
+      ],
+      "beat": 1.0,
+      "seconds": 3.6
+    },
+    {
+      "type": "list",
+      "kicker": "What happened",
+      "title": "Three stories",
+      "items": [
+        "Alberta rewrites grad rules",
+        "Ontario unions back strikes",
+        "Google sets an AI default"
+      ],
+      "transition": "wipe"
+    },
+    {
+      "type": "versus",
+      "kicker": "Alberta · Source: Global News",
+      "before": {
+        "label": "Today",
+        "items": [
+          "56 core credits"
+        ]
+      },
+      "after": {
+        "label": "From fall 2028",
+        "items": [
+          "47 core credits",
+          "AI literacy: not required"
+        ]
+      },
+      "transition": "slide"
+    },
+    {
+      "type": "stat",
+      "kicker": "Ontario",
+      "value": 5,
+      "label": "education unions voted for strike mandates this week",
+      "source": "Source: CP24, Nov. 19",
+      "transition": "ring"
+    },
+    {
+      "type": "point",
+      "lead": "Google, early 2027:",
+      "text": "Want search? [[Accept the AI.]]",
+      "transition": "wipe",
+      "kicker": "Source: The Conversation"
+    },
+    {
+      "type": "list",
+      "kicker": "Ask your school",
+      "title": "Before the switch",
+      "items": [
+        "What will we turn on?",
+        "Who teaches AI literacy?",
+        "How do we tell parents?"
+      ],
+      "transition": "slide"
+    },
+    {
+      "type": "outro"
+    }
+  ]
+}
