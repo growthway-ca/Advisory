@@ -1,0 +1,13 @@
+{
+  "slug": "2026-11-24-google-two-stories",
+  "caption": "Two Google stories this week, and both land in your school.\n\n1. Google.org is funding over $7M CAD for Canadian youth safety and AI literacy non-profits. Part of it ($2M) lets the Raspberry Pi Foundation, Actua and Digital Moment train 7,000 Canadian educators in Experience AI, a free AI education program, aiming to reach an estimated 300,000 young people by 2028.\n2. More than 540 Google employees and contractors signed a petition asking the company to let schools keep Google Search but turn off the AI answers (reported by Bloomberg).\n\nMeanwhile, Google's AI tools go off by default for K-12 student accounts in early 2027, and keeping plain Search means accepting AI features.\n\nFree training is good news. Your school still has to decide what gets switched on. Three questions to ask 👇 and if your school wants help with that plan, that's what we do. Link in bio.\n\nSources: Google Canada; Raspberry Pi Foundation (Nov. 20, 2026); iPhone in Canada citing Bloomberg (Nov. 20, 2026); The Conversation (Nov. 17, 2026).",
+  "hashtags": ["#AIinEducation", "#AIliteracy", "#K12", "#GoogleForEducation", "#CanadianEducation", "#Growthway"],
+  "scenes": [
+    { "type": "kinetic", "phrases": ["Two Google stories.", "One lands in", "[[your school.]]"], "beat": 1.1, "seconds": 3.8 },
+    { "type": "stat", "kicker": "Free AI training", "value": 7000, "label": "Canadian educators to be trained in Experience AI by 2028", "source": "Source: Raspberry Pi Foundation", "transition": "wipe" },
+    { "type": "stat", "kicker": "Meanwhile, inside Google", "value": 540, "suffix": "+", "label": "staff asked Google to let schools keep Search without AI answers", "source": "Source: Bloomberg via iPhone in Canada", "theme": "forest", "transition": "slide" },
+    { "type": "point", "kicker": "Source: The Conversation", "lead": "Early 2027:", "text": "Want search? [[Accept the AI.]]", "theme": "paper", "transition": "wipe" },
+    { "type": "list", "kicker": "Ask your school", "title": "Three questions", "items": ["Who trains our teachers?", "What gets switched on?", "How do we tell parents?"], "transition": "slide" },
+    { "type": "outro" }
+  ]
+}
