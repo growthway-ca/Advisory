@@ -3,7 +3,7 @@
 // 2. Sends approved reels whose time has come.
 // 3. With {"metrics": true} (daily), records views/reach/likes/... for reels posted in the last 30 days.
 // Nothing here posts a reel that isn't status 'approved': approval only happens in the dashboard.
-import { Account, admin, authorized, cors, ensureIgId, graph, json } from "../_shared/common.ts";
+import { Account, admin, authorized, cors, ensureIgId, graph, json, tokenFor } from "../_shared/common.ts";
 
 const PUBLIC = `${Deno.env.get("SUPABASE_URL")}/storage/v1/object/public/reels/`;
 
@@ -22,6 +22,12 @@ Deno.serve(async (req) => {
   for (const p of inflight ?? []) {
     const a = byId.get(p.account_id);
     if (!a) continue;
+    if (!p.container_id) {
+      // Claimed but never sent (a crashed run): put it back in line after 10 minutes.
+      if (Date.now() - new Date(p.updated_at).getTime() > 10 * 60 * 1000)
+        await db.from("posts").update({ status: "approved" }).eq("id", p.id).eq("status", "publishing").is("container_id", null);
+      continue;
+    }
     try {
       const st = await graph(a, "GET", p.container_id, { fields: "status_code,status" });
       if (st.status_code === "FINISHED") {
@@ -48,6 +54,11 @@ Deno.serve(async (req) => {
   for (const p of due ?? []) {
     const a = byId.get(p.account_id);
     if (!a || !p.video_path) continue;
+    if (!tokenFor(a)) { log.push(`waiting ${p.id}: no ${a.token_secret} secret yet`); continue; }
+    // Claim the post so two overlapping runs can't send it twice.
+    const { data: claimed } = await db.from("posts").update({ status: "publishing", container_id: null })
+      .eq("id", p.id).eq("status", "approved").select("id");
+    if (!claimed?.length) continue;
     try {
       const igId = await ensureIgId(db, a);
       const params: Record<string, string> = {
@@ -60,7 +71,7 @@ Deno.serve(async (req) => {
     } catch (e) {
       const msg = (e as Error).message;
       const failed = p.attempts + 1 >= 3;
-      await db.from("posts").update({ attempts: p.attempts + 1, error: msg, ...(failed ? { status: "failed" } : {}) }).eq("id", p.id);
+      await db.from("posts").update({ attempts: p.attempts + 1, error: msg, status: failed ? "failed" : "approved" }).eq("id", p.id);
       await db.from("ig_accounts").update({ last_error: msg }).eq("id", a.id);
       log.push(`error ${p.id}: ${msg}`);
     }

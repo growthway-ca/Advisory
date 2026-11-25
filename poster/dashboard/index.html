@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Growthway Poster</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --forest:#153C2A; --deep:#081F15; --sage:#D1E7AE; --cream:#F8F5EE; --rust:#C4632F; --line:#e4dfd3; --muted:#6b6a63; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--cream); color:var(--deep); font:15px/1.5 "Plus Jakarta Sans", system-ui, sans-serif; }
+  header { background:var(--forest); color:var(--cream); padding:14px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; font-weight:800; }
+  header .sp { flex:1; }
+  nav { display:flex; gap:6px; flex-wrap:wrap; }
+  nav button { background:transparent; color:var(--sage); border:1px solid #2d5a43; }
+  nav button.on { background:var(--sage); color:var(--forest); }
+  main { max-width:1000px; margin:0 auto; padding:16px; }
+  button { font:inherit; font-weight:600; border:0; border-radius:8px; padding:8px 12px; cursor:pointer; background:var(--forest); color:var(--cream); }
+  button.ghost { background:transparent; color:var(--forest); border:1px solid var(--forest); }
+  button.rust { background:var(--rust); }
+  button:disabled { opacity:.5; cursor:default; }
+  input, textarea, select { font:inherit; border:1px solid var(--line); border-radius:8px; padding:8px; background:#fff; width:100%; }
+  textarea { min-height:160px; }
+  .mono { font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.04em; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:14px; }
+  .post { display:grid; grid-template-columns: 180px 1fr; gap:14px; }
+  .post video { width:180px; aspect-ratio:9/16; border-radius:8px; background:#000; }
+  @media (max-width:640px){ .post { grid-template-columns:1fr; } .post video { width:100%; max-width:260px; } }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+  .pill { display:inline-block; border-radius:999px; padding:2px 10px; font-size:12px; font-weight:600; background:var(--sage); color:var(--forest); }
+  .pill.pending { background:#fdf1d8; color:#8a5a00; } .pill.failed { background:#fbe1d6; color:var(--rust); }
+  .pill.published { background:var(--forest); color:var(--sage); }
+  .err { color:var(--rust); font-size:13px; white-space:pre-wrap; }
+  .muted { color:var(--muted); font-size:13px; }
+  h2 { font-size:16px; margin:18px 0 8px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .scroll { overflow-x:auto; }
+  #login { max-width:360px; margin:60px auto; }
+  #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:var(--deep); color:var(--cream); padding:8px 14px; border-radius:8px; display:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Growthway Poster</h1>
+  <nav id="nav" hidden>
+    <button data-tab="queue" class="on">Queue</button>
+    <button data-tab="history">Posted</button>
+    <button data-tab="research">Research</button>
+    <button data-tab="accounts">Accounts</button>
+  </nav>
+  <span class="sp"></span>
+  <button id="signout" class="ghost" style="color:var(--sage);border-color:#2d5a43" hidden>Sign out</button>
+</header>
+
+<main>
+  <section id="login" class="card" hidden>
+    <h2 style="margin-top:0">Sign in</h2>
+    <p class="muted">Only accounts on the admin list can see the queue.</p>
+    <input id="email" type="email" placeholder="Email" autocomplete="email">
+    <div style="height:8px"></div>
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+    <div class="row"><button id="signin">Sign in</button><button id="signup" class="ghost">Create login</button></div>
+    <p id="loginmsg" class="muted"></p>
+  </section>
+
+  <section id="noadmin" class="card" hidden>
+    <h2 style="margin-top:0">Signed in, waiting for access</h2>
+    <p class="muted">Your login works, but it isn't on the admin list yet. Tell Claude you've signed up and it will add you.</p>
+  </section>
+
+  <section id="queue" hidden></section>
+  <section id="history" hidden></section>
+  <section id="research" hidden></section>
+  <section id="accounts" hidden></section>
+</main>
+<div id="toast"></div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
+
+const URL_ = "https://gacwxtcdzmxfvxqrrveb.supabase.co";
+const KEY = "sb_publishable_11ISE9lw3_UgP0yADxCDKQ_HtkufjkA"; // publishable key: safe in the browser, data is protected by row-level security
+const PUBLIC = `${URL_}/storage/v1/object/public/reels/`;
+const sb = createClient(URL_, KEY);
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const POST_COLS = "id,account_id,title,caption,video_path,cover_path,source,status,scheduled_for,approved_at,ig_media_id,permalink,published_at,error,attempts,created_at";
+let accounts = [];
+let tab = "queue";
+
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 3500); }
+function fmt(ts) { return ts ? new Date(ts).toLocaleString("en-CA", { dateStyle: "medium", timeStyle: "short" }) : ""; }
+function localInput(d) { const p = (n) => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }
+function defaultSlot() { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(11, 30, 0, 0); return d; }
+const acct = (id) => accounts.find((a) => a.id === id) ?? {};
+
+async function callFn(name, body = {}) {
+  const { data: { session } } = await sb.auth.getSession();
+  const r = await fetch(`${URL_}/functions/v1/${name}`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}`, apikey: KEY }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error ?? r.statusText);
+  return j;
+}
+
+// ---------- auth ----------
+async function boot() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { show("login"); return; }
+  $("#signout").hidden = false;
+  const { data: isAdmin } = await sb.rpc("is_admin");
+  if (!isAdmin) { show("noadmin"); return; }
+  $("#nav").hidden = false;
+  const { data } = await sb.from("ig_accounts").select("id,handle,label,token_secret,api_host,ig_user_id,active,last_error").order("label");
+  accounts = data ?? [];
+  render();
+}
+function show(id) { for (const s of document.querySelectorAll("main > section")) s.hidden = s.id !== id; }
+$("#signin").onclick = async () => {
+  const { error } = await sb.auth.signInWithPassword({ email: $("#email").value.trim(), password: $("#password").value });
+  $("#loginmsg").textContent = error ? error.message : ""; if (!error) boot();
+};
+$("#signup").onclick = async () => {
+  const { error } = await sb.auth.signUp({ email: $("#email").value.trim(), password: $("#password").value });
+  $("#loginmsg").textContent = error ? error.message : "Login created. Tell Claude you've signed up; it will confirm you and add you to the admin list.";
+};
+$("#signout").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+for (const b of document.querySelectorAll("#nav button")) b.onclick = () => { tab = b.dataset.tab; for (const x of document.querySelectorAll("#nav button")) x.classList.toggle("on", x === b); render(); };
+
+async function render() {
+  show(tab);
+  if (tab === "queue") return renderQueue();
+  if (tab === "history") return renderHistory();
+  if (tab === "research") return renderResearch();
+  if (tab === "accounts") return renderAccounts();
+}
+
+// ---------- queue ----------
+async function renderQueue() {
+  const el = $("#queue");
+  const { data: posts, error } = await sb.from("posts").select(POST_COLS).in("status", ["pending", "approved", "publishing", "failed"]).order("created_at", { ascending: false });
+  if (error) { el.innerHTML = `<p class="err">${esc(error.message)}</p>`; return; }
+  el.innerHTML = `<div class="row" style="margin:0 0 12px"><span class="muted">Nothing posts until you press Approve. Approved reels go out at their scheduled time (checked every 15 minutes).</span><span style="flex:1"></span><button class="ghost" id="runpub">Run posting check now</button></div>`
+    + (posts.length ? posts.map(postCard).join("") : `<div class="card muted">The queue is empty. New reels from the daily brief land here on Tuesdays and Fridays.</div>`);
+  $("#runpub").onclick = async (e) => { e.target.disabled = true; try { const r = await callFn("publisher"); toast(r.log.length ? r.log.join(" · ") : "Nothing due right now"); } catch (err) { toast(err.message); } e.target.disabled = false; renderQueue(); };
+  for (const p of posts) wirePost(p);
+}
+function postCard(p) {
+  const a = acct(p.account_id);
+  const when = p.scheduled_for ? new Date(p.scheduled_for) : defaultSlot();
+  const editable = p.status === "pending" || p.status === "failed";
+  return `<div class="card post" id="p-${p.id}">
+    <video src="${PUBLIC}${esc(p.video_path)}" ${p.cover_path ? `poster="${PUBLIC}${esc(p.cover_path)}"` : ""} controls playsinline preload="metadata"></video>
+    <div>
+      <div class="row" style="margin-top:0"><span class="pill ${p.status}">${p.status}</span><strong>${esc(p.title ?? "Untitled reel")}</strong><span class="muted">→ @${esc(a.handle)}</span></div>
+      <p class="mono muted">${esc(p.source ?? "")} · added ${fmt(p.created_at)}</p>
+      <textarea data-f="caption" ${editable ? "" : "disabled"}>${esc(p.caption)}</textarea>
+      <div class="muted"><span data-count>${p.caption.length}</span>/2200 characters · ${(p.caption.match(/#\w+/g) ?? []).length}/30 hashtags</div>
+      ${p.error ? `<p class="err">${esc(p.error)}</p>` : ""}
+      <div class="row">
+        <label class="muted" style="white-space:nowrap">Post at</label>
+        <input type="datetime-local" data-f="when" value="${localInput(when)}" style="max-width:230px" ${p.status === "publishing" ? "disabled" : ""}>
+      </div>
+      <div class="row">
+        ${p.status === "pending" ? `<button data-a="approve">Approve & schedule</button><button class="ghost" data-a="now">Approve, post now</button><button class="ghost" data-a="save">Save caption</button><button class="ghost" data-a="reject">Reject</button>` : ""}
+        ${p.status === "approved" ? `<span class="muted">Scheduled for ${fmt(p.scheduled_for)}</span><button class="ghost" data-a="reschedule">Change time</button><button class="ghost" data-a="unapprove">Unschedule</button>` : ""}
+        ${p.status === "publishing" ? `<span class="muted">Instagram is processing the video…</span>` : ""}
+        ${p.status === "failed" ? `<button data-a="retry">Retry</button><button class="ghost" data-a="save">Save caption</button><button class="ghost" data-a="reject">Reject</button>` : ""}
+      </div>
+    </div></div>`;
+}
+function wirePost(p) {
+  const root = $(`#p-${p.id}`); if (!root) return;
+  const cap = root.querySelector('[data-f="caption"]'), when = root.querySelector('[data-f="when"]');
+  cap.oninput = () => root.querySelector("[data-count]").textContent = cap.value.length;
+  const upd = async (patch, msg) => {
+    const { error } = await sb.from("posts").update(patch).eq("id", p.id);
+    if (error) toast(error.message); else { toast(msg); renderQueue(); }
+  };
+  const check = () => {
+    if (cap.value.length > 2200) { toast("Caption is over Instagram's 2,200 characters"); return false; }
+    if ((cap.value.match(/#\w+/g) ?? []).length > 30) { toast("Instagram allows 30 hashtags at most"); return false; }
+    return true;
+  };
+  for (const b of root.querySelectorAll("[data-a]")) b.onclick = async () => {
+    const a = b.dataset.a;
+    if (a === "approve" && check()) {
+      const t = new Date(when.value);
+      if (!(t > new Date())) { toast("Pick a time in the future, or use 'post now'"); return; }
+      upd({ caption: cap.value, status: "approved", scheduled_for: t.toISOString(), approved_at: new Date().toISOString(), error: null }, `Scheduled for ${fmt(t)}`);
+    }
+    if (a === "now" && check() && confirm(`Post this reel to @${acct(p.account_id).handle} now?`)) {
+      await sb.from("posts").update({ caption: cap.value, status: "approved", scheduled_for: new Date().toISOString(), approved_at: new Date().toISOString(), error: null }).eq("id", p.id);
+      try { const r = await callFn("publisher"); toast(r.log.join(" · ") || "Sent"); } catch (e) { toast(e.message); }
+      renderQueue();
+    }
+    if (a === "save" && check()) upd({ caption: cap.value }, "Caption saved");
+    if (a === "reject" && confirm("Reject this reel? It won't post.")) upd({ status: "rejected" }, "Rejected");
+    if (a === "unapprove") upd({ status: "pending", scheduled_for: null, approved_at: null }, "Back in the queue, not scheduled");
+    if (a === "reschedule") { const t = new Date(when.value); if (t > new Date()) upd({ scheduled_for: t.toISOString() }, `Moved to ${fmt(t)}`); else toast("Pick a time in the future"); }
+    if (a === "retry" && check()) upd({ caption: cap.value, status: "approved", scheduled_for: new Date().toISOString(), attempts: 0, error: null }, "Will retry at the next check");
+  };
+}
+
+// ---------- history ----------
+async function renderHistory() {
+  const el = $("#history");
+  const { data: posts } = await sb.from("posts").select(POST_COLS).in("status", ["published", "rejected"]).order("published_at", { ascending: false, nullsFirst: false }).limit(100);
+  const ids = (posts ?? []).map((p) => p.id);
+  const { data: mets } = ids.length ? await sb.from("post_metrics").select("post_id,captured_at,views,reach,likes,comments,saves,shares").in("post_id", ids).order("captured_at", { ascending: false }) : { data: [] };
+  const latest = new Map(); for (const m of mets ?? []) if (!latest.has(m.post_id)) latest.set(m.post_id, m);
+  el.innerHTML = `<div class="card scroll"><table><tr><th>Reel</th><th>Account</th><th>Posted</th><th>Views</th><th>Reach</th><th>Likes</th><th>Saves</th><th>Shares</th></tr>`
+    + (posts ?? []).map((p) => { const m = latest.get(p.id) ?? {};
+      return `<tr><td>${p.permalink ? `<a href="${esc(p.permalink)}" target="_blank" rel="noopener">${esc(p.title ?? "reel")}</a>` : esc(p.title ?? "reel")} ${p.status === "rejected" ? '<span class="pill failed">rejected</span>' : ""}</td><td>@${esc(acct(p.account_id).handle)}</td><td>${fmt(p.published_at)}</td><td>${m.views ?? ""}</td><td>${m.reach ?? ""}</td><td>${m.likes ?? ""}</td><td>${m.saves ?? ""}</td><td>${m.shares ?? ""}</td></tr>`; }).join("")
+    + `</table><p class="muted">Stats refresh once a day for 30 days after posting.</p></div>`;
+}
+
+// ---------- research ----------
+async function renderResearch() {
+  const el = $("#research");
+  const { data: comps } = await sb.from("comp_accounts").select("id,account_id,username,notes,active,last_error").order("username");
+  const { data: snaps } = await sb.from("comp_snapshots").select("comp_id,followers,media_count,captured_at").order("captured_at", { ascending: false }).limit(500);
+  const snap = new Map(); for (const s of snaps ?? []) if (!snap.has(s.comp_id)) snap.set(s.comp_id, s);
+  const since = new Date(Date.now() - 90 * 864e5).toISOString();
+  const { data: top } = await sb.from("comp_media").select("comp_id,permalink,caption,posted_at,view_count,like_count,comments_count,outlier,media_product_type").gte("posted_at", since).not("outlier", "is", null).order("outlier", { ascending: false }).limit(40);
+  const name = (id) => (comps ?? []).find((c) => c.id === id)?.username ?? "";
+  el.innerHTML = `
+    <div class="card"><h2 style="margin-top:0">Comp accounts</h2>
+      <p class="muted">Public business or creator accounts only (Instagram's rules). Stats update nightly through Instagram's official Business Discovery API.</p>
+      <div class="row"><select id="cacct" style="max-width:200px">${accounts.map((a) => `<option value="${a.id}">for @${esc(a.handle)}</option>`).join("")}</select>
+      <input id="cuser" placeholder="username, e.g. edutopia" style="max-width:240px"><button id="cadd">Add</button><span style="flex:1"></span><button class="ghost" id="crun">Run research now</button></div>
+      <div class="scroll"><table><tr><th>Account</th><th>For</th><th>Followers</th><th>Posts</th><th>Updated</th><th></th></tr>
+      ${(comps ?? []).map((c) => { const s = snap.get(c.id) ?? {}; return `<tr><td><a href="https://www.instagram.com/${esc(c.username)}/" target="_blank" rel="noopener">@${esc(c.username)}</a>${c.last_error ? `<div class="err">${esc(c.last_error)}</div>` : ""}</td><td>@${esc(acct(c.account_id).handle)}</td><td>${s.followers?.toLocaleString() ?? ""}</td><td>${s.media_count ?? ""}</td><td>${fmt(s.captured_at)}</td><td><button class="ghost" data-del="${c.id}">Remove</button></td></tr>`; }).join("")}
+      </table></div></div>
+    <div class="card scroll"><h2 style="margin-top:0">Outliers, last 90 days</h2>
+      <p class="muted">Views ÷ that account's median views. 3× or more means the topic or hook travelled well beyond its usual audience: a candidate idea for us.</p>
+      <table><tr><th>×</th><th>Account</th><th>Post</th><th>Views</th><th>Likes</th><th>Comments</th><th>Posted</th></tr>
+      ${(top ?? []).map((m) => `<tr><td><strong>${m.outlier}×</strong></td><td>@${esc(name(m.comp_id))}</td><td><a href="${esc(m.permalink)}" target="_blank" rel="noopener">${esc((m.caption ?? "").slice(0, 90)) || "open"}</a></td><td>${m.view_count?.toLocaleString() ?? ""}</td><td>${m.like_count?.toLocaleString() ?? ""}</td><td>${m.comments_count ?? ""}</td><td>${fmt(m.posted_at)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No data yet. Add comp accounts, then run research.</td></tr>`}
+      </table></div>`;
+  $("#cadd").onclick = async () => {
+    const u = $("#cuser").value.trim().replace(/^@/, "").replace(/.*instagram\.com\//, "").replace(/\/.*$/, "");
+    if (!/^[A-Za-z0-9._]{1,30}$/.test(u)) { toast("That doesn't look like an Instagram username"); return; }
+    const { error } = await sb.from("comp_accounts").insert({ account_id: $("#cacct").value, username: u });
+    if (error) toast(error.message); else { toast(`Added @${u}`); renderResearch(); }
+  };
+  $("#crun").onclick = async (e) => { e.target.disabled = true; try { const r = await callFn("research"); toast(r.log.join(" · ") || "No comp accounts yet"); } catch (err) { toast(err.message); } renderResearch(); };
+  for (const b of el.querySelectorAll("[data-del]")) b.onclick = async () => { if (!confirm("Remove this comp account and its data?")) return; await sb.from("comp_accounts").delete().eq("id", b.dataset.del); renderResearch(); };
+}
+
+// ---------- accounts ----------
+async function renderAccounts() {
+  $("#accounts").innerHTML = `<div class="card scroll"><h2 style="margin-top:0">Instagram accounts</h2>
+    <table><tr><th>Account</th><th>Connected</th><th>Token secret</th><th>Status</th></tr>
+    ${accounts.map((a) => `<tr><td>@${esc(a.handle)}</td><td>${a.ig_user_id ? `<span class="pill published">yes</span>` : `<span class="pill pending">not yet</span>`}</td><td class="mono">${esc(a.token_secret)}</td><td>${a.last_error ? `<span class="err">${esc(a.last_error)}</span>` : (a.ig_user_id ? "OK" : "Waiting for the token")}</td></tr>`).join("")}
+    </table>
+    <p class="muted">Tokens live as Supabase Edge Function secrets (never in this page or the database). An account shows "connected" after its first successful posting or research run.</p></div>`;
+}
+
+sb.auth.onAuthStateChange((ev) => { if (ev === "SIGNED_OUT") location.reload(); });
+boot();
+</script>
+</body>
+</html>

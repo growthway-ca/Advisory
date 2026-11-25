@@ -1,6 +1,6 @@
 -- Growthway poster: approval queue, publishing, metrics, comp-account research.
 create extension if not exists pg_cron;
-create extension if not exists pg_net;
+create extension if not exists pg_net with schema extensions;
 
 -- Who may use the dashboard. Anyone can sign up, but only rows here see or change data.
 create table public.admins (
@@ -131,3 +131,28 @@ insert into public.ig_accounts (handle, label, token_secret) values
 revoke select on public.posts from authenticated, anon;
 grant select (id, account_id, title, caption, video_path, cover_path, source, status, scheduled_for, approved_at, container_id, ig_media_id, permalink, published_at, error, attempts, created_at, updated_at) on public.posts to authenticated;
 revoke all on public.posts from anon;
+
+-- pg_cron -> Edge Functions, authenticated with the Vault cron key.
+create or replace function public.call_fn(fn text, body jsonb default '{}'::jsonb) returns bigint
+language sql security definer set search_path = public, vault, net as $$
+  select net.http_post(
+    url := 'https://gacwxtcdzmxfvxqrrveb.supabase.co/functions/v1/' || fn,
+    headers := jsonb_build_object('Content-Type','application/json','x-cron-key',(select decrypted_secret from vault.decrypted_secrets where name = 'cron_key')),
+    body := body,
+    timeout_milliseconds := 120000);
+$$;
+revoke all on function public.call_fn(text, jsonb) from public, anon, authenticated;
+select cron.schedule('poster-publish', '*/15 * * * *', $$select public.call_fn('publisher')$$);
+select cron.schedule('poster-metrics', '17 9 * * *', $$select public.call_fn('publisher', '{"metrics": true}'::jsonb)$$);
+select cron.schedule('poster-research', '43 7 * * *', $$select public.call_fn('research')$$);
+
+-- New projects don't grant table access to API roles by default; grant only what's needed.
+grant usage on schema public to service_role, authenticated;
+grant all on all tables in schema public to service_role;
+grant usage, select on all sequences in schema public to service_role;
+revoke all on all tables in schema public from anon;
+revoke truncate, trigger, references on all tables in schema public from authenticated;
+grant select on public.admins to authenticated;
+grant select, insert, update, delete on public.ig_accounts, public.comp_accounts to authenticated;
+grant select on public.post_metrics, public.comp_snapshots, public.comp_media to authenticated;
+grant update (title, caption, status, scheduled_for, approved_at, error, attempts), delete on public.posts to authenticated;
