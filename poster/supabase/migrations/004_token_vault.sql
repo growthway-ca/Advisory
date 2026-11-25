@@ -19,3 +19,9 @@ revoke all on function public.set_ig_token(uuid, text) from public, anon, authen
 revoke all on function public.ig_tokens() from public, anon, authenticated;
 grant execute on function public.set_ig_token(uuid, text) to service_role;
 grant execute on function public.ig_tokens() to service_role;
+
+-- The Meta app secret used to exchange tokens (saved to Vault as 'fb_app_secret'; value not in this file).
+create or replace function public.fb_app_secret() returns text language sql security definer set search_path = '' as $$
+  select decrypted_secret from vault.decrypted_secrets where name = 'fb_app_secret' $$;
+revoke all on function public.fb_app_secret() from public, anon, authenticated;
+grant execute on function public.fb_app_secret() to service_role;

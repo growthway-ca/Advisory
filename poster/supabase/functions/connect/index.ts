@@ -1,7 +1,7 @@
 // "Reconnect Instagram" from the dashboard. Paste ANY token from Meta's Graph API Explorer (short-lived user token,
 // extended one, or a Page token) and this turns it into Page tokens that never expire, then saves one per account
 // whose Instagram handle matches a Page the token can see:
-//   1. exchange it for a long-lived token (needs the FB_APP_SECRET Edge Function secret; the app id comes from the token)
+//   1. exchange it for a long-lived token (needs the app secret: FB_APP_SECRET Edge Function secret or Vault 'fb_app_secret'; the app id comes from the token)
 //   2. user token -> me/accounts -> each Page's token (Page tokens from a long-lived user token don't expire)
 //   3. check each with debug_token and refuse to save anything that expires
 //   4. save in Vault (set_ig_token), clear the error, record Meta's data-access deadline
@@ -24,8 +24,8 @@ Deno.serve(async (req) => {
   if (req.headers.get("x-cron-key") || !(await authorized(req, db))) return json({ error: "unauthorized" }, 401);
   const { token } = await req.json().catch(() => ({}));
   if (!token || typeof token !== "string") return json({ error: "Paste a token first" }, 400);
-  const secret = Deno.env.get("FB_APP_SECRET");
-  if (!secret) return json({ error: "The FB_APP_SECRET secret isn't set in Supabase yet" }, 500);
+  const secret = Deno.env.get("FB_APP_SECRET") || (await db.rpc("fb_app_secret")).data;
+  if (!secret) return json({ error: "The Meta app secret isn't saved in Supabase yet" }, 500);
 
   try {
     const t = token.trim();
