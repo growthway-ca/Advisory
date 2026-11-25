@@ -342,7 +342,8 @@ async function renderAccounts() {
       const r = await callFn("connect", { token: v });
       $("#tok").value = "";
       const html = (r.results.length ? r.results.map((x) => `<div class="${x.ok ? "" : "err"}">@${esc(x.handle)}: ${esc(x.message)}</div>`).join("")
-        : `<div class="err">None of your accounts matched. Pages this token can see: ${esc(r.pages.join(", ") || "none")}.</div>`);
+        : `<div class="err">None of your accounts matched.</div>`)
+        + `<div class="muted" style="margin-top:6px">Facebook Pages this token can see: ${esc(r.pages.join(", ") || "none")}. An account connects when its Page is listed here with that Instagram handle.</div>`;
       if (r.results.some((x) => x.ok)) await boot();
       $("#tokout").innerHTML = html;
     } catch (e) { out.innerHTML = `<span class="err">${esc(e.message)}</span>`; }
