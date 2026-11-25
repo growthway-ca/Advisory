@@ -1,9 +1,10 @@
 # Growthway daily brief: the playbook
 
 A Claude routine follows this every weekday morning (it starts at 6:07am ET so the brief is up by 6:30). The output is a
-short, ranked list of stories with ready-to-edit drafts for four accounts, published to the `social` branch. On Tuesdays
-and Fridays it also builds a reel in the Growthway house style (`reels/growthway/`). Nothing is ever posted
-automatically: Matt picks, edits and posts.
+short, ranked list of stories with ready-to-edit drafts for four accounts, published to the `social` branch. Every weekday
+it also builds a Growthway reel (`reels/growthway/`) and puts it in the poster's approval queue. Nothing is ever posted
+automatically: Matt approves each reel in the poster dashboard (growthway-poster.netlify.app) and picks, edits and posts
+the text drafts himself.
 
 ## The accounts
 
@@ -12,7 +13,7 @@ automatically: Matt picks, edits and posts.
 | **Matt, Bluesky** (@mattparreira.bsky.social, ~20K) | Policy people, educators, public-good crowd | Flagship opinion: education and AI, plus Canadian politics from Matt's progressive view (see "Politics" below) | First person, a clear take, names the gap or tension. Model: "Let's notice the gap between adoption and instruction, it's the actual policy problem, not the technology." Up to 300 characters. |
 | **Matt, X** (@matthewparreira, small) | Growing | Mirror of Bluesky | Same take, tightened to fit X. Suggest one larger Canadian account to reply to when relevant. |
 | **Growthway, X** (@growthway_, ~4.4K) | School leaders, educators, boards | The organization's news desk | Neutral and useful: what happened → what it means for schools. No hot takes. Link the primary source. |
-| **Growthway, Instagram** (growthway.ca, ~2K) | Parents and teachers | Visual, practical help | Plain language. Carousels in the "Why this matters" style; reels on Tue/Fri. |
+| **Growthway, Instagram** (growthway.ca, ~2K) | Parents and teachers | Visual, practical help | Plain language. Carousels in the "Why this matters" style; a reel every weekday. |
 
 Read `social/positions.md` before drafting. New drafts must agree with it; if a story pushes against a position, say so
 in the brief rather than quietly contradicting it.
@@ -136,16 +137,40 @@ hooked to this week's news; otherwise take one from the bank. For each:
 
 Same sourcing rules as everything else: every number comes from a source you opened.
 
-## Reels (Tuesdays and Fridays)
+## Reels (every weekday)
 
-- **Tuesday:** an explainer reel on the strongest story from the last few days (it may be today's top pick).
+- **Monday to Thursday:** an explainer reel on the strongest story from the last few days (it may be today's top pick).
+  Don't repeat a story that already has a reel in `this-week/` or `last-week/`; if nothing new is strong enough, make an
+  evergreen practical reel instead (a parent or teacher how-to, a "myth vs fact", a "before/after" on assessment or
+  homework), still sourced.
 - **Friday:** "This week in AI & schools": hook, then the week's 2–3 biggest developments (a `list` scene, or a `stat`/`gap`
   per story when there's a strong number), then a take and the outro.
 
-Write the spec to `reels/growthway/specs/<YYYY-MM-DD>-<slug>.json` following `reels/growthway/README.md` (scene types,
-fields, rules), build it with `npm run reel:growthway -- <spec>`, and look at `preview.png`. Fix anything that wraps
+**Template:** every spec sets `"template"`, and consecutive reels never share one. Rotate through `classic`, `notebook`,
+`newsdesk`, `bold`, `terminal`, `editorial`, `cards` in that order, starting after the template of the most recent
+`reel/spec.json` in `this-week/` or `last-week/` on `social` (if it has none, treat it as `classic`). Also vary the
+scene mix from day to day (open with `kinetic` one day, a `hook` the next; use `versus` or `quote` when the story suits it).
+Never circle words: highlight key phrases with `[[double brackets]]` only.
+
+Write the spec to `reels/growthway/specs/<YYYY-MM-DD>-<slug>.json` following `reels/growthway/README.md` (templates, scene
+types, fields, rules), build it with `npm run reel:growthway -- <spec>`, and look at `preview.png`. Fix anything that wraps
 badly or runs outside the frame, then rebuild. Copy `reel.mp4`, `cover.png`, `caption.txt` and `preview.png` into the
-day's `reel/` folder, along with the spec as `spec.json` so the reel can be rebuilt later. Everything goes to `social`; never push to the code branch.
+day's `reel/` folder, along with the spec as `spec.json` so the reel can be rebuilt later. Everything goes to `social`;
+never push to the code branch. Delete the spec from `reels/growthway/specs/` afterwards so the checkout stays clean.
+
+**Queue it for approval** (after the reel is built and checked):
+1. With the Supabase connector (project "Growthway posting", `gacwxtcdzmxfvxqrrveb`), run:
+   ```sql
+   insert into posts (account_id, title, caption, source)
+   select id, '<short title> (<Mon d>)', $cap$<the full caption.txt>$cap$, 'social:<YYYY-MM-DD-ddd>/reel'
+   from ig_accounts where handle = 'growthway.ca'
+   returning id, upload_token;
+   ```
+2. `node social/queue-reel.mjs <id> <upload_token> <path to the day's reel/ folder>` (prints `queued …: pending`).
+3. Mention in the summary that the reel is waiting in the dashboard. If either step fails, say so; the reel is still on
+   `social` and can be queued later.
+
+Never set a post's status to `approved` or call the publisher: approval is Matt's.
 
 ## Publish
 
@@ -159,4 +184,4 @@ git push origin "$(git commit-tree "$(git write-tree)" $P -m "Brief $DAY"):refs/
 ```
 
 Each run adds one commit on top of the last (a plain push, never a force push), and the tree only ever holds this week
-and last week, so a shallow clone of `social` stays small. Finish with a one-paragraph summary: the top pick, how many stories, and whether there's a reel.
+and last week, so a shallow clone of `social` stays small. Finish with a one-paragraph summary: the top pick, how many stories, the reel (template and topic) and whether it was queued.

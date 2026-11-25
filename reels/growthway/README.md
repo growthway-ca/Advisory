@@ -35,16 +35,34 @@ In any text, wrap the key phrase in `[[double brackets]]` to give it the marker.
 | `list` | `title`, `items` (2–4, short) | What to do about it. |
 | `outro` | `tagline`, `cta` (both optional) | Always last. |
 
-| `quote` | `text`, `name`, `role` | A pull quote: oversized quotation mark, serif text, speaker line. Defaults to the paper look. |
+| `quote` | `text`, `name`, `role` | A pull quote: oversized quotation mark, serif text, speaker line. Quote words exactly; trim with … rather than paraphrase. Defaults to the paper look in `classic`. |
 | `kinetic` | `phrases` (2–5 short phrases), `beat` (optional seconds per phrase) | Full-screen words, one phrase at a time. Good for hooks and lists of single words. `[[brackets]]` colour a word. |
 | `versus` | `before` and `after` (each `{label, items}`), optional `title` | The old way appears and gets struck through, then the new way lands. |
 
+### Templates
+
+Set `"template"` at the top of the spec to restyle the whole reel. Same palette and logo, seven different looks:
+
+| template | look |
+|---|---|
+| `classic` | The house rhythm: theme per scene type, ring reveals, sage marker sweep. The default. |
+| `notebook` | Ruled notebook paper on every scene, highlighter strokes on key phrases, wipe cuts. |
+| `newsdesk` | Dark studio with a "LIVE · The Growthway Brief · date" bar, rust kicker chips and lower-third rules, slide cuts. Set `"date"` (YYYY-MM-DD) for the bar. |
+| `bold` | Full-bleed colour blocks that alternate rust, sage, forest, cream; all-caps type that slams in; inverted blocks; hard cuts. |
+| `terminal` | Dark grid, monospace type that prints on, `$` prompts, a blinking cursor, outlined list rows; hard cuts. |
+| `editorial` | Magazine look: serif headlines, a rule above each block, rust underline accents, fades. |
+| `cards` | Each beat on a tilted white card taped to a dotted background (forest, rust, deep), pop-in cuts. |
+
+Scenes can still set their own `theme` or `transition` to override the template. Preview all seven quickly with
+`--stills` (skips the mp4).
+
 ### Variation
 
-Mix these so reels don't all feel the same:
-- `transition` on any scene: `ring` (default, the circle reveal), `wipe` (up from the bottom), `slide` (in from the right) or `cut` (no transition; good between kinetic beats).
-- `theme: "paper"`: notebook paper with ruled lines and a margin, and a hand-drawn circle instead of the marker sweep. Works with any scene type.
+- `transition` on any scene: `ring`, `wipe`, `slide`, `cut`, `fade` or `pop`.
+- `theme: "paper"`: notebook paper with ruled lines and a highlighter on key phrases.
 - Pace: set `seconds` per scene; kinetic scenes read best at 3–4 seconds.
+- Key phrases are only ever highlighted with `[[double brackets]]` (each template draws its own marker). There is no circle
+  style: it clipped at the edge of the line.
 
 A good reel is 5–7 scenes and 25–35 seconds: hook → evidence (stat or gap) → the take (point) → what to do (list) → outro.
 

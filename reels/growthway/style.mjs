@@ -18,12 +18,26 @@ export const THEMES = {
   sage: { bg: COLORS.sage, glow: '#e6f3cf', text: COLORS.forest, accent: COLORS.rust, marker: COLORS.forest, markText: COLORS.sage, mark: COLORS.forest },
   cream: { bg: COLORS.cream, glow: '#ffffff', text: COLORS.forest, accent: COLORS.rust, marker: COLORS.sage, markText: COLORS.forest, mark: COLORS.forest },
   rust: { bg: COLORS.rust, glow: '#d8834f', text: COLORS.cream, accent: COLORS.deep, marker: COLORS.cream, markText: COLORS.rust, mark: COLORS.cream },
-  // Notebook paper: ruled lines and a margin, with a hand-drawn circle instead of the marker sweep.
+  // Notebook paper: ruled lines and a margin; the marker becomes a highlighter stroke.
   paper: { bg: '#FBF8F1', glow: '#ffffff', text: COLORS.forest, accent: COLORS.rust, marker: COLORS.sage, markText: COLORS.forest, mark: COLORS.forest, paper: true },
 };
 
 // Default theme per scene type, so a spec can leave it out and still get the house rhythm.
 const DEFAULT_THEME = { hook: 'forest', stat: 'sage', gap: 'forest', point: 'rust', list: 'cream', outro: 'deep', quote: 'paper', kinetic: 'deep', versus: 'cream' };
+
+// Templates: seven whole-reel looks on the same brand palette, so the feed doesn't feel like one video on repeat.
+// A spec picks one with "template"; scenes can still override theme or transition one at a time.
+// `themes` maps scene type -> theme; `cycle` (if set) alternates themes by scene position instead.
+const ALL = (t, outro = 'deep') => ({ hook: t, stat: t, gap: t, point: t, list: t, quote: t, kinetic: t, versus: t, outro });
+export const TEMPLATES = {
+  classic: { label: 'Classic: the house rhythm, ring reveals, sage marker sweep', themes: DEFAULT_THEME, transition: 'ring' },
+  notebook: { label: 'Notebook: ruled paper, highlighter strokes, wipe cuts', themes: ALL('paper', 'forest'), transition: 'wipe' },
+  newsdesk: { label: 'News desk: dark studio, live bar, rust lower-thirds', themes: { ...ALL('deep'), point: 'rust' }, transition: 'slide', chrome: 'news' },
+  bold: { label: 'Bold: full-bleed colour blocks, all-caps type that slams in, hard cuts', cycle: ['rust', 'sage', 'forest', 'cream'], themes: ALL('rust'), transition: 'cut' },
+  terminal: { label: 'Terminal: grid, monospace type that prints on, blinking cursor', themes: ALL('deep'), transition: 'cut' },
+  editorial: { label: 'Editorial: magazine serif headlines, rules, underline accents, fades', themes: ALL('cream', 'forest'), transition: 'fade' },
+  cards: { label: 'Cards: each beat on a tilted card taped to the background, pop-ins', cycle: ['forest', 'rust', 'deep'], themes: ALL('forest'), transition: 'pop', outroTransition: 'fade' },
+};
 
 export async function fonts() {
   const face = async (pkg, file, family, weight, style = 'normal') => {
@@ -34,7 +48,9 @@ export async function fonts() {
     face('plus-jakarta-sans', 'plus-jakarta-sans-latin-600-normal.woff2', 'Jakarta', 600),
     face('plus-jakarta-sans', 'plus-jakarta-sans-latin-800-normal.woff2', 'Jakarta', 800),
     face('newsreader', 'newsreader-latin-500-italic.woff2', 'Newsreader', 500, 'italic'),
+    face('newsreader', 'newsreader-latin-600-normal.woff2', 'NewsSerif', 600),
     face('jetbrains-mono', 'jetbrains-mono-latin-500-normal.woff2', 'Mono', 500),
+    face('jetbrains-mono', 'jetbrains-mono-latin-700-normal.woff2', 'Mono', 700),
   ])).join('');
 }
 
@@ -51,18 +67,16 @@ export function logo(color, { size = 64, build = false, delay = 0 } = {}) {
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-// Splits a line into rising words. Text inside [[double brackets]] gets the marker.
-function words(text, { start = 0, step = 0.09, circle = false } = {}) {
+// Splits a line into rising words. Text inside [[double brackets]] gets the marker (each template styles it its own
+// way: sweep, highlighter, box, underline...). There is deliberately no circle style: it clipped at line ends.
+function words(text, { start = 0, step = 0.09 } = {}) {
   let i = 0;
   return esc(text).split(/(\[\[.*?\]\])/).map((part) => {
     const marked = part.startsWith('[[');
     const html = (marked ? part.slice(2, -2) : part).split(/\s+/).filter(Boolean)
       .map((w) => `<span class="w" style="--t:${(start + step * i++).toFixed(2)}s">${w}</span>`).join(' ');
     if (!marked) return html;
-    const t = (start + step * i).toFixed(2);
-    return circle
-      ? `<span class="mkc" style="--t:${t}s">${html}<svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M8 24C4 9 52 3 90 9c12 3 8 22-14 26-30 6-70 4-68-13" pathLength="100"/></svg></span>`
-      : `<span class="mk" style="--t:${t}s">${html}</span>`;
+    return `<span class="mk" style="--t:${(start + step * i).toFixed(2)}s">${html}</span>`;
   }).join(' ');
 }
 
@@ -75,7 +89,7 @@ function counter(value, { prefix = '', suffix = '', t = 0.3, dur = 1.1 } = {}) {
 }
 
 const SCENES = {
-  hook: (s, th) => `<div class="content mid">${kicker(s.kicker)}<h1 class="headline">${words(s.text, { start: 0.35, circle: th.paper })}</h1>
+  hook: (s, th) => `<div class="content mid">${kicker(s.kicker)}<h1 class="headline">${words(s.text, { start: 0.35})}</h1>
 ${s.sub ? `<p class="sub" style="--t:${0.6 + s.text.split(/\s+/).length * 0.09}s">${esc(s.sub)}</p>` : ''}</div>`,
 
   stat: (s) => `<div class="content mid">${kicker(s.kicker)}${counter(s.value, { prefix: s.prefix, suffix: s.suffix })}
@@ -94,7 +108,7 @@ ${source(s.source, 2.6)}</div>`;
   },
 
   point: (s, th) => `<div class="content mid">${kicker(s.kicker)}<p class="serif">${words(s.lead, { start: 0.35, step: 0.08 })}</p>
-<h1 class="headline punch">${words(s.text, { start: 0.8 + s.lead.split(/\s+/).length * 0.08, step: 0.1, circle: th.paper })}</h1></div>`,
+<h1 class="headline punch">${words(s.text, { start: 0.8 + s.lead.split(/\s+/).length * 0.08, step: 0.1})}</h1></div>`,
 
   list: (s) => `<div class="content mid">${kicker(s.kicker)}<h2 class="title">${words(s.title, { start: 0.2, step: 0.05 })}</h2>
 <ol class="items">${s.items.map((x, k) => `<li style="--t:${0.8 + k * 0.7}s"><span class="ix">${String(k + 1).padStart(2, '0')}</span><span class="it">${esc(x)}</span></li>`).join('')}</ol></div>`,
@@ -105,7 +119,7 @@ ${source(s.source, 2.6)}</div>`;
     const size = n > 14 ? 72 : n > 8 ? 88 : 104;
     const at = 0.5 + n * 0.08;
     return `<div class="content mid">${kicker(s.kicker)}<div class="qmark">&ldquo;</div>
-<p class="quote" style="font-size:${size}px">${words(s.text, { start: 0.45, step: 0.08, circle: th.paper })}</p>
+<p class="quote" style="font-size:${size}px">${words(s.text, { start: 0.45, step: 0.08})}</p>
 <div class="who" style="--t:${(at + 0.3).toFixed(2)}s"><i></i><div><b>${esc(s.name ?? '')}</b>${s.role ? `<span>${esc(s.role)}</span>` : ''}</div></div></div>`;
   },
 
@@ -217,11 +231,6 @@ body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
 @keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
 .url{margin-top:36px;font:500 32px/1 Mono,monospace;letter-spacing:.16em;opacity:.75;animation:fadeUp .6s var(--t) both}
 
-/* circle marker (paper look) */
-.mkc{position:relative;display:inline-block;white-space:nowrap}
-.mkc svg{position:absolute;left:-7%;top:-14%;width:114%;height:128%;overflow:visible;pointer-events:none}
-.mkc path{fill:none;stroke:var(--accent);stroke-width:5;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:draw .7s calc(var(--t) + .3s) cubic-bezier(.6,0,.3,1) forwards}
-
 /* quote */
 .qmark{font:italic 500 420px/0.6 Newsreader,serif;color:var(--accent);opacity:.9;height:190px;padding-top:150px;margin-bottom:30px;animation:fadeUp .5s .2s both}
 .quote{font:italic 500 96px/1.12 Newsreader,serif;letter-spacing:-.01em}
@@ -261,22 +270,119 @@ body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
 @keyframes leaf{from{transform:scale(0) rotate(-12deg)}to{transform:none}}
 `;
 
-export function sceneTheme(s) {
-  return THEMES[s.theme ?? DEFAULT_THEME[s.type]];
+
+// Per-template overrides, scoped by the body class.
+const TEMPLATE_CSS = `
+.scene.t-fade{animation:fadeScene .7s ease both}
+@keyframes fadeScene{from{opacity:0}to{opacity:1}}
+.scene.t-pop{animation:popScene .55s cubic-bezier(.3,1.35,.5,1) both}
+@keyframes popScene{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
+
+/* notebook: highlighter instead of the sweep block */
+.paper .mk{--marker:rgba(209,231,174,.95);color:var(--text);border-radius:6px 18px 8px 16px;padding:0 .14em;background-position:0 78%;background-size:0% 62%}
+.paper .mk{animation-name:hilite}
+@keyframes hilite{from{background-size:0% 62%}to{background-size:100% 62%}}
+
+/* news desk */
+.newsbar{position:absolute;left:84px;right:84px;top:246px;display:flex;align-items:center;gap:22px;font:500 26px/1 Mono,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--text);border-top:2px solid color-mix(in srgb,var(--text) 30%,transparent);border-bottom:2px solid color-mix(in srgb,var(--text) 30%,transparent);padding:16px 0;animation:fadeUp .5s .1s both}
+.newsbar b{display:flex;align-items:center;gap:10px;background:${COLORS.rust};color:${COLORS.cream};padding:8px 14px;border-radius:6px;font-weight:500}
+.newsbar b i{width:14px;height:14px;border-radius:50%;background:${COLORS.cream};animation:blink 1s steps(1) infinite}
+.newsbar em{margin-left:auto;font-style:normal;opacity:.75}
+@keyframes blink{50%{opacity:0}}
+.tpl-newsdesk .content{top:360px}
+.tpl-newsdesk .kicker{align-self:flex-start;background:${COLORS.rust};color:${COLORS.cream};padding:14px 20px;border-radius:6px}
+.tpl-newsdesk .kicker span{display:none}
+.tpl-newsdesk .headline,.tpl-newsdesk .title{border-left:14px solid ${COLORS.rust};padding-left:34px}
+.tpl-newsdesk .mk{--marker:${COLORS.rust};--markText:${COLORS.cream};border-radius:4px}
+.tpl-newsdesk .s-point .headline{border-left-color:${COLORS.deep}}
+.tpl-newsdesk .s-point .mk{--marker:${COLORS.deep};--markText:${COLORS.cream}}
+.tpl-newsdesk .s-point .kicker,.tpl-newsdesk .s-point .newsbar b{background:${COLORS.deep}}
+
+/* bold */
+.tpl-bold .headline,.tpl-bold .title,.tpl-bold .label,.tpl-bold .it,.tpl-bold .vs li,.tpl-bold .kp{text-transform:uppercase}
+.tpl-bold .headline{font-size:118px;line-height:.96;letter-spacing:-.04em}
+.tpl-bold .punch{font-size:124px}
+.tpl-bold .title{font-size:66px}
+.tpl-bold .label{font-size:58px}
+.tpl-bold .it{font-size:46px}
+.tpl-bold .w{animation:slam .32s var(--t) cubic-bezier(.2,1.2,.4,1) both}
+@keyframes slam{from{opacity:0;transform:scale(1.7)}to{opacity:1;transform:none}}
+.tpl-bold .mk{--marker:var(--text);--markText:var(--bg);border-radius:0;animation-duration:.2s}
+.tpl-bold .kicker{font-size:34px}
+.tpl-bold .grain{opacity:.16}
+
+/* terminal */
+.tpl-terminal .scene{background-image:linear-gradient(rgba(209,231,174,.07) 2px,transparent 2px),linear-gradient(90deg,rgba(209,231,174,.07) 2px,transparent 2px);background-size:72px 72px}
+.tpl-terminal .headline,.tpl-terminal .title,.tpl-terminal .label,.tpl-terminal .it,.tpl-terminal .vs li,.tpl-terminal .quote,.tpl-terminal .serif,.tpl-terminal .kp{font-family:Mono,monospace;font-weight:700;font-style:normal;letter-spacing:-.04em}
+.tpl-terminal .headline{font-size:90px;line-height:1.1}
+.tpl-terminal .num{font-family:Mono,monospace;font-weight:700;font-size:270px;letter-spacing:-.08em}
+.tpl-terminal .punch{font-size:96px}
+.tpl-terminal .title{font-size:58px}
+.tpl-terminal .label{font-size:52px}
+.tpl-terminal .it{font-size:42px}
+.tpl-terminal .vs li{font-size:50px}
+.tpl-terminal .serif{font-size:56px;font-weight:500;opacity:.8}
+.tpl-terminal .quote{font-size:64px !important}
+.tpl-terminal .w{animation:print .01s var(--t) steps(1) both}
+@keyframes print{from{opacity:0}to{opacity:1}}
+.tpl-terminal .headline::after,.tpl-terminal .title::after{content:"▍";color:var(--accent);animation:blink 1s steps(1) infinite}
+.tpl-terminal .kicker span{display:none}
+.tpl-terminal .kicker::before{content:"$ ";opacity:.7}
+.tpl-terminal .mk{--marker:rgba(209,231,174,.2);--markText:${COLORS.sage};border-radius:2px}
+.tpl-terminal .items li{border-radius:8px;border:2px solid color-mix(in srgb,var(--text) 18%,transparent);background:transparent}
+
+/* editorial */
+.tpl-editorial .headline,.tpl-editorial .title,.tpl-editorial .label{font-family:NewsSerif,serif;font-weight:600;letter-spacing:-.02em}
+.tpl-editorial .headline{font-size:122px;line-height:1.02}
+.tpl-editorial .punch{font-size:128px}
+.tpl-editorial .title{font-size:78px}
+.tpl-editorial .content:not(.center):not(.kin)::before{content:"";display:block;height:4px;background:var(--text);margin-bottom:34px;flex:none}
+.tpl-editorial .kicker span{display:none}
+.tpl-editorial .mk{--markText:var(--text);background:linear-gradient(var(--accent),var(--accent)) no-repeat 0 96%/0% .085em;padding:0;border-radius:0;animation-name:underline}
+@keyframes underline{from{background-size:0% .085em}to{background-size:100% .085em}}
+.tpl-editorial .items li{background:transparent;border-radius:0;border-top:2px solid color-mix(in srgb,var(--text) 22%,transparent);padding:30px 0}
+.tpl-editorial .water{opacity:.04}
+
+/* cards */
+.tpl-cards .scene{background-image:radial-gradient(color-mix(in srgb,var(--text) 18%,transparent) 2.5px,transparent 2.5px);background-size:44px 44px}
+.tpl-cards .content:not(.center):not(.kin){--text:${COLORS.forest};--accent:${COLORS.rust};--marker:${COLORS.sage};--markText:${COLORS.forest};--bg:#ffffff;color:var(--text);background:#fff;border-radius:36px;padding:72px 62px;top:50%;bottom:auto;height:auto;max-height:1180px;transform:translateY(-54%) rotate(-1.4deg);box-shadow:0 34px 90px rgba(8,31,21,.28)}
+.tpl-cards .content:not(.center):not(.kin)::before{content:"";position:absolute;top:-30px;left:50%;width:220px;height:60px;margin-left:-110px;background:rgba(248,245,238,.78);transform:rotate(-5deg);box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.tpl-cards .num{font-size:250px}
+.tpl-cards .headline{font-size:100px}
+.tpl-cards .punch{font-size:108px}
+.tpl-cards .items li{background:${COLORS.cream};padding:28px 30px}
+.tpl-cards .it{font-size:42px}
+.tpl-cards .ix{font-size:30px}
+`;
+
+export function template(name = 'classic') {
+  const t = TEMPLATES[name];
+  if (!t) throw new Error(`Unknown template "${name}". Use one of: ${Object.keys(TEMPLATES).join(', ')}`);
+  return { name, ...t };
 }
 
+export function sceneTheme(s, index = 0, tpl = template()) {
+  if (s.theme) return THEMES[s.theme];
+  if (tpl.cycle && s.type !== 'outro') return THEMES[tpl.cycle[index % tpl.cycle.length]];
+  return THEMES[tpl.themes[s.type] ?? DEFAULT_THEME[s.type]];
+}
+
+const newsDate = (d) => d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' }).toUpperCase();
+
 // One scene as a full HTML page. `index`/`count` drive the progress bar; `prev` is the previous scene's background
-// (what the ring reveal opens out of).
-export function scenePage(fontCss, s, { index, count, prev, cover = false }) {
-  const th = sceneTheme(s);
+// (what the reveal opens out of).
+export function scenePage(fontCss, s, { index, count, prev, cover = false, tpl = template(), date = new Date() }) {
+  const th = sceneTheme(s, index, tpl);
   if (!SCENES[s.type]) throw new Error(`Unknown scene type: ${s.type}`);
   const vars = `--bg:${th.bg};--glow:${th.glow};--text:${th.text};--accent:${th.accent};--marker:${th.marker};--markText:${th.markText};--prev:${prev ?? th.bg};--d:${s.seconds}s`;
   const segs = Array.from({ length: count }, (_, k) => `<div class="seg ${k < index ? 'done' : k === index ? 'now' : ''}"><i></i></div>`).join('');
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}${CSS}</style></head>
-<body class="${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''}" style="${vars}"><div class="scene t-${s.transition ?? 'ring'}${th.paper ? ' paper' : ''}">
+  const news = tpl.chrome === 'news' && s.type !== 'outro'
+    ? `<div class="newsbar"><b><i></i>LIVE</b><span>The Growthway Brief</span><em>${newsDate(date)}</em></div>` : '';
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}${CSS}${TEMPLATE_CSS}</style></head>
+<body class="tpl-${tpl.name} ${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''}" style="${vars}"><div class="scene t-${s.transition ?? (s.type === 'outro' ? tpl.outroTransition : undefined) ?? tpl.transition}${th.paper ? ' paper' : ''} s-${s.type}">
 <div class="glow"></div>${s.type === 'outro' ? '' : `<div class="water">${logo(th.mark)}</div>`}<div class="grain"></div>
 <div class="progress">${segs}</div>
 ${s.type === 'outro' ? '' : `<div class="tag">${logo(th.text, { size: 46 })}<span>Growthway</span></div>`}
-${SCENES[s.type](s, th)}
+${news}${SCENES[s.type](s, th)}
 </div></body></html>`;
 }
