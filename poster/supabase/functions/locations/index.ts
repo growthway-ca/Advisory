@@ -3,7 +3,7 @@
 //   POST {id: "<page id or fb url>"}  -> look up one Page and check it has a location
 //   POST {own: true}                  -> each connected account's own Page, if it has a location
 // Callers: a signed-in dashboard admin only.
-import { Account, admin, authorized, cors, graph, json } from "../_shared/common.ts";
+import { Account, admin, authorized, cors, graph, json, tokenFor } from "../_shared/common.ts";
 
 const FIELDS = "id,name,location,link";
 
@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
   if (!(await authorized(req, db))) return json({ error: "unauthorized" }, 401);
   const body = await req.json().catch(() => ({}));
   const { data: accounts } = await db.from("ig_accounts").select("id,handle,token_secret,api_host,ig_user_id").eq("active", true);
-  const usable = (accounts ?? []).filter((a) => Deno.env.get(a.token_secret)) as Account[];
+  const usable = (accounts ?? []).filter((a) => tokenFor(a as Account)) as Account[];
   if (!usable.length) return json({ error: "No connected account to search with" }, 400);
   const a = usable[0];
   try {

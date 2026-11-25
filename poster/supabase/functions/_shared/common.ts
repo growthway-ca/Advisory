@@ -21,6 +21,7 @@ export async function authorized(req: Request, db: SupabaseClient): Promise<bool
   const key = req.headers.get("x-cron-key");
   if (key) {
     const { data } = await db.rpc("cron_key_ok", { k: key });
+    if (data === true) await loadTokens(db);
     return data === true;
   }
   const auth = req.headers.get("authorization") ?? "";
@@ -30,6 +31,7 @@ export async function authorized(req: Request, db: SupabaseClient): Promise<bool
     auth: { persistSession: false },
   });
   const { data } = await user.rpc("is_admin");
+  if (data === true) await loadTokens(db);
   return data === true;
 }
 
@@ -37,8 +39,17 @@ export type Account = {
   id: string; handle: string; token_secret: string; api_host: string; ig_user_id: string | null;
 };
 
+// Tokens saved from the dashboard (Vault) win over the older IG_TOKEN_* Edge Function secrets.
+// Loaded once per request by authorized().
+const VAULT = new Map<string, string>();
+export async function loadTokens(db: SupabaseClient) {
+  const { data } = await db.rpc("ig_tokens");
+  VAULT.clear();
+  for (const r of data ?? []) VAULT.set(r.account_id, r.token);
+}
+
 export function tokenFor(a: Account): string | undefined {
-  return Deno.env.get(a.token_secret) || undefined;
+  return VAULT.get(a.id) || Deno.env.get(a.token_secret) || undefined;
 }
 
 // Calls the Graph API. Throws with Meta's error message on failure.

@@ -132,8 +132,8 @@ async function boot() {
 function banner() {
   const msgs = [];
   for (const a of accounts) {
-    if (a.last_error && /session|expired|access token|OAuth/i.test(a.last_error)) msgs.push(`@${a.handle}: the Instagram token isn't working (${a.last_error.slice(0, 90)}…). Posting is paused until you add a new one (see SETUP.md, step 3).`);
-    if (a.data_access_expires) { const d = (new Date(a.data_access_expires) - new Date()) / 864e5; if (d < 21) msgs.push(`@${a.handle}: Meta needs you to re-approve the app by ${a.data_access_expires} (${Math.max(0, Math.round(d))} days). Regenerate the token as in SETUP.md, step 3.`); }
+    if (a.last_error && /session|expired|access token|OAuth/i.test(a.last_error)) msgs.push(`@${a.handle}: the Instagram token isn't working (${a.last_error.slice(0, 90)}…). Posting is paused: open Accounts → Reconnect Instagram.`);
+    if (a.data_access_expires) { const d = (new Date(a.data_access_expires) - new Date()) / 864e5; if (d < 21) msgs.push(`@${a.handle}: Meta needs you to re-approve the app by ${a.data_access_expires} (${Math.max(0, Math.round(d))} days). Use Accounts → Reconnect Instagram.`); }
   }
   const b = $("#banner"); b.hidden = !msgs.length; b.innerHTML = msgs.map(esc).join("<br>");
 }
@@ -315,7 +315,11 @@ async function renderResearch() {
 async function renderAccounts() {
   const el = $("#accounts");
   const locOpts = (sel) => `<option value="">No location</option>${locations.map((l) => `<option value="${l.id}" ${l.id === sel ? "selected" : ""}>${esc(l.name)}${l.city ? ` · ${esc(l.city)}` : ""}</option>`).join("")}`;
-  el.innerHTML = `<div class="card scroll"><h2 style="margin-top:0">Instagram accounts</h2>
+  el.innerHTML = `<div class="card"><h2 style="margin-top:0">Reconnect Instagram</h2>
+      <p class="muted">In Meta's <a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener">Graph API Explorer</a>, pick your app, press <b>Generate Access Token</b>, tap the copy icon, and paste it here. Any token works: this turns it into one that never expires, checks it, and connects every account whose Facebook Page it can see.</p>
+      <div class="row"><input id="tok" type="password" placeholder="Paste the token" autocomplete="off" style="max-width:420px"><button id="tokgo">Connect</button></div>
+      <div id="tokout" class="muted" style="margin-top:8px"></div></div>
+    <div class="card scroll"><h2 style="margin-top:0">Instagram accounts</h2>
     <table><tr><th>Account</th><th>Connected</th><th>Default location</th><th>Default audience</th><th>Status</th></tr>
     ${accounts.map((a) => `<tr><td>@${esc(a.handle)}<div class="mono muted">${esc(a.token_secret)}</div></td><td>${a.ig_user_id ? `<span class="pill published">yes</span>` : `<span class="pill pending">not yet</span>`}</td>
       <td><select data-acc-loc="${a.id}">${locOpts(a.default_location_id)}</select></td>
@@ -324,13 +328,26 @@ async function renderAccounts() {
     </table>
     ${accounts.filter((a) => a.best_hours).map((a) => { const h = a.best_hours; const max = Math.max(...Object.values(h)); const top = Object.entries(h).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([k]) => +k);
       return `<h2>When @${esc(a.handle)}'s followers are online</h2><div class="bars">${Array.from({ length: 24 }, (_, k) => `<i class="${top.includes(k) ? "top" : ""}" title="${k}:00" style="height:${Math.max(4, ((h[k] ?? 0) / max) * 100)}%"></i>`).join("")}</div><p class="muted">Hours 0–23 as Instagram reports them (Instagram's own time zone, not necessarily Toronto). Busiest: ${top.map((k) => k + ":00").join(", ")}.</p>`; }).join("")}
-    <p class="muted">Defaults apply to new reels as they arrive in the queue; you can still change them per reel. Tokens live as Supabase Edge Function secrets, never in this page or the database.</p></div>
+    <p class="muted">Defaults apply to new reels as they arrive in the queue; you can still change them per reel. Tokens are stored encrypted in Supabase Vault; this page never shows them.</p></div>
     <div class="card"><h2 style="margin-top:0">Locations</h2>
       <p class="muted">A location tag has to be a Facebook Page with an address. Your own Pages work; searching other places needs Meta's "Page Public Metadata Access" approval.</p>
       <div class="row"><button class="ghost" id="locown">Add my Pages' locations</button><input id="locid" placeholder="Facebook Page ID or link" style="max-width:300px"><button id="locadd">Add</button></div>
       <table style="margin-top:10px"><tr><th>Name</th><th>Place</th><th>Page ID</th><th></th></tr>
       ${locations.map((l) => `<tr><td>${esc(l.name)}</td><td>${esc([l.city, l.state, l.country].filter(Boolean).join(", "))}</td><td class="mono">${esc(l.id)}</td><td><button class="ghost" data-locdel="${l.id}">Remove</button></td></tr>`).join("") || `<tr><td colspan="4" class="muted">No locations yet.</td></tr>`}
       </table></div>`;
+  $("#tokgo").onclick = async () => {
+    const v = $("#tok").value.trim(); if (!v) return;
+    const out = $("#tokout"); out.textContent = "Checking with Meta…"; $("#tokgo").disabled = true;
+    try {
+      const r = await callFn("connect", { token: v });
+      $("#tok").value = "";
+      const html = (r.results.length ? r.results.map((x) => `<div class="${x.ok ? "" : "err"}">@${esc(x.handle)}: ${esc(x.message)}</div>`).join("")
+        : `<div class="err">None of your accounts matched. Pages this token can see: ${esc(r.pages.join(", ") || "none")}.</div>`);
+      if (r.results.some((x) => x.ok)) await boot();
+      $("#tokout").innerHTML = html;
+    } catch (e) { out.innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+    finally { const b = $("#tokgo"); if (b) b.disabled = false; }
+  };
   for (const s of el.querySelectorAll("[data-acc-loc]")) s.onchange = async () => { const { error } = await sb.from("ig_accounts").update({ default_location_id: s.value || null }).eq("id", s.dataset.accLoc); toast(error ? error.message : "Default location saved"); boot(); };
   for (const s of el.querySelectorAll("[data-acc-trial]")) s.onchange = async () => { const { error } = await sb.from("ig_accounts").update({ default_trial: s.value || null }).eq("id", s.dataset.accTrial); toast(error ? error.message : "Default audience saved"); boot(); };
   const save = async (results) => {
