@@ -5,7 +5,8 @@
   "scripts": {
     "reel:nordic": "node reels/nordic-fix/build.mjs",
     "reel:growthway": "node reels/growthway/build.mjs",
-    "reel:parreira": "node reels/parreira/build.mjs"
+    "reel:parreira": "node reels/parreira/build.mjs",
+    "carousel:growthway": "node reels/growthway/carousel.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",

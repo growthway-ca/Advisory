@@ -68,6 +68,15 @@ Scene lengths are worked out from the content; set `seconds` only to override.
 
 A good reel is 3–5 scenes and 20–35 seconds: title → the format scene (sometimes two beats of it, or one supporting beat) → outro.
 
+### Sound, A/B titles, carousels
+
+- **Music:** every reel gets an original synthesised music bed (`music.mjs`: pad, plucked arpeggio, soft pulse, reverb;
+  deterministic per slug). Mood follows the main format; override with `"music": "calm" | "bright" | "focus" | "none"`.
+- **A/B hook test:** add `"titleB"` (and optionally `"kickerB"`); the build also makes `out/<slug>-b/` with only the title
+  card changed.
+- **Carousels:** `npm run carousel:growthway -- <spec>` with `"slides"` instead of `"scenes"` renders settled
+  1080x1350 JPEGs (`01.jpg`…), a page counter and "Swipe →". Myth/fact shows both cards on one slide.
+
 ## Rules
 
 - Every number on screen must come from a source you've read, and the scene shows that source.

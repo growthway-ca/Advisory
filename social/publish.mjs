@@ -42,15 +42,17 @@ const cutoff = new Date(day.getTime() - 30 * 86400e3).toISOString().slice(0, 10)
 const merged = [...covered.filter((c) => !todays.some((t) => t.url === c.url)), ...todays.map((t) => ({ ...t, date }))].filter((c) => c.date >= cutoff);
 await writeFile(coveredFile, `${JSON.stringify(merged, null, 2)}\n`);
 
-let md = `# Growthway daily brief\n\nA new brief every weekday by 6:30am ET, with a branded reel on Tuesdays and Fridays.
+let md = `# Growthway daily brief\n\nA new brief every weekday by 6:30am ET, with a branded reel every weekday (and carousels on Mondays and Wednesdays). Reels and carousels wait for approval in the poster dashboard (growthway-poster.netlify.app).
 Pick what you like, edit, post. Nothing here is posted automatically.
 This week's briefs stay here until Monday, then move to "Last week". After that they're deleted.\n\n## This week (from ${weekStart})\n`;
 for (const f of await days(thisWeek)) {
   const dir = path.join(thisWeek, f);
   md += `\n---\n\n## ${label(f)}\n\n`;
+  if (existsSync(path.join(dir, 'carousel', '01.jpg'))) md += `🖼️ **Carousel:** [slides](this-week/${f}/carousel) · <img src="this-week/${f}/carousel/01.jpg" width="160">\n\n`;
   if (existsSync(path.join(dir, 'reel', 'reel.mp4'))) {
     md += `🎬 **Reel:** [reel.mp4](this-week/${f}/reel/reel.mp4) · [folder](this-week/${f}/reel)\n\n<img src="this-week/${f}/reel/cover.png" width="200">\n\n`;
     if (existsSync(path.join(dir, 'reel', 'caption.txt'))) md += `\`\`\`text\n${(await readFile(path.join(dir, 'reel', 'caption.txt'), 'utf8')).trim()}\n\`\`\`\n\n`;
+    if (existsSync(path.join(dir, 'reel-b', 'reel.mp4'))) md += `🅱️ **A/B variant:** [reel-b.mp4](this-week/${f}/reel-b/reel.mp4) · <img src="this-week/${f}/reel-b/cover.png" width="120">\n\n`;
   }
   if (existsSync(path.join(dir, 'brief.md'))) md += `${(await readFile(path.join(dir, 'brief.md'), 'utf8')).trim()}\n`;
 }

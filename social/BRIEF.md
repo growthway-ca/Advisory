@@ -158,22 +158,60 @@ always; highlight key phrases with `[[double brackets]]`; never circle words.
 Write the spec to `reels/growthway/specs/<YYYY-MM-DD>-<slug>.json` following `reels/growthway/README.md` (formats, scene
 types, fields, rules), build it with `npm run reel:growthway -- <spec>`, and look at `preview.png`. Fix anything that wraps
 badly or runs outside the frame, then rebuild. Copy `reel.mp4`, `cover.png`, `caption.txt` and `preview.png` into the
-day's `reel/` folder, along with the spec as `spec.json` so the reel can be rebuilt later. Everything goes to `social`;
+day's `reel/` folder (variant B's into `reel-b/`), along with the spec as `spec.json` so the reel can be rebuilt later. Everything goes to `social`;
 never push to the code branch. Delete the spec from `reels/growthway/specs/` afterwards so the checkout stays clean.
 
+**Sound:** reels get an original music bed automatically (synthesised, nothing to license). Leave it on; set
+`"music": "calm" | "bright" | "focus"` in the spec only to override the mood, or `"none"` to skip it.
+
+**Regular reel or A/B trial pair:**
+- Time-sensitive news Growthway's followers need now (a vote, a deadline, a policy that changes this week), or a
+  direct call to action: one **regular** reel.
+- Everything else (explainers, evergreen how-tos, new formats): an **A/B hook test**. Add `"titleB"` (and optionally
+  `"kickerB"`) to the spec: a genuinely different angle on the same story, not a reworded copy (a question vs. a
+  number, a myth vs. a promise). The build makes `<slug>` and `<slug>-b`. Queue both as **trial reels** with
+  `trial = 'SS_PERFORMANCE'` and one shared `variant_group`; Matt approves them, and the better one graduates itself.
+- Aim for 2–3 regular reels a week; the rest are trial pairs.
+
 **Queue it for approval** (after the reel is built and checked):
-1. With the Supabase connector (project "Growthway posting", `gacwxtcdzmxfvxqrrveb`), run:
+1. With the Supabase connector (project "Growthway posting", `gacwxtcdzmxfvxqrrveb`), insert one row per reel. For an
+   A/B pair, use the same `variant_group` (e.g. from `select gen_random_uuid()`) with `variant` 'A' and 'B':
    ```sql
-   insert into posts (account_id, title, caption, source)
-   select id, '<short title> (<Mon d>)', $cap$<the full caption.txt>$cap$, 'social:<YYYY-MM-DD-ddd>/reel'
+   insert into posts (account_id, kind, title, caption, source, format, hook, variant_group, variant, trial)
+   select id, 'reel', '<short title> (<Mon d>)', $cap$<the full caption.txt>$cap$, 'social:<YYYY-MM-DD-ddd>/reel',
+          '<main format: notes|thread|mythfact|timeline|scorecard|fineprint|search|list>', '<the title-card text>',
+          <'<uuid>' or null>, <'A'|'B'|null>, <'SS_PERFORMANCE' or null>
    from ig_accounts where handle = 'growthway.ca'
    returning id, upload_token;
    ```
-2. `node social/queue-reel.mjs <id> <upload_token> <path to the day's reel/ folder>` (prints `queued …: pending`).
-3. Mention in the summary that the reel is waiting in the dashboard. If either step fails, say so; the reel is still on
-   `social` and can be queued later.
+2. `node social/queue-reel.mjs <id> <upload_token> <folder>` for each (the `reel/` folder; `reel-b/` for variant B).
+   It prints `queued …: pending`.
+3. Mention in the summary what's waiting in the dashboard. If a step fails, say so; the files are still on `social`.
 
 Never set a post's status to `approved` or call the publisher: approval is Matt's.
+
+## Carousels (Mondays and Wednesdays)
+
+When the top story has an Instagram carousel outline, also build it: write `reels/growthway/specs/<date>-<slug>-carousel.json`
+with `"slides"` (title slide, 3–6 content slides in the narrative formats, then `{"type": "outro"}`; one idea per
+slide), run `npm run carousel:growthway -- <spec>`, check `preview.png`, copy `01.jpg…`, `preview.png`, `caption.txt` and the
+spec to the day's `carousel/` folder, and queue it like a reel with `kind = 'carousel'` and the `carousel/` folder.
+Same sourcing rules. Carousels are never trial posts.
+
+## Engagement and learning (every day, after the reel)
+
+- **Comments:** `select id, username, text, permalink from comments where status = 'new' and draft is null order by posted_at`.
+  For each, write a short, warm, specific reply draft in Growthway's voice (plain language, no hard sell, no promises
+  we can't keep, nothing political) and save it: `update comments set draft = $d$...$d$ where id = '<id>'`. Skip spam
+  and anything abusive (`update comments set status = 'ignored' ...`). Never send replies: Matt does, in the dashboard.
+- **Borrow from the research:** run
+  `select c.username, m.outlier, m.view_count, m.permalink, left(m.caption, 160) from comp_media m join comp_accounts c on c.id = m.comp_id where m.posted_at > now() - interval '14 days' and m.outlier >= 3 order by m.outlier desc limit 5`
+  and add a short **"Hooks and formats to borrow"** section to the brief: what each outlier did (hook pattern, format,
+  length) and how a Growthway reel could use the idea. Borrow structure, never content or wording.
+- **Mondays, the weekly scorecard:** from `post_stats` (last 30 days): average views by `format`, regular vs trial,
+  and each finished A/B pair's winner. Add a **"What's working"** section with 3 bullets, and let it steer the week: when
+  a format clearly leads (2+ posts, about 1.5× the others), use it up to twice this week, and drop the weakest format
+  for a week. Say what you changed.
 
 ## Publish
 
@@ -187,4 +225,4 @@ git push origin "$(git commit-tree "$(git write-tree)" $P -m "Brief $DAY"):refs/
 ```
 
 Each run adds one commit on top of the last (a plain push, never a force push), and the tree only ever holds this week
-and last week, so a shallow clone of `social` stays small. Finish with a one-paragraph summary: the top pick, how many stories, the reel (format and topic) and whether it was queued.
+and last week, so a shallow clone of `social` stays small. Finish with a one-paragraph summary: the top pick, how many stories, the reel (format, topic, regular or A/B trial), anything else queued, and how many reply drafts are waiting.

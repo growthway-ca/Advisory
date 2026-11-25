@@ -498,17 +498,37 @@ export function sceneTheme(s) {
 
 // One scene as a full HTML page. `index`/`count` drive the progress bar; `prev` is the previous scene's background
 // (what the reveal opens out of).
-export function scenePage(fontCss, s, { index, count, prev, cover = false }) {
+// Carousel slides: 1080x1350 stills, a page counter instead of the progress bar, safe areas for the feed.
+const CAROUSEL_CSS = `
+html,body{height:1350px}
+.progress{display:none}
+.tag{top:72px}
+.pager{position:absolute;right:84px;top:66px;font:500 26px/1 Mono,monospace;letter-spacing:.16em;color:var(--text);opacity:.75}
+.content{top:170px;bottom:120px;right:84px}
+.content.thread{bottom:110px}
+.swipe{position:absolute;right:84px;bottom:56px;font:500 26px/1 Mono,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.carousel .mf{perspective:none}
+.carousel .flip{animation:none;transform:none;height:auto;display:flex;flex-direction:column;gap:34px}
+.carousel .face{position:relative;inset:auto;padding:48px 50px}
+.carousel .face.back{transform:none}
+.carousel .mf-text{font-size:50px}
+.carousel .mf-label{margin-bottom:28px}
+.carousel .stamp{right:36px;top:34px;bottom:auto;font-size:34px;border-width:6px;padding:12px 18px}
+`;
+
+export function scenePage(fontCss, s, { index, count, prev, cover = false, carousel = false }) {
   const th = sceneTheme(s);
   if (!SCENES[s.type]) throw new Error(`Unknown scene type: ${s.type}`);
   const vars = `--bg:${th.bg};--glow:${th.glow};--text:${th.text};--accent:${th.accent};--marker:${th.marker};--markText:${th.markText};--prev:${prev ?? th.bg};--d:${s.seconds}s`;
   const segs = Array.from({ length: count }, (_, k) => `<div class="seg ${k < index ? 'done' : k === index ? 'now' : ''}"><i></i></div>`).join('');
   const board = ['notes', 'timeline', 'mythfact', 'fineprint'].includes(s.type) ? ' board' : '';
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}${CSS}${EXTRA_CSS}${FORMAT_CSS}</style></head>
-<body class="${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''}" style="${vars}"><div class="scene t-${s.transition ?? 'ring'}${th.paper ? ' paper' : ''}${board} s-${s.type}">
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}${CSS}${EXTRA_CSS}${FORMAT_CSS}${carousel ? CAROUSEL_CSS : ''}</style></head>
+<body class="${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''} ${carousel ? 'carousel' : ''}" style="${vars}"><div class="scene t-${s.transition ?? 'ring'}${th.paper ? ' paper' : ''}${board} s-${s.type}">
 <div class="glow"></div>${s.type === 'outro' ? '' : `<div class="water">${logo(th.mark)}</div>`}<div class="grain"></div>
 <div class="progress">${segs}</div>
 ${s.type === 'outro' ? '' : `<div class="tag">${logo(th.text, { size: 46 })}<span>Growthway</span></div>`}
+${carousel && s.type !== 'outro' ? `<div class="pager">${index + 1}/${count}</div>` : ''}
 ${SCENES[s.type](s, th)}
+${carousel && index < count - 1 ? '<div class="swipe">Swipe →</div>' : ''}
 </div></body></html>`;
 }

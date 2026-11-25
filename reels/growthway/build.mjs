@@ -9,6 +9,10 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { hasFfmpeg, recordSequence } from '../reel.mjs';
 import { durationOf, fonts, sceneTheme, scenePage } from './style.mjs';
+import { hashSeed, moodFor, musicBed } from './music.mjs';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+const run = promisify(execFile);
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const STILLS = process.argv.includes('--stills');
@@ -65,7 +69,20 @@ async function build(browser, fontCss, specFile) {
   if (STILLS) return console.log(`${spec.slug}: stills only → ${path.relative(process.cwd(), out)}`);
   if (!(await hasFfmpeg())) return console.error(`${spec.slug}: reel skipped, ffmpeg is not installed.`);
   await recordSequence(browser, scenes.map((s, i) => ({ html: pages[i], seconds: s.seconds })), path.join(out, 'reel.mp4'));
+  if (spec.music !== 'none') await addMusic(out, scenes, spec);
   console.log(`${spec.slug}: ${scenes.length} scenes, ${scenes.reduce((a, s) => a + s.seconds, 0).toFixed(1)}s → ${path.relative(process.cwd(), out)}`);
+}
+
+// Bakes a quiet, original music bed into the reel (see music.mjs). spec.music: "calm" | "bright" | "focus" | "none".
+async function addMusic(out, scenes, spec) {
+  const total = scenes.reduce((a, s) => a + s.seconds, 0);
+  const wav = path.join(out, '.music.wav'), tmp = path.join(out, '.with-music.mp4'), mp4 = path.join(out, 'reel.mp4');
+  await writeFile(wav, musicBed(total, { mood: spec.music ?? moodFor(scenes), seed: hashSeed(spec.slug) }));
+  const fadeOut = Math.max(0, total - 1.8).toFixed(2);
+  await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', mp4, '-i', wav, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k',
+    '-af', `afade=t=in:d=0.6,afade=t=out:st=${fadeOut}:d=1.8,loudnorm=I=-20:TP=-2:LRA=9`, '-shortest', '-movflags', '+faststart', tmp]);
+  await rm(mp4); await rm(wav);
+  await run('mv', [tmp, mp4]);
 }
 
 async function main() {
@@ -77,7 +94,19 @@ async function main() {
   const fontCss = await fonts();
   const browser = await chromium.launch(CHROMIUM ? { executablePath: CHROMIUM } : {});
   try {
-    for (const f of files) await build(browser, fontCss, f);
+    for (const f of files) {
+      await build(browser, fontCss, f);
+      // A/B hook test: "titleB" builds a second reel, identical except for the title card, into <slug>-b.
+      const spec = JSON.parse(await readFile(f, 'utf8'));
+      if (spec.titleB) {
+        const b = { ...spec, slug: `${spec.slug}-b`, scenes: spec.scenes.map((s, i) => (i === 0 ? { ...s, text: spec.titleB, kicker: spec.kickerB ?? s.kicker } : s)) };
+        const tmp = path.join(HERE, 'out', `.${spec.slug}-b.json`);
+        await mkdir(path.dirname(tmp), { recursive: true });
+        await writeFile(tmp, JSON.stringify(b));
+        await build(browser, fontCss, tmp);
+        await rm(tmp);
+      }
+    }
   } finally {
     await browser.close();
   }
