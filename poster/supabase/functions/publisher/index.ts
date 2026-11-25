@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
   }
 
   // 2. Approved and due
-  const { data: due } = await db.from("posts").select("id,account_id,caption,video_path,cover_path,attempts")
+  const { data: due } = await db.from("posts").select("id,account_id,caption,video_path,cover_path,attempts,location_id,trial")
     .eq("status", "approved").lte("scheduled_for", new Date().toISOString()).order("scheduled_for").limit(5);
   for (const p of due ?? []) {
     const a = byId.get(p.account_id);
@@ -62,9 +62,13 @@ Deno.serve(async (req) => {
     try {
       const igId = await ensureIgId(db, a);
       const params: Record<string, string> = {
-        media_type: "REELS", video_url: PUBLIC + p.video_path, caption: p.caption ?? "", share_to_feed: "true",
+        media_type: "REELS", video_url: PUBLIC + p.video_path, caption: p.caption ?? "",
       };
       if (p.cover_path) params.cover_url = PUBLIC + p.cover_path;
+      if (p.location_id) params.location_id = p.location_id;
+      // Trial reels are shown to non-followers first; MANUAL = graduate in the app, SS_PERFORMANCE = auto if it does well.
+      if (p.trial) params.trial_params = JSON.stringify({ graduation_strategy: p.trial });
+      else params.share_to_feed = "true";
       const c = await graph(a, "POST", `${igId}/media`, params);
       await db.from("posts").update({ status: "publishing", container_id: c.id, attempts: p.attempts + 1, error: null }).eq("id", p.id);
       log.push(`sent ${p.id}`);

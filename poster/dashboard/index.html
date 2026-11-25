@@ -88,7 +88,9 @@ const PUBLIC = `${URL_}/storage/v1/object/public/reels/`;
 const sb = createClient(URL_, KEY);
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-const POST_COLS = "id,account_id,title,caption,video_path,cover_path,source,status,scheduled_for,approved_at,ig_media_id,permalink,published_at,error,attempts,created_at";
+const POST_COLS = "id,account_id,title,caption,video_path,cover_path,source,status,scheduled_for,approved_at,ig_media_id,permalink,published_at,error,attempts,created_at,location_id,trial";
+let locations = [];
+const TRIAL = { "": "Regular reel (followers + non-followers)", MANUAL: "Trial reel: non-followers first, I graduate it in the app", SS_PERFORMANCE: "Trial reel: non-followers first, auto-graduate if it performs" };
 let accounts = [];
 let tab = "queue";
 
@@ -114,8 +116,9 @@ async function boot() {
   const { data: isAdmin } = await sb.rpc("is_admin");
   if (!isAdmin) { show("noadmin"); return; }
   $("#nav").hidden = false;
-  const { data } = await sb.from("ig_accounts").select("id,handle,label,token_secret,api_host,ig_user_id,active,last_error").order("label");
+  const { data } = await sb.from("ig_accounts").select("id,handle,label,token_secret,api_host,ig_user_id,active,last_error,default_location_id,default_trial").order("label");
   accounts = data ?? [];
+  locations = (await sb.from("locations").select("id,name,city,state,country").order("name")).data ?? [];
   render();
 }
 function show(id) { for (const s of document.querySelectorAll("main > section")) s.hidden = s.id !== id; }
@@ -161,13 +164,21 @@ function postCard(p) {
       <div class="muted"><span data-count>${p.caption.length}</span>/2200 characters · ${(p.caption.match(/#\w+/g) ?? []).length}/30 hashtags</div>
       ${p.error ? `<p class="err">${esc(p.error)}</p>` : ""}
       <div class="row">
+        <label class="muted" style="white-space:nowrap">Location</label>
+        <select data-f="loc" style="max-width:280px" ${p.status === "publishing" ? "disabled" : ""}><option value="">No location</option>${locations.map((l) => `<option value="${l.id}" ${l.id === p.location_id ? "selected" : ""}>${esc(l.name)}${l.city ? ` · ${esc(l.city)}` : ""}</option>`).join("")}</select>
+      </div>
+      <div class="row">
+        <label class="muted" style="white-space:nowrap">Audience</label>
+        <select data-f="trial" style="max-width:420px" ${p.status === "publishing" ? "disabled" : ""}>${Object.entries(TRIAL).map(([v, t]) => `<option value="${v}" ${(p.trial ?? "") === v ? "selected" : ""}>${t}</option>`).join("")}</select>
+      </div>
+      <div class="row">
         <label class="muted" style="white-space:nowrap">Post at</label>
         <input type="datetime-local" data-f="when" value="${localInput(when)}" style="max-width:230px" ${p.status === "publishing" ? "disabled" : ""}>
       </div>
       <div class="row">
         ${p.status === "pending" ? `<button data-a="approve">Approve & schedule</button><button class="ghost" data-a="now">Approve, post now</button><button class="ghost" data-a="save">Save caption</button><button class="ghost" data-a="reject">Reject</button>` : ""}
-        ${p.status === "approved" ? `<span class="muted">Scheduled for ${fmt(p.scheduled_for)}</span><button class="ghost" data-a="reschedule">Change time</button><button class="ghost" data-a="unapprove">Unschedule</button>` : ""}
-        ${p.status === "publishing" ? `<span class="muted">Instagram is processing the video…</span>` : ""}
+        ${p.status === "approved" ? `<span class="muted">Scheduled for ${fmt(p.scheduled_for)}${p.trial ? " · trial reel" : ""}</span><button class="ghost" data-a="reschedule">Save changes</button><button class="ghost" data-a="unapprove">Unschedule</button>` : ""}
+        ${p.status === "publishing" ? `<span class="muted">Instagram is processing the video…${p.trial ? " (trial reel)" : ""}</span>` : ""}
         ${p.status === "failed" ? `<button data-a="retry">Retry</button><button class="ghost" data-a="save">Save caption</button><button class="ghost" data-a="reject">Reject</button>` : ""}
       </div>
     </div></div>`;
@@ -175,6 +186,8 @@ function postCard(p) {
 function wirePost(p) {
   const root = $(`#p-${p.id}`); if (!root) return;
   const cap = root.querySelector('[data-f="caption"]'), when = root.querySelector('[data-f="when"]');
+  const loc = root.querySelector('[data-f="loc"]'), trial = root.querySelector('[data-f="trial"]');
+  const extra = () => ({ location_id: loc.value || null, trial: trial.value || null });
   cap.oninput = () => root.querySelector("[data-count]").textContent = cap.value.length;
   const upd = async (patch, msg) => {
     const { error } = await sb.from("posts").update(patch).eq("id", p.id);
@@ -190,18 +203,18 @@ function wirePost(p) {
     if (a === "approve" && check()) {
       const t = new Date(when.value);
       if (!(t > new Date())) { toast("Pick a time in the future, or use 'post now'"); return; }
-      upd({ caption: cap.value, status: "approved", scheduled_for: t.toISOString(), approved_at: new Date().toISOString(), error: null }, `Scheduled for ${fmt(t)}`);
+      upd({ caption: cap.value, ...extra(), status: "approved", scheduled_for: t.toISOString(), approved_at: new Date().toISOString(), error: null }, `Scheduled for ${fmt(t)}`);
     }
     if (a === "now" && check() && confirm(`Post this reel to @${acct(p.account_id).handle} now?`)) {
-      await sb.from("posts").update({ caption: cap.value, status: "approved", scheduled_for: new Date().toISOString(), approved_at: new Date().toISOString(), error: null }).eq("id", p.id);
+      await sb.from("posts").update({ caption: cap.value, ...extra(), status: "approved", scheduled_for: new Date().toISOString(), approved_at: new Date().toISOString(), error: null }).eq("id", p.id);
       try { const r = await callFn("publisher"); toast(r.log.join(" · ") || "Sent"); } catch (e) { toast(e.message); }
       renderQueue();
     }
-    if (a === "save" && check()) upd({ caption: cap.value }, "Caption saved");
+    if (a === "save" && check()) upd({ caption: cap.value, ...extra() }, "Saved");
     if (a === "reject" && confirm("Reject this reel? It won't post.")) upd({ status: "rejected" }, "Rejected");
     if (a === "unapprove") upd({ status: "pending", scheduled_for: null, approved_at: null }, "Back in the queue, not scheduled");
-    if (a === "reschedule") { const t = new Date(when.value); if (t > new Date()) upd({ scheduled_for: t.toISOString() }, `Moved to ${fmt(t)}`); else toast("Pick a time in the future"); }
-    if (a === "retry" && check()) upd({ caption: cap.value, status: "approved", scheduled_for: new Date().toISOString(), attempts: 0, error: null }, "Will retry at the next check");
+    if (a === "reschedule") { const t = new Date(when.value); if (t > new Date()) upd({ scheduled_for: t.toISOString(), ...extra() }, `Moved to ${fmt(t)}`); else toast("Pick a time in the future"); }
+    if (a === "retry" && check()) upd({ caption: cap.value, ...extra(), status: "approved", scheduled_for: new Date().toISOString(), attempts: 0, error: null }, "Will retry at the next check");
   };
 }
 
@@ -252,11 +265,33 @@ async function renderResearch() {
 
 // ---------- accounts ----------
 async function renderAccounts() {
-  $("#accounts").innerHTML = `<div class="card scroll"><h2 style="margin-top:0">Instagram accounts</h2>
-    <table><tr><th>Account</th><th>Connected</th><th>Token secret</th><th>Status</th></tr>
-    ${accounts.map((a) => `<tr><td>@${esc(a.handle)}</td><td>${a.ig_user_id ? `<span class="pill published">yes</span>` : `<span class="pill pending">not yet</span>`}</td><td class="mono">${esc(a.token_secret)}</td><td>${a.last_error ? `<span class="err">${esc(a.last_error)}</span>` : (a.ig_user_id ? "OK" : "Waiting for the token")}</td></tr>`).join("")}
+  const el = $("#accounts");
+  const locOpts = (sel) => `<option value="">No location</option>${locations.map((l) => `<option value="${l.id}" ${l.id === sel ? "selected" : ""}>${esc(l.name)}${l.city ? ` · ${esc(l.city)}` : ""}</option>`).join("")}`;
+  el.innerHTML = `<div class="card scroll"><h2 style="margin-top:0">Instagram accounts</h2>
+    <table><tr><th>Account</th><th>Connected</th><th>Default location</th><th>Default audience</th><th>Status</th></tr>
+    ${accounts.map((a) => `<tr><td>@${esc(a.handle)}<div class="mono muted">${esc(a.token_secret)}</div></td><td>${a.ig_user_id ? `<span class="pill published">yes</span>` : `<span class="pill pending">not yet</span>`}</td>
+      <td><select data-acc-loc="${a.id}">${locOpts(a.default_location_id)}</select></td>
+      <td><select data-acc-trial="${a.id}">${Object.entries(TRIAL).map(([v, t]) => `<option value="${v}" ${(a.default_trial ?? "") === v ? "selected" : ""}>${t}</option>`).join("")}</select></td>
+      <td>${a.last_error ? `<span class="err">${esc(a.last_error)}</span>` : (a.ig_user_id ? "OK" : "Waiting for the token")}</td></tr>`).join("")}
     </table>
-    <p class="muted">Tokens live as Supabase Edge Function secrets (never in this page or the database). An account shows "connected" after its first successful posting or research run.</p></div>`;
+    <p class="muted">Defaults apply to new reels as they arrive in the queue; you can still change them per reel. Tokens live as Supabase Edge Function secrets, never in this page or the database.</p></div>
+    <div class="card"><h2 style="margin-top:0">Locations</h2>
+      <p class="muted">A location tag has to be a Facebook Page with an address. Your own Pages work; searching other places needs Meta's "Page Public Metadata Access" approval.</p>
+      <div class="row"><button class="ghost" id="locown">Add my Pages' locations</button><input id="locid" placeholder="Facebook Page ID or link" style="max-width:300px"><button id="locadd">Add</button></div>
+      <table style="margin-top:10px"><tr><th>Name</th><th>Place</th><th>Page ID</th><th></th></tr>
+      ${locations.map((l) => `<tr><td>${esc(l.name)}</td><td>${esc([l.city, l.state, l.country].filter(Boolean).join(", "))}</td><td class="mono">${esc(l.id)}</td><td><button class="ghost" data-locdel="${l.id}">Remove</button></td></tr>`).join("") || `<tr><td colspan="4" class="muted">No locations yet.</td></tr>`}
+      </table></div>`;
+  for (const s of el.querySelectorAll("[data-acc-loc]")) s.onchange = async () => { const { error } = await sb.from("ig_accounts").update({ default_location_id: s.value || null }).eq("id", s.dataset.accLoc); toast(error ? error.message : "Default location saved"); boot(); };
+  for (const s of el.querySelectorAll("[data-acc-trial]")) s.onchange = async () => { const { error } = await sb.from("ig_accounts").update({ default_trial: s.value || null }).eq("id", s.dataset.accTrial); toast(error ? error.message : "Default audience saved"); boot(); };
+  const save = async (results) => {
+    const ok = (results ?? []).filter((r) => r.hasLocation);
+    if (!ok.length) { toast(results?.[0]?.error ?? "That Page has no address on Facebook, so it can't be a location tag"); return; }
+    const { error } = await sb.from("locations").upsert(ok.map((r) => ({ id: r.id, name: r.name, city: r.city, state: r.state, country: r.country })));
+    toast(error ? error.message : `Added ${ok.map((r) => r.name).join(", ")}`); boot();
+  };
+  $("#locown").onclick = async () => { try { save((await callFn("locations", { own: true })).results); } catch (e) { toast(e.message); } };
+  $("#locadd").onclick = async () => { const v = $("#locid").value.trim(); if (!v) return; try { save((await callFn("locations", { id: v })).results); } catch (e) { toast(e.message); } };
+  for (const b of el.querySelectorAll("[data-locdel]")) b.onclick = async () => { if (!confirm("Remove this location?")) return; await sb.from("locations").delete().eq("id", b.dataset.locdel); boot(); };
 }
 
 sb.auth.onAuthStateChange((ev) => { if (ev === "SIGNED_OUT") location.reload(); });

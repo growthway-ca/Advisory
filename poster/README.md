@@ -23,6 +23,7 @@ pg_cron 07:43 UTC daily ──▶ research ──▶ Business Discovery ──�
 | `ingest`: one-time-token upload of reel.mp4 / cover.png | `supabase/functions/ingest` |
 | `publisher`: send approved + due reels, finish processing ones, daily metrics | `supabase/functions/publisher` |
 | `research`: comp accounts via Business Discovery | `supabase/functions/research` |
+| `locations`: look up taggable locations (Pages with an address) | `supabase/functions/locations` |
 | Shared helpers (deployed as `common.ts` next to each function) | `supabase/functions/_shared/common.ts` |
 | Dashboard (static, supabase-js, row-level security) | `dashboard/index.html` |
 | Upload a reel folder into the queue | `queue-reel.mjs` |
@@ -31,6 +32,14 @@ Security: every table is admin-only (row-level security + an `admins` list). The
 only the pg_cron key (kept in Supabase Vault) or a signed-in admin. Instagram tokens are Edge Function secrets
 (`IG_TOKEN_GROWTHWAY`, `IG_TOKEN_HOUSINGDATA`), never in the database or this repo. Videos are public files (Instagram
 has to download them), under random IDs.
+
+## Location tags and trial reels
+
+- **Location:** each post can carry a `location_id`, which must be a Facebook Page with an address. Your own Pages work
+  ("Add my Pages' locations" on the Accounts tab). Searching other places needs Meta's Page Public Metadata Access
+  feature (app review). Each account has a default location for new reels.
+- **Trial reels:** `trial` = `MANUAL` (shown to non-followers; you graduate it in the Instagram app) or `SS_PERFORMANCE`
+  (graduates automatically if it performs well). Empty = a regular reel shared to feed. Each account has a default.
 
 ## Queue a reel (what the daily brief does)
 
