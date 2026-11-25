@@ -57,6 +57,7 @@
     <button data-tab="accounts">Accounts</button>
   </nav>
   <span class="sp"></span>
+  <select id="acctf" hidden aria-label="Show posts for" style="width:auto;background:var(--forest);color:var(--cream);border:1px solid #2d5a43"></select>
   <button id="signout" class="ghost" style="color:var(--sage);border-color:#2d5a43" hidden>Sign out</button>
 </header>
 
@@ -99,6 +100,9 @@ let locations = [];
 const TRIAL = { "": "Regular reel (followers + non-followers)", MANUAL: "Trial reel: non-followers first, I graduate it in the app", SS_PERFORMANCE: "Trial reel: non-followers first, auto-graduate if it performs" };
 let accounts = [];
 let tab = "queue";
+// Account filter (top right): "" = all accounts. Remembered on this device.
+let filt = ""; try { filt = localStorage.getItem("acctf") ?? ""; } catch {}
+const scope = (q) => (filt ? q.eq("account_id", filt) : q);
 
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 3500); }
 function fmt(ts) { return ts ? new Date(ts).toLocaleString("en-CA", { dateStyle: "medium", timeStyle: "short" }) : ""; }
@@ -124,6 +128,10 @@ async function boot() {
   $("#nav").hidden = false;
   const { data } = await sb.from("ig_accounts").select("id,handle,label,token_secret,api_host,ig_user_id,active,last_error,default_location_id,default_trial,best_hours,data_access_expires").order("label");
   accounts = data ?? [];
+  if (filt && !accounts.some((a) => a.id === filt)) filt = "";
+  const f = $("#acctf"); f.hidden = accounts.length < 2;
+  f.innerHTML = `<option value="">All accounts</option>` + accounts.map((a) => `<option value="${a.id}" ${a.id === filt ? "selected" : ""}>@${esc(a.handle)}</option>`).join("");
+  f.onchange = () => { filt = f.value; try { localStorage.setItem("acctf", filt); } catch {} render(); };
   locations = (await sb.from("locations").select("id,name,city,state,country").order("name")).data ?? [];
   banner();
   render();
@@ -161,10 +169,10 @@ async function render() {
 // ---------- queue ----------
 async function renderQueue() {
   const el = $("#queue");
-  const { data: posts, error } = await sb.from("posts").select(POST_COLS).in("status", ["pending", "approved", "publishing", "failed"]).order("created_at", { ascending: false });
+  const { data: posts, error } = await scope(sb.from("posts").select(POST_COLS)).in("status", ["pending", "approved", "publishing", "failed"]).order("created_at", { ascending: false });
   if (error) { el.innerHTML = `<p class="err">${esc(error.message)}</p>`; return; }
   el.innerHTML = `<div class="row" style="margin:0 0 12px"><span class="muted">Nothing posts until you press Approve. Approved reels go out at their scheduled time (checked every 15 minutes).</span><span style="flex:1"></span><button class="ghost" id="runpub">Run posting check now</button></div>`
-    + (posts.length ? posts.map(postCard).join("") : `<div class="card muted">The queue is empty. New reels from the daily brief land here on Tuesdays and Fridays.</div>`);
+    + (posts.length ? posts.map(postCard).join("") : `<div class="card muted">${filt ? `Nothing waiting for @${esc(acct(filt).handle)}.` : "The queue is empty."} New posts land here as they're made.</div>`);
   $("#runpub").onclick = async (e) => { e.target.disabled = true; try { const r = await callFn("publisher"); toast(r.log.length ? r.log.join(" · ") : "Nothing due right now"); } catch (err) { toast(err.message); } e.target.disabled = false; renderQueue(); };
   for (const p of posts) wirePost(p);
 }
@@ -239,7 +247,7 @@ function wirePost(p) {
 // ---------- history ----------
 async function renderHistory() {
   const el = $("#history");
-  const { data: stats } = await sb.from("post_stats").select("*").order("published_at", { ascending: false }).limit(200);
+  const { data: stats } = await scope(sb.from("post_stats").select("*")).order("published_at", { ascending: false }).limit(200);
   const rows = stats ?? [];
   const avg = (xs) => xs.length ? Math.round(xs.reduce((a, b) => a + b, 0) / xs.length) : null;
   const by = (key) => { const g = new Map(); for (const r of rows) { if (r.views == null) continue; const k = r[key] ?? "unknown"; g.set(k, [...(g.get(k) ?? []), r.views]); } return [...g].map(([k, v]) => [k, avg(v), v.length]).sort((a, b) => b[1] - a[1]); };
@@ -259,11 +267,11 @@ async function renderHistory() {
 // ---------- comments ----------
 async function renderComments() {
   const el = $("#comments");
-  const { data } = await sb.from("comments").select("id,account_id,permalink,username,text,posted_at,like_count,status,draft,reply_text").order("posted_at", { ascending: false }).limit(100);
+  const { data } = await scope(sb.from("comments").select("id,account_id,permalink,username,text,posted_at,like_count,status,draft,reply_text")).order("posted_at", { ascending: false }).limit(100);
   const list = data ?? [];
   const open = list.filter((c) => c.status === "new"), done = list.filter((c) => c.status !== "new").slice(0, 20);
   el.innerHTML = `<div class="row" style="margin:0 0 12px"><span class="muted">New comments are pulled every 2 hours. The daily brief drafts replies; edit, then send. Replying quickly helps reach.</span><span style="flex:1"></span><button class="ghost" id="cpull">Check now</button></div>`
-    + (open.length ? open.map((c) => `<div class="card" id="c-${esc(c.id)}"><div class="row" style="margin-top:0"><strong>@${esc(c.username)}</strong><span class="muted">${fmt(c.posted_at)}</span>${c.permalink ? `<a class="muted" href="${esc(c.permalink)}" target="_blank" rel="noopener">on this post</a>` : ""}</div>
+    + (open.length ? open.map((c) => `<div class="card" id="c-${esc(c.id)}"><div class="row" style="margin-top:0"><strong>@${esc(c.username)}</strong><span class="muted">${fmt(c.posted_at)}${filt ? "" : ` · on @${esc(acct(c.account_id).handle)}`}</span>${c.permalink ? `<a class="muted" href="${esc(c.permalink)}" target="_blank" rel="noopener">on this post</a>` : ""}</div>
         <p>${esc(c.text)}</p><textarea data-reply style="min-height:80px" placeholder="Your reply">${esc(c.draft ?? "")}</textarea>
         <div class="row"><button data-send>Reply on Instagram</button><button class="ghost" data-ignore>Ignore</button></div></div>`).join("") : `<div class="card muted">No comments waiting.</div>`)
     + (done.length ? `<div class="card scroll"><h2 style="margin-top:0">Recent</h2><table>${done.map((c) => `<tr><td>@${esc(c.username)}</td><td>${esc(c.text)}</td><td>${c.status === "replied" ? `↳ ${esc(c.reply_text ?? "")}` : '<span class="muted">ignored</span>'}</td></tr>`).join("")}</table></div>` : "");
@@ -282,16 +290,17 @@ async function renderComments() {
 // ---------- research ----------
 async function renderResearch() {
   const el = $("#research");
-  const { data: comps } = await sb.from("comp_accounts").select("id,account_id,username,notes,active,last_error").order("username");
+  const { data: comps } = await scope(sb.from("comp_accounts").select("id,account_id,username,notes,active,last_error")).order("username");
   const { data: snaps } = await sb.from("comp_snapshots").select("comp_id,followers,media_count,captured_at").order("captured_at", { ascending: false }).limit(500);
   const snap = new Map(); for (const s of snaps ?? []) if (!snap.has(s.comp_id)) snap.set(s.comp_id, s);
   const since = new Date(Date.now() - 90 * 864e5).toISOString();
-  const { data: top } = await sb.from("comp_media").select("comp_id,permalink,caption,posted_at,view_count,like_count,comments_count,outlier,media_product_type").gte("posted_at", since).not("outlier", "is", null).order("outlier", { ascending: false }).limit(40);
+  const { data: top } = await sb.from("comp_media").select("comp_id,permalink,caption,posted_at,view_count,like_count,comments_count,outlier,media_product_type").gte("posted_at", since).not("outlier", "is", null).order("outlier", { ascending: false }).limit(80);
   const name = (id) => (comps ?? []).find((c) => c.id === id)?.username ?? "";
+  const shown = (top ?? []).filter((m) => name(m.comp_id)).slice(0, 25);
   el.innerHTML = `
     <div class="card"><h2 style="margin-top:0">Comp accounts</h2>
       <p class="muted">Public business or creator accounts only (Instagram's rules). Stats update nightly through Instagram's official Business Discovery API.</p>
-      <div class="row"><select id="cacct" style="max-width:200px">${accounts.map((a) => `<option value="${a.id}">for @${esc(a.handle)}</option>`).join("")}</select>
+      <div class="row"><select id="cacct" style="max-width:200px">${accounts.map((a) => `<option value="${a.id}" ${a.id === filt ? "selected" : ""}>for @${esc(a.handle)}</option>`).join("")}</select>
       <input id="cuser" placeholder="username, e.g. edutopia" style="max-width:240px"><button id="cadd">Add</button><span style="flex:1"></span><button class="ghost" id="crun">Run research now</button></div>
       <div class="scroll"><table><tr><th>Account</th><th>For</th><th>Followers</th><th>Posts</th><th>Updated</th><th></th></tr>
       ${(comps ?? []).map((c) => { const s = snap.get(c.id) ?? {}; return `<tr><td><a href="https://www.instagram.com/${esc(c.username)}/" target="_blank" rel="noopener">@${esc(c.username)}</a>${c.last_error ? `<div class="err">${esc(c.last_error)}</div>` : ""}</td><td>@${esc(acct(c.account_id).handle)}</td><td>${s.followers?.toLocaleString() ?? ""}</td><td>${s.media_count ?? ""}</td><td>${fmt(s.captured_at)}</td><td><button class="ghost" data-del="${c.id}">Remove</button></td></tr>`; }).join("")}
@@ -299,7 +308,7 @@ async function renderResearch() {
     <div class="card scroll"><h2 style="margin-top:0">Outliers, last 90 days</h2>
       <p class="muted">Views ÷ that account's median views. 3× or more means the topic or hook travelled well beyond its usual audience: a candidate idea for us.</p>
       <table><tr><th>×</th><th>Account</th><th>Post</th><th>Views</th><th>Likes</th><th>Comments</th><th>Posted</th></tr>
-      ${(top ?? []).map((m) => `<tr><td><strong>${m.outlier}×</strong></td><td>@${esc(name(m.comp_id))}</td><td><a href="${esc(m.permalink)}" target="_blank" rel="noopener">${esc((m.caption ?? "").slice(0, 90)) || "open"}</a></td><td>${m.view_count?.toLocaleString() ?? ""}</td><td>${m.like_count?.toLocaleString() ?? ""}</td><td>${m.comments_count ?? ""}</td><td>${fmt(m.posted_at)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No data yet. Add comp accounts, then run research.</td></tr>`}
+      ${shown.map((m) => `<tr><td><strong>${m.outlier}×</strong></td><td>@${esc(name(m.comp_id))}</td><td><a href="${esc(m.permalink)}" target="_blank" rel="noopener">${esc((m.caption ?? "").slice(0, 90)) || "open"}</a></td><td>${m.view_count?.toLocaleString() ?? ""}</td><td>${m.like_count?.toLocaleString() ?? ""}</td><td>${m.comments_count ?? ""}</td><td>${fmt(m.posted_at)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No data yet. Add comp accounts, then run research.</td></tr>`}
       </table></div>`;
   $("#cadd").onclick = async () => {
     const u = $("#cuser").value.trim().replace(/^@/, "").replace(/.*instagram\.com\//, "").replace(/\/.*$/, "");
