@@ -39,32 +39,34 @@ In any text, wrap the key phrase in `[[double brackets]]` to give it the marker.
 | `kinetic` | `phrases` (2–5 short phrases), `beat` (optional seconds per phrase) | Full-screen words, one phrase at a time. Good for hooks and lists of single words. `[[brackets]]` colour a word. |
 | `versus` | `before` and `after` (each `{label, items}`), optional `title` | The old way appears and gets struck through, then the new way lands. |
 
-### Templates
+### Narrative formats
 
-Set `"template"` at the top of the spec to restyle the whole reel. Same palette and logo, seven different looks:
+Every reel opens with a `title` scene (dark green, logo tag, one punchy title that doubles as the Instagram cover) and
+ends with the `outro`. In between, tell the story in ONE main format, and rotate formats from reel to reel. Same fonts and
+palette throughout; what changes is how the information is presented.
 
-| template | look |
-|---|---|
-| `classic` | The house rhythm: theme per scene type, ring reveals, sage marker sweep. The default. |
-| `notebook` | Ruled notebook paper on every scene, highlighter strokes on key phrases, wipe cuts. |
-| `newsdesk` | Dark studio with a "LIVE · The Growthway Brief · date" bar, rust kicker chips and lower-third rules, slide cuts. Set `"date"` (YYYY-MM-DD) for the bar. |
-| `bold` | Full-bleed colour blocks that alternate rust, sage, forest, cream; all-caps type that slams in; inverted blocks; hard cuts. |
-| `terminal` | Dark grid, monospace type that prints on, `$` prompts, a blinking cursor, outlined list rows; hard cuts. |
-| `editorial` | Magazine look: serif headlines, a rule above each block, rust underline accents, fades. |
-| `cards` | Each beat on a tilted white card taped to a dotted background (forest, rust, deep), pop-in cuts. |
+| type | fields | the story it tells |
+|---|---|---|
+| `title` | `kicker` (chip), `text` (≤ ~45 characters, one `[[highlight]]`), `sub` (optional serif line) | The opener / cover. |
+| `notes` | `title` (optional), `notes` (2–5; strings or `{text, hot}`), `source` | Ideas slapped onto a board as sticky notes; the `hot` one is rust. |
+| `thread` | `with` (who's texting), `status`, `messages` (`{from: "them"\|"us", text}`, 3–5), `source` | A text conversation: a parent or teacher asks, we answer. Typing dots, then bubbles. |
+| `mythfact` | `myth`, `verdict` (stamp, e.g. "Not quite"), `fact`, `source` | A myth card gets stamped, then flips to the fact. |
+| `timeline` | `title` (optional), `events` (`{when, text, next}`, 3–5), `source` | A line draws down the screen; dated beats appear; `next: true` pulses. |
+| `scorecard` | `title` (optional), `rows` (`{label, status: yes\|no\|part, note}`, 3–6), `source` | A checklist where each row gets a stamped ✓, ✗ or ~. Facts only. |
+| `fineprint` | `doc` (document name and date), `quote` (exact words, ≤ ~180 characters), `note`, `source` | A document page; the exact sentence gets highlighted, the page zooms, then what it means. |
+| `search` | `query` (what a parent or teacher would type), `results` (`{label, text, source}`, 1–2) | A question types into a search bar, then answer cards slide up. |
 
-Scenes can still set their own `theme` or `transition` to override the template. Preview all seven quickly with
-`--stills` (skips the mp4).
+The older scene types below (`stat`, `gap`, `point`, `quote`, `versus`, `kinetic`) are supporting beats: a strong number,
+a pull quote, a takeaway. `list` (numbered rows) is the least interesting way to show anything; use it at most once a week.
+Scene lengths are worked out from the content; set `seconds` only to override.
 
 ### Variation
 
 - `transition` on any scene: `ring`, `wipe`, `slide`, `cut`, `fade` or `pop`.
-- `theme: "paper"`: notebook paper with ruled lines and a highlighter on key phrases.
 - Pace: set `seconds` per scene; kinetic scenes read best at 3–4 seconds.
-- Key phrases are only ever highlighted with `[[double brackets]]` (each template draws its own marker). There is no circle
-  style: it clipped at the edge of the line.
+- Key phrases are only ever highlighted with `[[double brackets]]`. There is no circle style: it clipped at the edge of the line.
 
-A good reel is 5–7 scenes and 25–35 seconds: hook → evidence (stat or gap) → the take (point) → what to do (list) → outro.
+A good reel is 3–5 scenes and 20–35 seconds: title → the format scene (sometimes two beats of it, or one supporting beat) → outro.
 
 ## Rules
 

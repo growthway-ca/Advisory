@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { hasFfmpeg, recordSequence } from '../reel.mjs';
-import { fonts, sceneTheme, scenePage, template } from './style.mjs';
+import { durationOf, fonts, sceneTheme, scenePage } from './style.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const STILLS = process.argv.includes('--stills');
@@ -44,13 +44,11 @@ async function contactSheet(browser, files, out) {
 
 async function build(browser, fontCss, specFile) {
   const spec = JSON.parse(await readFile(specFile, 'utf8'));
-  const scenes = spec.scenes.map((s) => ({ ...s, seconds: s.seconds ?? SECONDS[s.type] }));
-  const tpl = template(spec.template ?? 'classic');
-  const date = spec.date ? new Date(`${spec.date}T12:00:00`) : new Date();
+  const scenes = spec.scenes.map((s) => ({ ...s, seconds: s.seconds ?? durationOf(s) ?? SECONDS[s.type] }));
   const out = path.join(HERE, 'out', spec.slug);
   await rm(out, { recursive: true, force: true });
   await mkdir(out, { recursive: true });
-  const opts = (i) => ({ index: i, count: scenes.length, tpl, date, prev: i ? sceneTheme(scenes[i - 1], i - 1, tpl).bg : undefined });
+  const opts = (i) => ({ index: i, count: scenes.length, prev: i ? sceneTheme(scenes[i - 1]).bg : undefined });
   const pages = scenes.map((s, i) => scenePage(fontCss, s, opts(i)));
 
   await still(browser, scenePage(fontCss, scenes[0], { ...opts(0), cover: true }), path.join(out, 'cover.png'), 60);
@@ -64,10 +62,10 @@ async function build(browser, fontCss, specFile) {
   await Promise.all(shots.map((f) => rm(f)));
   await writeFile(path.join(out, 'caption.txt'), `${spec.caption.trim()}\n\n${(spec.hashtags ?? []).join(' ')}\n`);
 
-  if (STILLS) return console.log(`${spec.slug} [${tpl.name}]: stills only → ${path.relative(process.cwd(), out)}`);
+  if (STILLS) return console.log(`${spec.slug}: stills only → ${path.relative(process.cwd(), out)}`);
   if (!(await hasFfmpeg())) return console.error(`${spec.slug}: reel skipped, ffmpeg is not installed.`);
   await recordSequence(browser, scenes.map((s, i) => ({ html: pages[i], seconds: s.seconds })), path.join(out, 'reel.mp4'));
-  console.log(`${spec.slug} [${tpl.name}]: ${scenes.length} scenes, ${scenes.reduce((a, s) => a + s.seconds, 0).toFixed(1)}s → ${path.relative(process.cwd(), out)}`);
+  console.log(`${spec.slug}: ${scenes.length} scenes, ${scenes.reduce((a, s) => a + s.seconds, 0).toFixed(1)}s → ${path.relative(process.cwd(), out)}`);
 }
 
 async function main() {

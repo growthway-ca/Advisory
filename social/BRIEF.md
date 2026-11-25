@@ -143,16 +143,19 @@ Same sourcing rules as everything else: every number comes from a source you ope
   Don't repeat a story that already has a reel in `this-week/` or `last-week/`; if nothing new is strong enough, make an
   evergreen practical reel instead (a parent or teacher how-to, a "myth vs fact", a "before/after" on assessment or
   homework), still sourced.
-- **Friday:** "This week in AI & schools": hook, then the week's 2–3 biggest developments (a `list` scene, or a `stat`/`gap`
-  per story when there's a strong number), then a take and the outro.
+- **Friday:** "This week in AI & schools": the week's 2–3 biggest developments told in that day's format (sticky notes,
+  a timeline or a scorecard work best for a roundup), then the outro.
 
-**Template:** every spec sets `"template"`, and consecutive reels never share one. Rotate through `classic`, `notebook`,
-`newsdesk`, `bold`, `terminal`, `editorial`, `cards` in that order, starting after the template of the most recent
-`reel/spec.json` in `this-week/` or `last-week/` on `social` (if it has none, treat it as `classic`). Also vary the
-scene mix from day to day (open with `kinetic` one day, a `hook` the next; use `versus` or `quote` when the story suits it).
-Never circle words: highlight key phrases with `[[double brackets]]` only.
+**Format:** every reel opens with a `title` scene (green, logo, a punchy title that works as the cover) and ends with the
+`outro`. In between, tell the story in one narrative format, and never use the same format two reels in a row. Rotate
+`notes`, `thread`, `mythfact`, `timeline`, `scorecard`, `fineprint`, `search` in that order, starting after the format used
+in the most recent `reel/spec.json` in `this-week/` or `last-week/` on `social` (Friday's roundup can use `timeline`,
+`notes` or `scorecard` when it's that format's turn, or the next of those three). Pick the angle that fits the format:
+a `thread` is a parent or teacher asking the question the story raises; a `mythfact` corrects a likely misunderstanding;
+`fineprint` quotes the primary source word for word. A numbered `list` scene at most once a week. Same fonts and palette
+always; highlight key phrases with `[[double brackets]]`; never circle words.
 
-Write the spec to `reels/growthway/specs/<YYYY-MM-DD>-<slug>.json` following `reels/growthway/README.md` (templates, scene
+Write the spec to `reels/growthway/specs/<YYYY-MM-DD>-<slug>.json` following `reels/growthway/README.md` (formats, scene
 types, fields, rules), build it with `npm run reel:growthway -- <spec>`, and look at `preview.png`. Fix anything that wraps
 badly or runs outside the frame, then rebuild. Copy `reel.mp4`, `cover.png`, `caption.txt` and `preview.png` into the
 day's `reel/` folder, along with the spec as `spec.json` so the reel can be rebuilt later. Everything goes to `social`;
@@ -184,4 +187,4 @@ git push origin "$(git commit-tree "$(git write-tree)" $P -m "Brief $DAY"):refs/
 ```
 
 Each run adds one commit on top of the last (a plain push, never a force push), and the tree only ever holds this week
-and last week, so a shallow clone of `social` stays small. Finish with a one-paragraph summary: the top pick, how many stories, the reel (template and topic) and whether it was queued.
+and last week, so a shallow clone of `social` stays small. Finish with a one-paragraph summary: the top pick, how many stories, the reel (format and topic) and whether it was queued.

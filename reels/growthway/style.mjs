@@ -23,20 +23,9 @@ export const THEMES = {
 };
 
 // Default theme per scene type, so a spec can leave it out and still get the house rhythm.
-const DEFAULT_THEME = { hook: 'forest', stat: 'sage', gap: 'forest', point: 'rust', list: 'cream', outro: 'deep', quote: 'paper', kinetic: 'deep', versus: 'cream' };
-
-// Templates: seven whole-reel looks on the same brand palette, so the feed doesn't feel like one video on repeat.
-// A spec picks one with "template"; scenes can still override theme or transition one at a time.
-// `themes` maps scene type -> theme; `cycle` (if set) alternates themes by scene position instead.
-const ALL = (t, outro = 'deep') => ({ hook: t, stat: t, gap: t, point: t, list: t, quote: t, kinetic: t, versus: t, outro });
-export const TEMPLATES = {
-  classic: { label: 'Classic: the house rhythm, ring reveals, sage marker sweep', themes: DEFAULT_THEME, transition: 'ring' },
-  notebook: { label: 'Notebook: ruled paper, highlighter strokes, wipe cuts', themes: ALL('paper', 'forest'), transition: 'wipe' },
-  newsdesk: { label: 'News desk: dark studio, live bar, rust lower-thirds', themes: { ...ALL('deep'), point: 'rust' }, transition: 'slide', chrome: 'news' },
-  bold: { label: 'Bold: full-bleed colour blocks, all-caps type that slams in, hard cuts', cycle: ['rust', 'sage', 'forest', 'cream'], themes: ALL('rust'), transition: 'cut' },
-  terminal: { label: 'Terminal: grid, monospace type that prints on, blinking cursor', themes: ALL('deep'), transition: 'cut' },
-  editorial: { label: 'Editorial: magazine serif headlines, rules, underline accents, fades', themes: ALL('cream', 'forest'), transition: 'fade' },
-  cards: { label: 'Cards: each beat on a tilted card taped to the background, pop-ins', cycle: ['forest', 'rust', 'deep'], themes: ALL('forest'), transition: 'pop', outroTransition: 'fade' },
+const DEFAULT_THEME = {
+  hook: 'forest', stat: 'sage', gap: 'forest', point: 'rust', list: 'cream', outro: 'deep', quote: 'paper', kinetic: 'deep', versus: 'cream',
+  title: 'forest', notes: 'forest', thread: 'deep', mythfact: 'forest', timeline: 'forest', scorecard: 'deep', fineprint: 'forest', search: 'deep',
 };
 
 export async function fonts() {
@@ -48,7 +37,6 @@ export async function fonts() {
     face('plus-jakarta-sans', 'plus-jakarta-sans-latin-600-normal.woff2', 'Jakarta', 600),
     face('plus-jakarta-sans', 'plus-jakarta-sans-latin-800-normal.woff2', 'Jakarta', 800),
     face('newsreader', 'newsreader-latin-500-italic.woff2', 'Newsreader', 500, 'italic'),
-    face('newsreader', 'newsreader-latin-600-normal.woff2', 'NewsSerif', 600),
     face('jetbrains-mono', 'jetbrains-mono-latin-500-normal.woff2', 'Mono', 500),
     face('jetbrains-mono', 'jetbrains-mono-latin-700-normal.woff2', 'Mono', 700),
   ])).join('');
@@ -86,6 +74,35 @@ const source = (text, t) => (text ? `<div class="source" style="--t:${t}s">${esc
 // Number that counts up: prefix/suffix stay put, the integer animates via a registered custom property.
 function counter(value, { prefix = '', suffix = '', t = 0.3, dur = 1.1 } = {}) {
   return `<div class="num" style="--to:${value};--t:${t}s;--nd:${dur}s"><span class="affix">${esc(prefix)}</span><span class="n"></span><span class="affix">${esc(suffix)}</span></div>`;
+}
+
+// Static rich text: [[double brackets]] become the marker, drawn at time t (no per-word rise).
+const rich = (text, t = 0) => esc(text).replace(/\[\[(.*?)\]\]/g, (_, x) => `<span class="mk" style="--t:${(+t).toFixed(2)}s">${x}</span>`);
+
+// Timing for the multi-beat formats, shared by the scene markup and the default scene length.
+const T = {
+  thread(s) {
+    let t = 0.7; const beats = [];
+    for (const m of s.messages) { beats.push([t, t + 0.75]); t += 0.75 + 0.6 + Math.min(1.5, m.text.length * 0.014); }
+    return { beats, end: t };
+  },
+  search(s) { const t0 = 0.6, cps = 0.045; const tEnd = t0 + [...s.query].length * cps; return { t0, cps, tEnd, res: (k) => tEnd + 0.6 + k * 1.0 }; },
+};
+
+// Default length of a scene when the spec doesn't set seconds.
+export function durationOf(s) {
+  const t0 = s.title ? 0.9 : 0.4;
+  switch (s.type) {
+    case 'title': return 3.6;
+    case 'notes': return 2 + (s.title ? 0.5 : 0) + s.notes.length * 1.25;
+    case 'thread': return T.thread(s).end + 1.6;
+    case 'mythfact': return (s.flipAt ?? 2.8) + 3.4;
+    case 'timeline': return t0 + s.events.length * (s.step ?? 1.15) + 1.8;
+    case 'scorecard': return t0 + s.rows.length * (s.step ?? 0.8) + 2;
+    case 'fineprint': return (s.zoomAt ?? 2.6) + 3.6;
+    case 'search': return T.search(s).res((s.results ?? []).length) + 1.8;
+    default: return undefined;
+  }
 }
 
 const SCENES = {
@@ -144,6 +161,93 @@ ${source(s.source, 2.6)}</div>`;
 <ul>${c.items.map((x, j) => `<li style="--t:${(0.5 + k * 1.6 + j * 0.25).toFixed(2)}s;--s:${(1.3 + j * 0.15).toFixed(2)}s">${esc(x)}</li>`).join('')}</ul></div>`;
     return `<div class="content mid">${kicker(s.kicker)}${s.title ? `<h2 class="title vs-title">${words(s.title, { start: 0.15, step: 0.05 })}</h2>` : ''}
 ${col(s.before, 0, 'before')}<div class="vs-arrow" style="--t:1.7s">↓</div>${col(s.after, 1, 'after')}</div>`;
+  },
+
+  // The opener: green, logo tag, one punchy title that also works as the Instagram cover.
+  title: (s) => {
+    const len = s.text.replace(/\[\[|\]\]/g, '').length;
+    const size = len > 44 ? 104 : len > 30 ? 120 : 138;
+    return `<div class="content mid">${s.kicker ? `<div class="chip" style="--t:.15s">${esc(s.kicker)}</div>` : ''}
+<h1 class="titlecard" style="font-size:${size}px">${words(s.text, { start: 0.3, step: 0.07 })}</h1>
+${s.sub ? `<p class="titlesub" style="--t:${(0.6 + len / 6 * 0.07).toFixed(2)}s">${esc(s.sub)}</p>` : ''}</div>`;
+  },
+
+  // Sticky notes slapped onto a board, one idea per note. A note with hot:true is the rust one.
+  notes: (s) => {
+    const rot = [-3, 2.5, 2, -2.5, 1.5];
+    const t0 = s.title ? 0.9 : 0.4;
+    const items = s.notes.map((n, k) => {
+      const text = typeof n === 'string' ? n : n.text;
+      const t = t0 + k * 1.25;
+      return `<div class="note ${n.hot ? 'hot' : k % 2 ? 'cream' : 'sage'}" style="--t:${t.toFixed(2)}s;--r:${rot[k % rot.length]}deg"><i class="tape"></i>${rich(text, t + 0.45)}</div>`;
+    }).join('');
+    return `<div class="content mid">${s.title ? `<h2 class="title notes-title">${words(s.title, { start: 0.2, step: 0.05 })}</h2>` : ''}
+<div class="notes n${s.notes.length}">${items}</div>${source(s.source, t0 + s.notes.length * 1.25)}</div>`;
+  },
+
+  // A text conversation: typing dots, then the bubble. from: "them" (left) or "us" (right).
+  thread: (s) => {
+    const { beats } = T.thread(s);
+    const rows = s.messages.map((m, k) => {
+      const side = m.from === 'us' ? 'us' : 'them';
+      const [tt, tb] = beats[k];
+      return `<div class="typing ${side}" style="--t:${tt.toFixed(2)}s"><i></i><i></i><i></i></div><div class="bub ${side}" style="--t:${tb.toFixed(2)}s">${rich(m.text, tb + 0.35)}</div>`;
+    }).join('');
+    return `<div class="content thread"><div class="th-head"><div class="av">${esc((s.with ?? '?').trim()[0].toUpperCase())}</div><div><b>${esc(s.with ?? '')}</b><span>${esc(s.status ?? 'now')}</span></div></div>
+<div class="msgs">${rows}</div>${source(s.source, T.thread(s).end)}</div>`;
+  },
+
+  // Myth on the front of a card, stamped, then the card flips to the fact.
+  mythfact: (s) => {
+    const f = s.flipAt ?? 2.8;
+    return `<div class="content mid mf"><div class="flip" style="--t:${f}s">
+<div class="face front"><div class="mf-label myth">${esc(s.mythLabel ?? 'Myth')}</div><p class="mf-text">${rich(s.myth, 0.5)}</p><div class="stamp" style="--t:${(f - 1.1).toFixed(2)}s">${esc(s.verdict ?? 'Not quite')}</div></div>
+<div class="face back"><div class="mf-label fact">${esc(s.factLabel ?? 'Fact')}</div><p class="mf-text">${rich(s.fact, f + 0.8)}</p>${s.source ? `<div class="mf-src">${esc(s.source)}</div>` : ''}</div>
+</div></div>`;
+  },
+
+  // A line that draws down the screen, dated beats appear along it; next:true marks what's coming.
+  timeline: (s) => {
+    const step = s.step ?? 1.15, t0 = s.title ? 0.9 : 0.4, n = s.events.length;
+    const evs = s.events.map((e, k) => {
+      const t = t0 + 0.2 + k * step;
+      return `<div class="ev${e.next ? ' next' : ''}" style="--t:${t.toFixed(2)}s"><i class="dot"></i><div class="when">${esc(e.when)}</div><div class="what">${rich(e.text, t + 0.35)}</div></div>`;
+    }).join('');
+    return `<div class="content mid">${s.title ? `<h2 class="title tl-title">${words(s.title, { start: 0.2, step: 0.05 })}</h2>` : ''}
+<div class="tl" style="--t:${t0}s;--dur:${(n * step).toFixed(2)}s">${evs}</div>${source(s.source, t0 + n * step)}</div>`;
+  },
+
+  // A checklist of facts with a verdict stamped on each row: status yes | no | part.
+  scorecard: (s) => {
+    const step = s.step ?? 0.8, t0 = s.title ? 0.9 : 0.4;
+    const glyph = { yes: '✓', no: '✗', part: '~' };
+    const rows = s.rows.map((r, k) => {
+      const t = t0 + k * step;
+      return `<div class="sc-row" style="--t:${t.toFixed(2)}s"><div class="sc-l"><b>${rich(r.label, t + 0.3)}</b>${r.note ? `<span>${esc(r.note)}</span>` : ''}</div><div class="sc-v ${r.status}" style="--t:${(t + 0.35).toFixed(2)}s">${esc(r.mark ?? glyph[r.status] ?? '')}</div></div>`;
+    }).join('');
+    return `<div class="content mid">${s.title ? `<h2 class="title sc-title">${words(s.title, { start: 0.2, step: 0.05 })}</h2>` : ''}<div class="sc">${rows}</div>${source(s.source, t0 + s.rows.length * step)}</div>`;
+  },
+
+  // The fine print: a document page, the exact sentence highlighted, then a zoom and what it means.
+  fineprint: (s) => {
+    const z = s.zoomAt ?? 2.6;
+    return `<div class="content mid"><div class="doc" style="--t:.3s;--z:${z}s">
+<div class="doc-head">${esc(s.doc)}</div><i class="ln" style="width:94%"></i><i class="ln" style="width:82%"></i><i class="ln" style="width:89%"></i>
+<p class="doc-q"><span class="hl" style="--t:${s.highlightAt ?? 1.3}s">${esc(s.quote)}</span></p>
+<i class="ln" style="width:91%"></i><i class="ln" style="width:66%"></i></div>
+${s.note ? `<div class="fp-note" style="--t:${(z + 0.7).toFixed(2)}s"><span class="arr">↳</span> ${rich(s.note, z + 1.1)}</div>` : ''}${source(s.source, z + 1.3)}</div>`;
+  },
+
+  // A question typed into a search bar, then answer cards slide up.
+  search: (s) => {
+    const { t0, cps, tEnd, res } = T.search(s);
+    const chars = [...s.query].map((c, k) => `<span class="ch" style="--t:${(t0 + k * cps).toFixed(3)}s">${c === ' ' ? ' ' : esc(c)}</span>`).join('');
+    const cards = (s.results ?? []).map((r, k) => {
+      const t = res(k);
+      return `<div class="res" style="--t:${t.toFixed(2)}s">${r.label ? `<div class="res-l">${esc(r.label)}</div>` : ''}<div class="res-t">${rich(r.text, t + 0.45)}</div>${r.source ? `<div class="res-s">${esc(r.source)}</div>` : ''}</div>`;
+    }).join('');
+    return `<div class="content search"><div class="sbar"><svg viewBox="0 0 48 48" width="54" height="54"><circle cx="20" cy="20" r="13" fill="none" stroke="${COLORS.forest}" stroke-width="5"/><path d="M30 30l11 11" stroke="${COLORS.forest}" stroke-width="5" stroke-linecap="round"/></svg>
+<div class="q">${chars}<i class="caret" style="--t:${tEnd.toFixed(2)}s"></i></div></div><div class="results">${cards}</div></div>`;
   },
 
   outro: (s, th) => `<div class="content center">${logo(th.mark, { size: 300, build: true, delay: 0.25 })}
@@ -271,118 +375,140 @@ body{background:var(--prev);font-family:Jakarta,sans-serif;color:var(--text)}
 `;
 
 
-// Per-template overrides, scoped by the body class.
-const TEMPLATE_CSS = `
+
+// The narrative formats.
+const FORMAT_CSS = `
+.board{background-image:radial-gradient(color-mix(in srgb,var(--text) 15%,transparent) 2.5px,transparent 2.5px);background-size:44px 44px}
+
+/* title */
+.chip{align-self:flex-start;background:var(--accent);color:var(--bg);font:500 30px/1 Mono,monospace;letter-spacing:.2em;text-transform:uppercase;padding:16px 22px;border-radius:10px;margin-bottom:52px;animation:pop .5s var(--t) cubic-bezier(.3,1.5,.5,1) both}
+.titlecard{font-weight:800;line-height:.98;letter-spacing:-.045em;word-spacing:.08em}
+.titlesub{margin-top:48px;font:italic 500 58px/1.2 Newsreader,serif;opacity:.9;animation:fadeUp .7s var(--t) both}
+
+/* notes */
+.notes-title{margin-bottom:60px}
+.notes{display:flex;flex-wrap:wrap;gap:40px 34px;justify-content:space-between}
+.note{position:relative;width:calc(50% - 17px);min-height:340px;padding:62px 36px 40px;font-weight:800;font-size:46px;line-height:1.12;letter-spacing:-.02em;color:${COLORS.forest};border-radius:6px;box-shadow:0 26px 50px rgba(0,0,0,.3);transform:rotate(var(--r));animation:stick .55s var(--t) cubic-bezier(.2,1.25,.4,1) both}
+.note.sage{background:${COLORS.sage}}.note.cream{background:${COLORS.cream}}.note.hot{background:${COLORS.rust};color:${COLORS.cream}}
+.notes.n1 .note,.notes.n3 .note:last-child,.notes.n5 .note:last-child{width:100%;min-height:250px}
+.note{--text:${COLORS.forest}}.note.hot{--text:${COLORS.cream}}
+.note .mk{--marker:${COLORS.forest};--markText:${COLORS.cream}}
+.note.hot .mk{--marker:${COLORS.deep};--markText:${COLORS.cream}}
+.tape{position:absolute;top:-22px;left:50%;width:150px;height:46px;margin-left:-75px;background:rgba(248,245,238,.6);transform:rotate(-3deg);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+@keyframes stick{from{opacity:0;transform:translateY(-150px) scale(1.2) rotate(calc(var(--r) + 10deg))}to{opacity:1;transform:rotate(var(--r))}}
+
+/* thread */
+.content.thread{display:flex;flex-direction:column;justify-content:flex-start}
+.th-head{display:flex;align-items:center;gap:26px;padding-bottom:30px;margin-bottom:10px;border-bottom:2px solid color-mix(in srgb,var(--text) 18%,transparent);animation:fadeUp .5s .1s both}
+.av{width:92px;height:92px;border-radius:50%;background:${COLORS.sage};color:${COLORS.forest};display:grid;place-items:center;font-weight:800;font-size:44px}
+.th-head b{display:block;font-weight:800;font-size:44px;letter-spacing:-.02em}
+.th-head > div > span{display:block;margin-top:6px;font:500 24px/1 Mono,monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+.msgs{flex:1;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden}
+.bub{max-width:82%;padding:30px 36px;border-radius:42px;font-weight:600;font-size:44px;line-height:1.24;margin-top:24px;color:${COLORS.deep};animation:bubIn .38s var(--t) cubic-bezier(.3,1.4,.5,1) both}
+.bub.them{align-self:flex-start;background:${COLORS.cream};border-bottom-left-radius:10px;transform-origin:left bottom}
+.bub.us{align-self:flex-end;background:${COLORS.sage};border-bottom-right-radius:10px;transform-origin:right bottom}
+.bub{--text:${COLORS.deep}}
+.bub .mk{--marker:${COLORS.forest};--markText:${COLORS.cream}}
+@keyframes bubIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.typing{display:flex;gap:12px;align-items:center;border-radius:42px;padding:0 34px;background:${COLORS.cream};overflow:hidden;animation:typing .75s var(--t) both}
+.typing.them{align-self:flex-start}.typing.us{align-self:flex-end;background:${COLORS.sage}}
+.typing i{width:18px;height:18px;border-radius:50%;background:${COLORS.forest};opacity:.45}
+@keyframes typing{0%{max-height:0;opacity:0;padding-top:0;padding-bottom:0;margin-top:0}15%,85%{max-height:100px;opacity:1;padding-top:32px;padding-bottom:32px;margin-top:24px}100%{max-height:0;opacity:0;padding-top:0;padding-bottom:0;margin-top:0}}
+
+/* myth / fact */
+.mf{perspective:2600px}
+.flip{position:relative;height:900px;transform-style:preserve-3d;animation:flipCard .8s var(--t) cubic-bezier(.6,0,.3,1) both}
+@keyframes flipCard{from{transform:rotateY(0)}to{transform:rotateY(180deg)}}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:40px;padding:70px 62px;display:flex;flex-direction:column;justify-content:center;color:${COLORS.forest};box-shadow:0 34px 90px rgba(0,0,0,.3)}
+.face.front{background:${COLORS.cream};animation:fadeUp .6s .2s both}
+.face.back{background:${COLORS.sage};transform:rotateY(180deg)}
+.mf-label{align-self:flex-start;font:500 32px/1 Mono,monospace;letter-spacing:.24em;text-transform:uppercase;padding:14px 20px;border-radius:8px;margin-bottom:46px}
+.myth{background:${COLORS.rust};color:${COLORS.cream}}.fact{background:${COLORS.forest};color:${COLORS.sage}}
+.mf-text{font-weight:800;font-size:66px;line-height:1.1;letter-spacing:-.025em}
+.face{--text:${COLORS.forest}}
+.face .mk{--marker:${COLORS.forest};--markText:${COLORS.cream}}
+.mf-src{margin-top:46px;font:500 26px/1.4 Mono,monospace;opacity:.7}
+.stamp{position:absolute;right:52px;bottom:76px;border:8px solid ${COLORS.rust};color:${COLORS.rust};font:700 44px/1 Mono,monospace;letter-spacing:.1em;text-transform:uppercase;padding:18px 26px;border-radius:10px;transform:rotate(-8deg);animation:stamp .35s var(--t) cubic-bezier(.3,1.6,.5,1) both}
+@keyframes stamp{from{opacity:0;transform:rotate(-8deg) scale(2.3)}to{opacity:1;transform:rotate(-8deg) scale(1)}}
+
+/* timeline */
+.tl-title,.sc-title{margin-bottom:58px}
+.tl{position:relative;padding-left:78px;display:flex;flex-direction:column;gap:50px}
+.tl::before{content:"";position:absolute;left:14px;top:16px;bottom:16px;width:6px;border-radius:3px;background:var(--accent);transform-origin:top;animation:line var(--dur) var(--t) linear both}
+@keyframes line{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.ev{position:relative;animation:slideIn .55s var(--t) cubic-bezier(.2,.8,.2,1) both}
+.ev .dot{position:absolute;left:-78px;top:4px;width:36px;height:36px;border-radius:50%;background:var(--bg);border:7px solid var(--accent)}
+.ev.next .dot{background:${COLORS.rust};border-color:${COLORS.rust};animation:pulse 1.3s calc(var(--t) + .4s) ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(196,99,47,.65)}100%{box-shadow:0 0 0 34px rgba(196,99,47,0)}}
+.when{font:500 30px/1 Mono,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.what{font-weight:800;font-size:50px;line-height:1.14;letter-spacing:-.02em}
+
+/* scorecard */
+.sc{display:flex;flex-direction:column}
+.sc-row{display:flex;align-items:center;gap:30px;padding:32px 0;border-bottom:2px solid color-mix(in srgb,var(--text) 16%,transparent);animation:fadeUp .5s var(--t) both}
+.sc-l{flex:1}
+.sc-l b{display:block;font-weight:800;font-size:50px;line-height:1.12;letter-spacing:-.02em}
+.sc-l > span{display:block;margin-top:10px;font:500 26px/1.35 Mono,monospace;opacity:.7}
+.sc-v{flex:none;width:108px;height:108px;border-radius:24px;display:grid;place-items:center;font-weight:800;font-size:66px;animation:stampIn .35s var(--t) cubic-bezier(.3,1.6,.5,1) both}
+.sc-v.yes{background:${COLORS.sage};color:${COLORS.deep}}.sc-v.no{background:${COLORS.rust};color:${COLORS.cream}}.sc-v.part{border:6px solid ${COLORS.sage};color:${COLORS.sage}}
+@keyframes stampIn{from{opacity:0;transform:scale(2) rotate(-12deg)}to{opacity:1;transform:none}}
+
+/* fine print */
+.doc{background:#FBF8F1;color:${COLORS.deep};border-radius:14px;padding:56px 54px;box-shadow:0 30px 80px rgba(0,0,0,.35);transform:rotate(-1deg);transform-origin:50% 55%;animation:docIn .6s var(--t) both,zoomDoc 1s var(--z) cubic-bezier(.6,0,.3,1) forwards}
+@keyframes docIn{from{opacity:0;transform:translateY(90px) rotate(-1deg)}to{opacity:1;transform:rotate(-1deg)}}
+@keyframes zoomDoc{from{transform:rotate(-1deg) scale(1)}to{transform:rotate(0deg) scale(1.06)}}
+.doc-head{font:500 24px/1.35 Mono,monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.6;padding-bottom:26px;margin-bottom:30px;border-bottom:2px solid rgba(8,31,21,.15)}
+.ln{display:block;height:20px;border-radius:10px;background:rgba(8,31,21,.11);margin:22px 0}
+.doc-q{font-weight:600;font-size:50px;line-height:1.3;margin:36px 0;letter-spacing:-.01em}
+.hl{background:linear-gradient(${COLORS.sage},${COLORS.sage}) no-repeat 0 88%/0% 78%;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .08em;animation:hlSweep 1.1s var(--t) cubic-bezier(.5,0,.3,1) both}
+@keyframes hlSweep{to{background-size:100% 78%}}
+.fp-note{margin-top:64px;font-weight:800;font-size:60px;line-height:1.1;letter-spacing:-.025em;animation:fadeUp .6s var(--t) both}
+.fp-note .arr{color:var(--accent)}
+
+/* search */
+.content.search{justify-content:flex-start;padding-top:70px}
+.sbar{display:flex;align-items:center;gap:26px;background:${COLORS.cream};color:${COLORS.deep};border-radius:64px;padding:32px 42px;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:fadeUp .5s .1s both}
+.sbar svg{flex:none}
+.q{font-weight:600;font-size:44px;line-height:1.25}
+.ch{opacity:0;animation:typeOn .01s var(--t) steps(1) forwards}
+@keyframes typeOn{to{opacity:1}}
+.caret{display:inline-block;width:5px;height:50px;vertical-align:middle;background:${COLORS.rust};margin-left:4px;opacity:0;animation:typeOn .01s var(--t) forwards,blink 1s calc(var(--t) + .02s) steps(1) infinite}
+.results{margin-top:64px;display:flex;flex-direction:column;gap:32px}
+.res{background:color-mix(in srgb,var(--text) 8%,var(--bg));border-radius:30px;padding:42px 44px;animation:slideUp .55s var(--t) cubic-bezier(.2,.8,.2,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(90px)}to{opacity:1;transform:none}}
+.res-l{font:500 26px/1 Mono,monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+.res-t{font-weight:800;font-size:52px;line-height:1.14;letter-spacing:-.02em}
+.res-s{margin-top:22px;font:500 24px/1.35 Mono,monospace;opacity:.65}
+`;
+
+// Extra transitions and the notebook highlighter.
+const EXTRA_CSS = `
 .scene.t-fade{animation:fadeScene .7s ease both}
 @keyframes fadeScene{from{opacity:0}to{opacity:1}}
 .scene.t-pop{animation:popScene .55s cubic-bezier(.3,1.35,.5,1) both}
 @keyframes popScene{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
-
-/* notebook: highlighter instead of the sweep block */
-.paper .mk{--marker:rgba(209,231,174,.95);color:var(--text);border-radius:6px 18px 8px 16px;padding:0 .14em;background-position:0 78%;background-size:0% 62%}
-.paper .mk{animation-name:hilite}
+.paper .mk{--marker:rgba(209,231,174,.95);color:var(--text);border-radius:6px 18px 8px 16px;padding:0 .14em;background-position:0 78%;background-size:0% 62%;animation-name:hilite}
 @keyframes hilite{from{background-size:0% 62%}to{background-size:100% 62%}}
-
-/* news desk */
-.newsbar{position:absolute;left:84px;right:84px;top:246px;display:flex;align-items:center;gap:22px;font:500 26px/1 Mono,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--text);border-top:2px solid color-mix(in srgb,var(--text) 30%,transparent);border-bottom:2px solid color-mix(in srgb,var(--text) 30%,transparent);padding:16px 0;animation:fadeUp .5s .1s both}
-.newsbar b{display:flex;align-items:center;gap:10px;background:${COLORS.rust};color:${COLORS.cream};padding:8px 14px;border-radius:6px;font-weight:500}
-.newsbar b i{width:14px;height:14px;border-radius:50%;background:${COLORS.cream};animation:blink 1s steps(1) infinite}
-.newsbar em{margin-left:auto;font-style:normal;opacity:.75}
 @keyframes blink{50%{opacity:0}}
-.tpl-newsdesk .content{top:360px}
-.tpl-newsdesk .kicker{align-self:flex-start;background:${COLORS.rust};color:${COLORS.cream};padding:14px 20px;border-radius:6px}
-.tpl-newsdesk .kicker span{display:none}
-.tpl-newsdesk .headline,.tpl-newsdesk .title{border-left:14px solid ${COLORS.rust};padding-left:34px}
-.tpl-newsdesk .mk{--marker:${COLORS.rust};--markText:${COLORS.cream};border-radius:4px}
-.tpl-newsdesk .s-point .headline{border-left-color:${COLORS.deep}}
-.tpl-newsdesk .s-point .mk{--marker:${COLORS.deep};--markText:${COLORS.cream}}
-.tpl-newsdesk .s-point .kicker,.tpl-newsdesk .s-point .newsbar b{background:${COLORS.deep}}
-
-/* bold */
-.tpl-bold .headline,.tpl-bold .title,.tpl-bold .label,.tpl-bold .it,.tpl-bold .vs li,.tpl-bold .kp{text-transform:uppercase}
-.tpl-bold .headline{font-size:118px;line-height:.96;letter-spacing:-.04em}
-.tpl-bold .punch{font-size:124px}
-.tpl-bold .title{font-size:66px}
-.tpl-bold .label{font-size:58px}
-.tpl-bold .it{font-size:46px}
-.tpl-bold .w{animation:slam .32s var(--t) cubic-bezier(.2,1.2,.4,1) both}
-@keyframes slam{from{opacity:0;transform:scale(1.7)}to{opacity:1;transform:none}}
-.tpl-bold .mk{--marker:var(--text);--markText:var(--bg);border-radius:0;animation-duration:.2s}
-.tpl-bold .kicker{font-size:34px}
-.tpl-bold .grain{opacity:.16}
-
-/* terminal */
-.tpl-terminal .scene{background-image:linear-gradient(rgba(209,231,174,.07) 2px,transparent 2px),linear-gradient(90deg,rgba(209,231,174,.07) 2px,transparent 2px);background-size:72px 72px}
-.tpl-terminal .headline,.tpl-terminal .title,.tpl-terminal .label,.tpl-terminal .it,.tpl-terminal .vs li,.tpl-terminal .quote,.tpl-terminal .serif,.tpl-terminal .kp{font-family:Mono,monospace;font-weight:700;font-style:normal;letter-spacing:-.04em}
-.tpl-terminal .headline{font-size:90px;line-height:1.1}
-.tpl-terminal .num{font-family:Mono,monospace;font-weight:700;font-size:270px;letter-spacing:-.08em}
-.tpl-terminal .punch{font-size:96px}
-.tpl-terminal .title{font-size:58px}
-.tpl-terminal .label{font-size:52px}
-.tpl-terminal .it{font-size:42px}
-.tpl-terminal .vs li{font-size:50px}
-.tpl-terminal .serif{font-size:56px;font-weight:500;opacity:.8}
-.tpl-terminal .quote{font-size:64px !important}
-.tpl-terminal .w{animation:print .01s var(--t) steps(1) both}
-@keyframes print{from{opacity:0}to{opacity:1}}
-.tpl-terminal .headline::after,.tpl-terminal .title::after{content:"▍";color:var(--accent);animation:blink 1s steps(1) infinite}
-.tpl-terminal .kicker span{display:none}
-.tpl-terminal .kicker::before{content:"$ ";opacity:.7}
-.tpl-terminal .mk{--marker:rgba(209,231,174,.2);--markText:${COLORS.sage};border-radius:2px}
-.tpl-terminal .items li{border-radius:8px;border:2px solid color-mix(in srgb,var(--text) 18%,transparent);background:transparent}
-
-/* editorial */
-.tpl-editorial .headline,.tpl-editorial .title,.tpl-editorial .label{font-family:NewsSerif,serif;font-weight:600;letter-spacing:-.02em}
-.tpl-editorial .headline{font-size:122px;line-height:1.02}
-.tpl-editorial .punch{font-size:128px}
-.tpl-editorial .title{font-size:78px}
-.tpl-editorial .content:not(.center):not(.kin)::before{content:"";display:block;height:4px;background:var(--text);margin-bottom:34px;flex:none}
-.tpl-editorial .kicker span{display:none}
-.tpl-editorial .mk{--markText:var(--text);background:linear-gradient(var(--accent),var(--accent)) no-repeat 0 96%/0% .085em;padding:0;border-radius:0;animation-name:underline}
-@keyframes underline{from{background-size:0% .085em}to{background-size:100% .085em}}
-.tpl-editorial .items li{background:transparent;border-radius:0;border-top:2px solid color-mix(in srgb,var(--text) 22%,transparent);padding:30px 0}
-.tpl-editorial .water{opacity:.04}
-
-/* cards */
-.tpl-cards .scene{background-image:radial-gradient(color-mix(in srgb,var(--text) 18%,transparent) 2.5px,transparent 2.5px);background-size:44px 44px}
-.tpl-cards .content:not(.center):not(.kin){--text:${COLORS.forest};--accent:${COLORS.rust};--marker:${COLORS.sage};--markText:${COLORS.forest};--bg:#ffffff;color:var(--text);background:#fff;border-radius:36px;padding:72px 62px;top:50%;bottom:auto;height:auto;max-height:1180px;transform:translateY(-54%) rotate(-1.4deg);box-shadow:0 34px 90px rgba(8,31,21,.28)}
-.tpl-cards .content:not(.center):not(.kin)::before{content:"";position:absolute;top:-30px;left:50%;width:220px;height:60px;margin-left:-110px;background:rgba(248,245,238,.78);transform:rotate(-5deg);box-shadow:0 4px 10px rgba(0,0,0,.08)}
-.tpl-cards .num{font-size:250px}
-.tpl-cards .headline{font-size:100px}
-.tpl-cards .punch{font-size:108px}
-.tpl-cards .items li{background:${COLORS.cream};padding:28px 30px}
-.tpl-cards .it{font-size:42px}
-.tpl-cards .ix{font-size:30px}
 `;
 
-export function template(name = 'classic') {
-  const t = TEMPLATES[name];
-  if (!t) throw new Error(`Unknown template "${name}". Use one of: ${Object.keys(TEMPLATES).join(', ')}`);
-  return { name, ...t };
+export function sceneTheme(s) {
+  return THEMES[s.theme ?? DEFAULT_THEME[s.type]];
 }
-
-export function sceneTheme(s, index = 0, tpl = template()) {
-  if (s.theme) return THEMES[s.theme];
-  if (tpl.cycle && s.type !== 'outro') return THEMES[tpl.cycle[index % tpl.cycle.length]];
-  return THEMES[tpl.themes[s.type] ?? DEFAULT_THEME[s.type]];
-}
-
-const newsDate = (d) => d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Toronto' }).toUpperCase();
 
 // One scene as a full HTML page. `index`/`count` drive the progress bar; `prev` is the previous scene's background
 // (what the reveal opens out of).
-export function scenePage(fontCss, s, { index, count, prev, cover = false, tpl = template(), date = new Date() }) {
-  const th = sceneTheme(s, index, tpl);
+export function scenePage(fontCss, s, { index, count, prev, cover = false }) {
+  const th = sceneTheme(s);
   if (!SCENES[s.type]) throw new Error(`Unknown scene type: ${s.type}`);
   const vars = `--bg:${th.bg};--glow:${th.glow};--text:${th.text};--accent:${th.accent};--marker:${th.marker};--markText:${th.markText};--prev:${prev ?? th.bg};--d:${s.seconds}s`;
   const segs = Array.from({ length: count }, (_, k) => `<div class="seg ${k < index ? 'done' : k === index ? 'now' : ''}"><i></i></div>`).join('');
-  const news = tpl.chrome === 'news' && s.type !== 'outro'
-    ? `<div class="newsbar"><b><i></i>LIVE</b><span>The Growthway Brief</span><em>${newsDate(date)}</em></div>` : '';
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}${CSS}${TEMPLATE_CSS}</style></head>
-<body class="tpl-${tpl.name} ${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''}" style="${vars}"><div class="scene t-${s.transition ?? (s.type === 'outro' ? tpl.outroTransition : undefined) ?? tpl.transition}${th.paper ? ' paper' : ''} s-${s.type}">
+  const board = ['notes', 'timeline', 'mythfact', 'fineprint'].includes(s.type) ? ' board' : '';
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}${CSS}${EXTRA_CSS}${FORMAT_CSS}</style></head>
+<body class="${index === 0 ? 'first' : ''} ${cover ? 'cover' : ''}" style="${vars}"><div class="scene t-${s.transition ?? 'ring'}${th.paper ? ' paper' : ''}${board} s-${s.type}">
 <div class="glow"></div>${s.type === 'outro' ? '' : `<div class="water">${logo(th.mark)}</div>`}<div class="grain"></div>
 <div class="progress">${segs}</div>
 ${s.type === 'outro' ? '' : `<div class="tag">${logo(th.text, { size: 46 })}<span>Growthway</span></div>`}
-${news}${SCENES[s.type](s, th)}
+${SCENES[s.type](s, th)}
 </div></body></html>`;
 }
