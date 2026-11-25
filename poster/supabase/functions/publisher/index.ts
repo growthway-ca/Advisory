@@ -1,0 +1,87 @@
+// Runs every 15 minutes (pg_cron) and on demand from the dashboard.
+// 1. Finishes reels already sent to Instagram (container processing -> publish).
+// 2. Sends approved reels whose time has come.
+// 3. With {"metrics": true} (daily), records views/reach/likes/... for reels posted in the last 30 days.
+// Nothing here posts a reel that isn't status 'approved': approval only happens in the dashboard.
+import { Account, admin, authorized, cors, ensureIgId, graph, json } from "../_shared/common.ts";
+
+const PUBLIC = `${Deno.env.get("SUPABASE_URL")}/storage/v1/object/public/reels/`;
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+  const db = admin();
+  if (!(await authorized(req, db))) return json({ error: "unauthorized" }, 401);
+  const opts = await req.json().catch(() => ({}));
+  const log: string[] = [];
+
+  const { data: accounts } = await db.from("ig_accounts").select("id,handle,token_secret,api_host,ig_user_id").eq("active", true);
+  const byId = new Map<string, Account>((accounts ?? []).map((a) => [a.id, a as Account]));
+
+  // 1. Containers in progress
+  const { data: inflight } = await db.from("posts").select("id,account_id,container_id,updated_at").eq("status", "publishing");
+  for (const p of inflight ?? []) {
+    const a = byId.get(p.account_id);
+    if (!a) continue;
+    try {
+      const st = await graph(a, "GET", p.container_id, { fields: "status_code,status" });
+      if (st.status_code === "FINISHED") {
+        const igId = await ensureIgId(db, a);
+        const pub = await graph(a, "POST", `${igId}/media_publish`, { creation_id: p.container_id });
+        const m = await graph(a, "GET", pub.id, { fields: "permalink" }).catch(() => ({}));
+        await db.from("posts").update({ status: "published", ig_media_id: pub.id, permalink: m.permalink ?? null, published_at: new Date().toISOString(), error: null }).eq("id", p.id);
+        log.push(`published ${p.id}`);
+      } else if (st.status_code === "ERROR" || st.status_code === "EXPIRED") {
+        await db.from("posts").update({ status: "failed", error: `Instagram processing ${st.status_code}: ${st.status ?? ""}` }).eq("id", p.id);
+        log.push(`failed ${p.id}`);
+      } else if (Date.now() - new Date(p.updated_at).getTime() > 60 * 60 * 1000) {
+        await db.from("posts").update({ status: "failed", error: "Instagram still processing after an hour" }).eq("id", p.id);
+      }
+    } catch (e) {
+      await db.from("posts").update({ error: String((e as Error).message) }).eq("id", p.id);
+      log.push(`error ${p.id}: ${(e as Error).message}`);
+    }
+  }
+
+  // 2. Approved and due
+  const { data: due } = await db.from("posts").select("id,account_id,caption,video_path,cover_path,attempts")
+    .eq("status", "approved").lte("scheduled_for", new Date().toISOString()).order("scheduled_for").limit(5);
+  for (const p of due ?? []) {
+    const a = byId.get(p.account_id);
+    if (!a || !p.video_path) continue;
+    try {
+      const igId = await ensureIgId(db, a);
+      const params: Record<string, string> = {
+        media_type: "REELS", video_url: PUBLIC + p.video_path, caption: p.caption ?? "", share_to_feed: "true",
+      };
+      if (p.cover_path) params.cover_url = PUBLIC + p.cover_path;
+      const c = await graph(a, "POST", `${igId}/media`, params);
+      await db.from("posts").update({ status: "publishing", container_id: c.id, attempts: p.attempts + 1, error: null }).eq("id", p.id);
+      log.push(`sent ${p.id}`);
+    } catch (e) {
+      const msg = (e as Error).message;
+      const failed = p.attempts + 1 >= 3;
+      await db.from("posts").update({ attempts: p.attempts + 1, error: msg, ...(failed ? { status: "failed" } : {}) }).eq("id", p.id);
+      await db.from("ig_accounts").update({ last_error: msg }).eq("id", a.id);
+      log.push(`error ${p.id}: ${msg}`);
+    }
+  }
+
+  // 3. Metrics
+  if (opts.metrics) {
+    const since = new Date(Date.now() - 30 * 864e5).toISOString();
+    const { data: live } = await db.from("posts").select("id,account_id,ig_media_id").eq("status", "published").gte("published_at", since);
+    for (const p of live ?? []) {
+      const a = byId.get(p.account_id);
+      if (!a || !p.ig_media_id) continue;
+      try {
+        const r = await graph(a, "GET", `${p.ig_media_id}/insights`, { metric: "views,reach,likes,comments,saved,shares,total_interactions" });
+        const v: Record<string, number> = {};
+        for (const m of r.data ?? []) v[m.name] = m.values?.[0]?.value ?? m.total_value?.value ?? null;
+        await db.from("post_metrics").insert({ post_id: p.id, views: v.views, reach: v.reach, likes: v.likes, comments: v.comments, saves: v.saved, shares: v.shares, total_interactions: v.total_interactions });
+      } catch (e) {
+        log.push(`metrics ${p.id}: ${(e as Error).message}`);
+      }
+    }
+  }
+  return json({ ok: true, log });
+});
