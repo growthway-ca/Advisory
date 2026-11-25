@@ -24,6 +24,7 @@ pg_cron 07:43 UTC daily ──▶ research ──▶ Business Discovery ──�
 | `publisher`: send approved + due reels, finish processing ones, daily metrics | `supabase/functions/publisher` |
 | `research`: comp accounts via Business Discovery | `supabase/functions/research` |
 | `locations`: look up taggable locations (Pages with an address) | `supabase/functions/locations` |
+| `engage`: token health, comments sync (every 2 h), replies, followers' online hours | `supabase/functions/engage` |
 | Shared helpers (deployed as `common.ts` next to each function) | `supabase/functions/_shared/common.ts` |
 | Dashboard (static, supabase-js, row-level security) | `dashboard/index.html` |
 | Upload a reel folder into the queue | `queue-reel.mjs` |
@@ -40,6 +41,17 @@ has to download them), under random IDs.
   feature (app review). Each account has a default location for new reels.
 - **Trial reels:** `trial` = `MANUAL` (shown to non-followers; you graduate it in the Instagram app) or `SS_PERFORMANCE`
   (graduates automatically if it performs well). Empty = a regular reel shared to feed. Each account has a default.
+
+## Learning loop, A/B tests, carousels, comments
+
+- Every post records `format`, `hook` (title-card text), `trial`, and for A/B tests a shared `variant_group` with
+  `variant` A/B. `post_stats` joins the latest metrics; the dashboard's Posted tab shows averages by format, regular vs
+  trial, and each A/B winner. The Monday brief reads the same view to steer the week.
+- Carousels: `kind = 'carousel'`, `media` = ordered JPEG paths; the publisher creates one image container per slide,
+  then the carousel.
+- Comments: `engage` pulls comments on posts from the last 30 days every 2 hours; the daily brief writes `draft`
+  replies; Matt sends them from the Comments tab.
+- Token health: `engage` checks each token every 2 hours; a dead token shows as a red banner on every tab.
 
 ## Queue a reel (what the daily brief does)
 

@@ -1,32 +1,45 @@
-// Upload step for new reels. The caller first creates a posts row (status 'uploading') and gets back
-// its id and one-time upload_token; then:
-//   POST {post_id, upload_token, action: "urls"}  -> signed upload URLs for reel.mp4 and cover.png
-//   PUT the files to those URLs
-//   POST {post_id, upload_token, action: "done"}  -> row moves to 'pending' (waiting for approval)
+// Upload step for new posts. The caller first creates a posts row (status 'uploading') and gets back its id and
+// one-time upload_token; then:
+//   POST {post_id, upload_token, action: "urls", files?: ["reel.mp4","cover.png"] | ["01.jpg","02.jpg",...]}
+//        -> {urls: {name: {signedUrl, path, token}}, plus legacy video/cover keys}
+//   PUT each file to its URL
+//   POST {post_id, upload_token, action: "done"} -> row moves to 'pending' (waiting for approval)
 import { admin, cors, json } from "../_shared/common.ts";
+
+const NAME = /^[a-z0-9-]{1,40}\.(mp4|png|jpg)$/;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   const db = admin();
-  const { post_id, upload_token, action } = await req.json().catch(() => ({}));
+  const { post_id, upload_token, action, files } = await req.json().catch(() => ({}));
   if (!post_id || !upload_token) return json({ error: "post_id and upload_token required" }, 400);
-  const { data: post } = await db.from("posts").select("id,status,upload_token").eq("id", post_id).maybeSingle();
+  const { data: post } = await db.from("posts").select("id,status,upload_token,kind").eq("id", post_id).maybeSingle();
   if (!post || post.status !== "uploading" || post.upload_token !== upload_token) return json({ error: "not found" }, 404);
 
-  const video = `${post_id}/reel.mp4`, cover = `${post_id}/cover.png`;
   if (action === "urls") {
-    const v = await db.storage.from("reels").createSignedUploadUrl(video, { upsert: true });
-    const c = await db.storage.from("reels").createSignedUploadUrl(cover, { upsert: true });
-    if (v.error || c.error) return json({ error: (v.error ?? c.error)!.message }, 500);
-    return json({ video: v.data, cover: c.data });
+    const names: string[] = Array.isArray(files) && files.length ? files : ["reel.mp4", "cover.png"];
+    if (names.length > 12 || !names.every((n) => NAME.test(n))) return json({ error: "bad file names" }, 400);
+    const urls: Record<string, unknown> = {};
+    for (const n of names) {
+      const r = await db.storage.from("reels").createSignedUploadUrl(`${post_id}/${n}`, { upsert: true });
+      if (r.error) return json({ error: r.error.message }, 500);
+      urls[n] = r.data;
+    }
+    return json({ urls, video: urls["reel.mp4"], cover: urls["cover.png"] });
   }
   if (action === "done") {
-    const { data: files } = await db.storage.from("reels").list(post_id);
-    const names = new Set((files ?? []).map((f) => f.name));
-    if (!names.has("reel.mp4")) return json({ error: "reel.mp4 not uploaded" }, 400);
-    await db.from("posts").update({
-      video_path: video, cover_path: names.has("cover.png") ? cover : null, status: "pending", upload_token: null,
-    }).eq("id", post_id);
+    const { data: list } = await db.storage.from("reels").list(post_id);
+    const names = (list ?? []).map((f) => f.name).sort();
+    if (post.kind === "carousel") {
+      const imgs = names.filter((n) => n.endsWith(".jpg"));
+      if (imgs.length < 2) return json({ error: "a carousel needs at least 2 .jpg slides" }, 400);
+      await db.from("posts").update({ media: imgs.map((n) => `${post_id}/${n}`), status: "pending", upload_token: null }).eq("id", post_id);
+    } else {
+      if (!names.includes("reel.mp4")) return json({ error: "reel.mp4 not uploaded" }, 400);
+      await db.from("posts").update({
+        video_path: `${post_id}/reel.mp4`, cover_path: names.includes("cover.png") ? `${post_id}/cover.png` : null, status: "pending", upload_token: null,
+      }).eq("id", post_id);
+    }
     return json({ ok: true, status: "pending" });
   }
   return json({ error: "action must be urls or done" }, 400);

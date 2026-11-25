@@ -49,11 +49,11 @@ Deno.serve(async (req) => {
   }
 
   // 2. Approved and due
-  const { data: due } = await db.from("posts").select("id,account_id,caption,video_path,cover_path,attempts,location_id,trial")
+  const { data: due } = await db.from("posts").select("id,account_id,kind,media,caption,video_path,cover_path,attempts,location_id,trial")
     .eq("status", "approved").lte("scheduled_for", new Date().toISOString()).order("scheduled_for").limit(5);
   for (const p of due ?? []) {
     const a = byId.get(p.account_id);
-    if (!a || !p.video_path) continue;
+    if (!a || (p.kind === "carousel" ? !p.media?.length : !p.video_path)) continue;
     if (!tokenFor(a)) { log.push(`waiting ${p.id}: no ${a.token_secret} secret yet`); continue; }
     // Claim the post so two overlapping runs can't send it twice.
     const { data: claimed } = await db.from("posts").update({ status: "publishing", container_id: null })
@@ -61,14 +61,23 @@ Deno.serve(async (req) => {
     if (!claimed?.length) continue;
     try {
       const igId = await ensureIgId(db, a);
-      const params: Record<string, string> = {
-        media_type: "REELS", video_url: PUBLIC + p.video_path, caption: p.caption ?? "",
-      };
-      if (p.cover_path) params.cover_url = PUBLIC + p.cover_path;
+      let params: Record<string, string>;
+      if (p.kind === "carousel") {
+        // One image container per slide (JPEG only), then the carousel container.
+        const children: string[] = [];
+        for (const path of p.media as string[]) {
+          const ch = await graph(a, "POST", `${igId}/media`, { image_url: PUBLIC + path, is_carousel_item: "true" });
+          children.push(ch.id);
+        }
+        params = { media_type: "CAROUSEL", children: children.join(","), caption: p.caption ?? "" };
+      } else {
+        params = { media_type: "REELS", video_url: PUBLIC + p.video_path, caption: p.caption ?? "" };
+        if (p.cover_path) params.cover_url = PUBLIC + p.cover_path;
+        // Trial reels are shown to non-followers first; MANUAL = graduate in the app, SS_PERFORMANCE = auto if it does well.
+        if (p.trial) params.trial_params = JSON.stringify({ graduation_strategy: p.trial });
+        else params.share_to_feed = "true";
+      }
       if (p.location_id) params.location_id = p.location_id;
-      // Trial reels are shown to non-followers first; MANUAL = graduate in the app, SS_PERFORMANCE = auto if it does well.
-      if (p.trial) params.trial_params = JSON.stringify({ graduation_strategy: p.trial });
-      else params.share_to_feed = "true";
       const c = await graph(a, "POST", `${igId}/media`, params);
       await db.from("posts").update({ status: "publishing", container_id: c.id, attempts: p.attempts + 1, error: null }).eq("id", p.id);
       log.push(`sent ${p.id}`);
@@ -89,7 +98,8 @@ Deno.serve(async (req) => {
       const a = byId.get(p.account_id);
       if (!a || !p.ig_media_id) continue;
       try {
-        const r = await graph(a, "GET", `${p.ig_media_id}/insights`, { metric: "views,reach,likes,comments,saved,shares,total_interactions" });
+        const r = await graph(a, "GET", `${p.ig_media_id}/insights`, { metric: "views,reach,likes,comments,saved,shares,total_interactions" })
+          .catch(() => graph(a, "GET", `${p.ig_media_id}/insights`, { metric: "reach,likes,comments,saved,shares,total_interactions" }));
         const v: Record<string, number> = {};
         for (const m of r.data ?? []) v[m.name] = m.values?.[0]?.value ?? m.total_value?.value ?? null;
         await db.from("post_metrics").insert({ post_id: p.id, views: v.views, reach: v.reach, likes: v.likes, comments: v.comments, saves: v.saved, shares: v.shares, total_interactions: v.total_interactions });
