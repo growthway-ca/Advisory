@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Growthway Poster</title>
 <meta name="robots" content="noindex">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
@@ -35,7 +37,7 @@
   header { position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:10px; padding:10px 16px;
     background:rgba(248,245,238,.55); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); border-bottom:1px solid var(--line); }
   .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:16px; letter-spacing:-.01em; color:var(--forest); }
-  .brand .mark { width:30px; height:30px; border-radius:9px; background:var(--forest); display:grid; place-items:center; color:var(--sage); font-weight:800; }
+  .brand .mark { width:34px; height:34px; border-radius:10px; background:#F8F5EE; display:block; box-shadow:0 0 0 1px rgba(21,60,42,.12), 0 4px 10px -6px rgba(8,31,21,.4); }
   header .sp { flex:1; }
   #acctf { width:auto; border-radius:999px; padding:7px 34px 7px 14px; font-weight:600; background-color:var(--glass-strong); }
   #signout { padding:7px 14px; }
@@ -202,7 +204,7 @@
 </head>
 <body>
 <header>
-  <div class="brand"><span class="mark">g</span><span>Growthway Poster</span></div>
+  <div class="brand"><img class="mark" src="logo.png" alt="Growthway"><span>Growthway Poster</span></div>
   <span class="sp"></span>
   <select id="acctf" hidden aria-label="Show posts for"></select>
   <button id="signout" class="ghost" hidden>Sign out</button>
@@ -498,7 +500,7 @@ async function renderResearch() {
   const since = new Date(Date.now() - 90 * 864e5).toISOString();
   const [{ data: snaps }, { data: med }] = await Promise.all([
     sb.from("comp_snapshots").select("comp_id,followers,media_count,captured_at").in("comp_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]).order("captured_at", { ascending: false }).limit(1000),
-    sb.from("comp_media").select("id,comp_id,permalink,caption,posted_at,view_count,like_count,comments_count,outlier,media_product_type").in("comp_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]).gte("posted_at", since).limit(3000),
+    sb.from("comp_media").select("id:ig_media_id,comp_id,permalink,caption,posted_at,view_count,like_count,comments_count,outlier,media_product_type").in("comp_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]).gte("posted_at", since).limit(3000),
   ]);
   const snap = new Map(); for (const s of snaps ?? []) if (!snap.has(s.comp_id)) snap.set(s.comp_id, s);
   const views = new Map(); for (const m of med ?? []) if (m.view_count != null) views.set(m.comp_id, [...(views.get(m.comp_id) ?? []), m.view_count]);
