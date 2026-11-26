@@ -54,6 +54,7 @@
     <button data-tab="history">Posted</button>
     <button data-tab="comments">Comments</button>
     <button data-tab="research">Research</button>
+    <button data-tab="inspo">Inspiration</button>
     <button data-tab="accounts">Accounts</button>
   </nav>
   <span class="sp"></span>
@@ -82,6 +83,7 @@
   <section id="history" hidden></section>
   <section id="comments" hidden></section>
   <section id="research" hidden></section>
+  <section id="inspo" hidden></section>
   <section id="accounts" hidden></section>
 </main>
 <div id="toast"></div>
@@ -99,7 +101,8 @@ const POST_COLS = "id,account_id,title,caption,video_path,cover_path,source,stat
 let locations = [];
 const TRIAL = { "": "Regular reel (followers + non-followers)", MANUAL: "Trial reel: non-followers first, I graduate it in the app", SS_PERFORMANCE: "Trial reel: non-followers first, auto-graduate if it performs" };
 let accounts = [];
-let tab = "queue";
+const SHARED = (() => { const q = new URLSearchParams(location.search); const t = [q.get("add"), q.get("url"), q.get("text")].filter(Boolean).join(" "); return (t.match(/https?:\/\/\S*instagram\.com\S*/) ?? [""])[0]; })();
+let tab = SHARED ? "inspo" : "queue";
 // Account filter (top right): "" = all accounts. Remembered on this device.
 let filt = ""; try { filt = localStorage.getItem("acctf") ?? ""; } catch {}
 const scope = (q) => (filt ? q.eq("account_id", filt) : q);
@@ -134,6 +137,7 @@ async function boot() {
   f.onchange = () => { filt = f.value; try { localStorage.setItem("acctf", filt); } catch {} render(); };
   locations = (await sb.from("locations").select("id,name,city,state,country").order("name")).data ?? [];
   banner();
+  for (const x of document.querySelectorAll("#nav button")) x.classList.toggle("on", x.dataset.tab === tab);
   render();
 }
 // Token trouble or Meta's 90-day re-approval coming up: say so at the top of every tab.
@@ -163,6 +167,7 @@ async function render() {
   if (tab === "history") return renderHistory();
   if (tab === "comments") return renderComments();
   if (tab === "research") return renderResearch();
+  if (tab === "inspo") return renderInspo();
   if (tab === "accounts") return renderAccounts();
 }
 
@@ -318,6 +323,88 @@ async function renderResearch() {
   };
   $("#crun").onclick = async (e) => { e.target.disabled = true; try { const r = await callFn("research"); toast(r.log.join(" · ") || "No comp accounts yet"); } catch (err) { toast(err.message); } renderResearch(); };
   for (const b of el.querySelectorAll("[data-del]")) b.onclick = async () => { if (!confirm("Remove this comp account and its data?")) return; await sb.from("comp_accounts").delete().eq("id", b.dataset.del); renderResearch(); };
+}
+
+
+// ---------- inspiration ----------
+// Reels and posts you save from your personal feeds: paste the link (Share → Copy link), tag it, add a note.
+// The "inspire" function fills in the author's followers and the post's views when the author is a public
+// business or creator account (it recognises Research-list accounts on its own; otherwise type the @author).
+const CATS = ["Hook", "Format", "Topic", "Editing / visuals", "Audio / trend", "Caption", "Other"];
+let inspoView = { cat: "", status: "new", q: "" };
+const igLink = (s) => (String(s).match(/https?:\/\/(?:www\.)?instagram\.com\/[^\s?#]+/) ?? [""])[0];
+const num = (n) => n == null ? "" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "K" : n >= 1e3 ? (n / 1e3).toFixed(1) + "K" : String(n);
+async function renderInspo() {
+  const el = $("#inspo");
+  let q = scope(sb.from("inspirations").select("*")).order("created_at", { ascending: false }).limit(300);
+  const { data, error } = await q;
+  if (error) { el.innerHTML = `<p class="err">${esc(error.message)}</p>`; return; }
+  const all = data ?? [];
+  const cats = [...new Set([...CATS, ...all.map((r) => r.category).filter(Boolean)])];
+  const rows = all.filter((r) => (!inspoView.cat || r.category === inspoView.cat) && (inspoView.status === "all" || r.status === inspoView.status)
+    && (!inspoView.q || [r.author, r.notes, r.caption, r.category].join(" ").toLowerCase().includes(inspoView.q.toLowerCase())));
+  const count = (c) => all.filter((r) => r.category === c && r.status !== "archived").length;
+  el.innerHTML = `<div class="card"><h2 style="margin-top:0">Save a reel</h2>
+      <p class="muted">On Instagram, tap Share → Copy link, then paste it here. Add the @author if you know it: that's how we get views and followers (accounts on the Research list are recognised automatically).</p>
+      <div class="row"><input id="iurl" placeholder="https://www.instagram.com/reel/…" value="${esc(SHARED)}" style="flex:2;min-width:220px"><button class="ghost" id="ipaste">Paste</button></div>
+      <div class="row"><input id="iauthor" placeholder="@author (optional)" style="max-width:200px">
+        <select id="icat" style="max-width:200px"><option value="">Category…</option>${cats.map((c) => `<option>${esc(c)}</option>`).join("")}<option value="+">+ New category</option></select>
+        ${accounts.length > 1 ? `<select id="iacct" style="max-width:200px">${accounts.map((a) => `<option value="${a.id}" ${a.id === filt ? "selected" : ""}>for @${esc(a.handle)}</option>`).join("")}</select>` : ""}</div>
+      <textarea id="inote" placeholder="What's worth borrowing? (the hook, the structure, the edit…)" style="min-height:60px;margin-top:8px"></textarea>
+      <div class="row"><button id="isave">Save</button><span id="imsg" class="muted"></span></div></div>
+    <div class="card"><div class="row" style="margin-top:0">
+      <button class="${inspoView.cat ? "ghost" : ""}" data-icat="">All</button>
+      ${cats.filter(count).map((c) => `<button class="${inspoView.cat === c ? "" : "ghost"}" data-icat="${esc(c)}">${esc(c)} (${count(c)})</button>`).join("")}</div>
+      <div class="row"><select id="istatus" style="max-width:160px">${[["new", "To use"], ["used", "Used"], ["archived", "Archived"], ["all", "All"]].map(([v, t]) => `<option value="${v}" ${inspoView.status === v ? "selected" : ""}>${t}</option>`).join("")}</select>
+        <input id="isearch" placeholder="Search notes, captions, authors" value="${esc(inspoView.q)}" style="max-width:280px"><span class="muted">${rows.length} saved</span></div></div>`
+    + (rows.length ? rows.map((r) => `<div class="card" id="i-${r.id}">
+        <div class="row" style="margin-top:0"><a href="${esc(r.url)}" target="_blank" rel="noopener"><strong>${r.author ? "@" + esc(r.author) : "Open on Instagram"}</strong></a>
+          ${r.media_type ? `<span class="tagx">${esc(r.media_type)}</span>` : ""}
+          ${r.author_followers != null ? `<span class="muted">${num(r.author_followers)} followers</span>` : ""}
+          ${r.view_count != null ? `<span><strong>${num(r.view_count)}</strong> views</span>` : ""}
+          ${r.view_count != null && r.author_followers ? `<span class="tagx" title="views ÷ followers">${(r.view_count / r.author_followers).toFixed(1)}× reach</span>` : ""}
+          ${r.like_count != null ? `<span class="muted">${num(r.like_count)} likes · ${num(r.comments_count)} comments</span>` : ""}
+          <span class="muted">saved ${fmt(r.created_at)}</span></div>
+        ${r.caption ? `<p class="muted" style="margin:6px 0">${esc(r.caption.slice(0, 220))}${r.caption.length > 220 ? "…" : ""}</p>` : ""}
+        ${r.fetch_error ? `<p class="muted" style="margin:6px 0">ⓘ ${esc(r.fetch_error)}</p>` : ""}
+        <div class="row"><select data-f="category" style="max-width:200px"><option value="">No category</option>${cats.map((c) => `<option ${r.category === c ? "selected" : ""}>${esc(c)}</option>`).join("")}</select>
+          ${r.author ? "" : `<input data-f="author" placeholder="@author" style="max-width:160px">`}</div>
+        <textarea data-f="notes" placeholder="Notes" style="min-height:50px;margin-top:8px">${esc(r.notes ?? "")}</textarea>
+        <div class="row">${r.status !== "used" ? `<button class="ghost" data-st="used">Mark used</button>` : `<button class="ghost" data-st="new">Back to “to use”</button>`}
+          ${r.status !== "archived" ? `<button class="ghost" data-st="archived">Archive</button>` : ""}
+          <button class="ghost" data-look>Look up again</button><button class="ghost" data-del>Delete</button></div></div>`).join("")
+      : `<div class="card muted">Nothing here yet. Save a reel above.</div>`);
+
+  const catSel = $("#icat");
+  catSel.onchange = () => { if (catSel.value === "+") { const n = prompt("New category name"); if (n?.trim()) { catSel.add(new Option(n.trim(), n.trim(), true, true)); } else catSel.value = ""; } };
+  $("#ipaste").onclick = async () => { try { $("#iurl").value = await navigator.clipboard.readText(); } catch { toast("Long-press the box and choose Paste"); } };
+  $("#isave").onclick = async () => {
+    const url = igLink($("#iurl").value);
+    if (!url) { toast("That doesn't look like an Instagram link"); return; }
+    $("#imsg").textContent = "Saving…";
+    const row = { url, author: $("#iauthor").value.replace(/^@/, "").trim() || null, category: catSel.value && catSel.value !== "+" ? catSel.value : null,
+      notes: $("#inote").value.trim() || null, account_id: $("#iacct")?.value || filt || accounts[0]?.id || null };
+    const { data: ins, error } = await sb.from("inspirations").insert(row).select("id").single();
+    if (error) { $("#imsg").textContent = /duplicate/.test(error.message) ? "Already saved." : error.message; return; }
+    if (SHARED) history.replaceState(null, "", location.pathname);
+    $("#imsg").textContent = "Saved. Looking it up…";
+    try { await callFn("inspire", { id: ins.id }); } catch {}
+    inspoView.status = "new"; renderInspo();
+  };
+  for (const b of el.querySelectorAll("[data-icat]")) b.onclick = () => { inspoView.cat = b.dataset.icat; renderInspo(); };
+  $("#istatus").onchange = (e) => { inspoView.status = e.target.value; renderInspo(); };
+  $("#isearch").onchange = (e) => { inspoView.q = e.target.value.trim(); renderInspo(); };
+  for (const r of rows) {
+    const root = document.getElementById(`i-${r.id}`);
+    const save = async (patch, msg) => { const { error } = await sb.from("inspirations").update(patch).eq("id", r.id); toast(error ? error.message : msg); };
+    root.querySelector('[data-f="category"]').onchange = (e) => save({ category: e.target.value || null }, "Category saved");
+    root.querySelector('[data-f="notes"]').onchange = (e) => save({ notes: e.target.value.trim() || null }, "Note saved");
+    const au = root.querySelector('[data-f="author"]');
+    if (au) au.onchange = async (e) => { await save({ author: e.target.value.replace(/^@/, "").trim() || null }, "Looking it up…"); try { await callFn("inspire", { id: r.id }); } catch {} renderInspo(); };
+    for (const b of root.querySelectorAll("[data-st]")) b.onclick = async () => { await save({ status: b.dataset.st }, "Updated"); renderInspo(); };
+    root.querySelector("[data-look]").onclick = async (e) => { e.target.disabled = true; try { await callFn("inspire", { id: r.id }); } catch (err) { toast(err.message); } renderInspo(); };
+    root.querySelector("[data-del]").onclick = async () => { if (!confirm("Delete this saved reel?")) return; await sb.from("inspirations").delete().eq("id", r.id); renderInspo(); };
+  }
 }
 
 // ---------- accounts ----------
