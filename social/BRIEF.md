@@ -208,6 +208,13 @@ Same sourcing rules. Carousels are never trial posts.
   `select c.username, m.outlier, m.view_count, m.permalink, left(m.caption, 160) from comp_media m join comp_accounts c on c.id = m.comp_id where m.posted_at > now() - interval '14 days' and m.outlier >= 3 order by m.outlier desc limit 5`
   and add a short **"Hooks and formats to borrow"** section to the brief: what each outlier did (hook pattern, format,
   length) and how a Growthway reel could use the idea. Borrow structure, never content or wording.
+- **Matt's saved inspiration** (the dashboard's Inspiration tab): run
+  `select i.id, i.author, i.category, i.notes, left(i.caption, 160), i.view_count, i.author_followers, i.url from inspirations i left join ig_accounts a on a.id = i.account_id where (a.handle = 'growthway.ca' or i.account_id is null) and i.status = 'new' order by i.created_at desc limit 10`.
+  List these first in "Hooks and formats to borrow",
+  newest first, under **"From your saves"**: one line each on what to borrow (going by Matt's category and note) and a
+  concrete way to use it in a Growthway reel this week. When it fits, build today's reel on one of them and say which.
+  After a reel borrows from a save, mark it: `update inspirations set status = 'used' where id = '<id>'`. Same rule:
+  borrow structure, never content or wording. Skip the subsection when nothing new is saved.
 - **Mondays, the weekly scorecard:** from `post_stats` (last 30 days): average views by `format`, regular vs trial,
   and each finished A/B pair's winner. Add a **"What's working"** section with 3 bullets, and let it steer the week: when
   a format clearly leads (2+ posts, about 1.5× the others), use it up to twice this week, and drop the weakest format
