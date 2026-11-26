@@ -8,61 +8,183 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  :root { --forest:#153C2A; --deep:#081F15; --sage:#D1E7AE; --cream:#F8F5EE; --rust:#C4632F; --line:#e4dfd3; --muted:#6b6a63; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--cream); color:var(--deep); font:15px/1.5 "Plus Jakarta Sans", system-ui, sans-serif; }
-  header { background:var(--forest); color:var(--cream); padding:14px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-  header h1 { font-size:18px; margin:0; font-weight:800; }
+  /* Growthway Poster: brand palette, glass surfaces over a soft gradient (in the spirit of Buffer / Wealthsimple). */
+  :root {
+    --forest:#153C2A; --deep:#081F15; --sage:#D1E7AE; --cream:#F8F5EE; --rust:#C4632F;
+    --ink:#0f241a; --muted:#5f6b63; --line:rgba(21,60,42,.10);
+    --glass:rgba(255,255,255,.58); --glass-strong:rgba(255,255,255,.82); --glass-edge:rgba(255,255,255,.75);
+    --shadow:0 1px 1px rgba(8,31,21,.04), 0 10px 30px -12px rgba(8,31,21,.18);
+    --blur:saturate(170%) blur(22px);
+    --r-lg:22px; --r-md:14px; --r-sm:10px;
+    --side:232px;
+  }
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; min-height:100vh; color:var(--ink); font:15px/1.5 "Plus Jakarta Sans", system-ui, sans-serif; background:#EEF0E8;
+    background-image:
+      radial-gradient(60vw 50vw at -10% -10%, rgba(209,231,174,.95), transparent 60%),
+      radial-gradient(50vw 40vw at 110% 0%, rgba(21,60,42,.22), transparent 60%),
+      radial-gradient(45vw 45vw at 90% 110%, rgba(196,99,47,.16), transparent 60%),
+      radial-gradient(40vw 40vw at 0% 100%, rgba(209,231,174,.6), transparent 60%);
+    background-attachment:fixed; }
+  .glass { background:var(--glass); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur);
+    border:1px solid var(--glass-edge); box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.8); }
+
+  /* Top bar */
+  header { position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:10px; padding:10px 16px;
+    background:rgba(248,245,238,.55); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); border-bottom:1px solid var(--line); }
+  .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:16px; letter-spacing:-.01em; color:var(--forest); }
+  .brand .mark { width:30px; height:30px; border-radius:9px; background:var(--forest); display:grid; place-items:center; color:var(--sage); font-weight:800; }
   header .sp { flex:1; }
-  nav { display:flex; gap:6px; flex-wrap:wrap; }
-  nav button { background:transparent; color:var(--sage); border:1px solid #2d5a43; }
-  nav button.on { background:var(--sage); color:var(--forest); }
-  main { max-width:1000px; margin:0 auto; padding:16px; }
-  button { font:inherit; font-weight:600; border:0; border-radius:8px; padding:8px 12px; cursor:pointer; background:var(--forest); color:var(--cream); }
-  button.ghost { background:transparent; color:var(--forest); border:1px solid var(--forest); }
+  #acctf { width:auto; border-radius:999px; padding:7px 34px 7px 14px; font-weight:600; background-color:var(--glass-strong); }
+  #signout { padding:7px 14px; }
+
+  /* Navigation: sidebar on desktop, glass tab bar on phones */
+  nav { position:fixed; z-index:25; display:flex; gap:4px; }
+  nav button { display:flex; align-items:center; gap:10px; background:transparent; color:var(--muted); border:0; border-radius:12px; padding:10px 12px; font-weight:600; text-align:left; box-shadow:none; }
+  nav button svg { width:20px; height:20px; flex:none; }
+  nav button:hover { background:rgba(255,255,255,.55); color:var(--ink); }
+  nav button.on { background:var(--forest); color:var(--cream); box-shadow:0 6px 16px -8px rgba(21,60,42,.8); }
+  @media (min-width:900px) {
+    nav { top:72px; left:16px; bottom:16px; width:var(--side); flex-direction:column; padding:12px; border-radius:var(--r-lg); }
+    main { margin-left:calc(var(--side) + 32px) !important; }
+  }
+  @media (max-width:899px) {
+    nav { left:10px; right:10px; bottom:max(10px, env(safe-area-inset-bottom)); justify-content:space-between; padding:6px; border-radius:22px; }
+    nav button { flex:1; flex-direction:column; gap:2px; padding:7px 2px; font-size:10.5px; border-radius:16px; }
+    main { padding-bottom:110px !important; }
+  }
+
+  main { max-width:1180px; padding:22px 20px 40px; margin:0 auto; }
+  #banner { margin:12px 16px 0; border-radius:var(--r-md); }
+  @media (min-width:900px) { #banner { margin-left:calc(var(--side) + 32px); } }
+
+  /* Controls */
+  button { font:inherit; font-weight:600; border:0; border-radius:999px; padding:9px 16px; cursor:pointer; background:var(--forest); color:var(--cream);
+    box-shadow:0 6px 16px -10px rgba(21,60,42,.9); transition:transform .12s ease, background .15s ease; }
+  button:active { transform:scale(.97); }
+  button.ghost { background:var(--glass-strong); color:var(--forest); border:1px solid var(--line); box-shadow:none; }
+  button.ghost:hover { background:#fff; }
   button.rust { background:var(--rust); }
   button:disabled { opacity:.5; cursor:default; }
-  input, textarea, select { font:inherit; border:1px solid var(--line); border-radius:8px; padding:8px; background:#fff; width:100%; }
-  textarea { min-height:160px; }
+  input, textarea, select { font:inherit; color:var(--ink); border:1px solid var(--line); border-radius:var(--r-sm); padding:9px 12px; background:rgba(255,255,255,.75); width:100%; outline:none; transition:border .15s, box-shadow .15s; }
+  input:focus, textarea:focus, select:focus { border-color:rgba(21,60,42,.4); box-shadow:0 0 0 4px rgba(209,231,174,.6); }
+  textarea { min-height:160px; resize:vertical; }
+  a { color:var(--forest); }
   .mono { font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.04em; }
-  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:14px; }
-  .post { display:grid; grid-template-columns: 180px 1fr; gap:14px; }
-  .post video { width:180px; aspect-ratio:9/16; border-radius:8px; background:#000; }
-  @media (max-width:640px){ .post { grid-template-columns:1fr; } .post video { width:100%; max-width:260px; } }
-  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px; }
-  .pill { display:inline-block; border-radius:999px; padding:2px 10px; font-size:12px; font-weight:600; background:var(--sage); color:var(--forest); }
+
+  /* Surfaces */
+  .card { background:var(--glass); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); border:1px solid var(--glass-edge);
+    box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.8); border-radius:var(--r-lg); padding:18px; margin-bottom:16px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .pill { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:3px 10px; font-size:12px; font-weight:700; background:var(--sage); color:var(--forest); white-space:nowrap; }
+  .pill::before { content:""; width:6px; height:6px; border-radius:50%; background:currentColor; }
   .pill.pending { background:#fdf1d8; color:#8a5a00; } .pill.failed { background:#fbe1d6; color:var(--rust); }
+  .pill.approved { background:#e3f0d0; color:var(--forest); } .pill.publishing { background:#dfe9f5; color:#2b4f7a; }
   .pill.published { background:var(--forest); color:var(--sage); }
   .err { color:var(--rust); font-size:13px; white-space:pre-wrap; }
   .muted { color:var(--muted); font-size:13px; }
-  h2 { font-size:16px; margin:18px 0 8px; }
+  h2 { font-size:16px; margin:18px 0 8px; letter-spacing:-.01em; }
   table { width:100%; border-collapse:collapse; font-size:14px; }
-  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th, td { text-align:left; padding:8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:12px; color:var(--muted); font-weight:600; }
   .scroll { overflow-x:auto; }
-  #login { max-width:360px; margin:60px auto; }
-  .strip{display:flex;gap:6px;overflow-x:auto;max-width:180px}.strip img{width:150px;border-radius:6px;flex:none}
-  .tagx{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:12px;color:var(--muted)}
-  .bars{display:flex;align-items:flex-end;gap:3px;height:80px}.bars i{display:block;flex:1;background:var(--sage);border-radius:3px 3px 0 0}.bars i.top{background:var(--forest)}
-  #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:var(--deep); color:var(--cream); padding:8px 14px; border-radius:8px; display:none; }
+  #login, #noadmin { max-width:380px; margin:60px auto; }
+  .tagx { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:1px 9px; font-size:12px; color:var(--muted); background:rgba(255,255,255,.5); }
+  .bars { display:flex; align-items:flex-end; gap:3px; height:80px; } .bars i { display:block; flex:1; background:var(--sage); border-radius:3px 3px 0 0; } .bars i.top { background:var(--forest); }
+  #toast { position:fixed; z-index:60; bottom:96px; left:50%; transform:translateX(-50%); background:rgba(8,31,21,.88); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur);
+    color:var(--cream); padding:10px 16px; border-radius:999px; display:none; font-weight:600; font-size:14px; box-shadow:var(--shadow); max-width:90vw; }
+
+  /* Page header */
+  .pagehead { display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .pagehead h1 { margin:0; font-size:28px; letter-spacing:-.02em; font-weight:800; }
+  .pagehead .sp { flex:1; }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .stat { padding:10px 14px; border-radius:var(--r-md); min-width:110px; }
+  .stat b { display:block; font-size:22px; letter-spacing:-.02em; }
+  .stat span { font-size:12px; color:var(--muted); font-weight:600; }
+  .seg { display:inline-flex; gap:2px; padding:4px; border-radius:999px; margin-bottom:16px; max-width:100%; overflow-x:auto; scrollbar-width:none; }
+  .seg::-webkit-scrollbar { display:none; }
+  .seg button { white-space:nowrap; background:transparent; color:var(--muted); box-shadow:none; padding:7px 14px; }
+  .seg button.on { background:#fff; color:var(--ink); box-shadow:0 2px 8px -2px rgba(8,31,21,.18); }
+
+  /* Mini cards */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(168px, 1fr)); gap:14px; }
+  @media (max-width:520px) { .grid { grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; } }
+  .mini { position:relative; display:flex; flex-direction:column; text-align:left; padding:0; border-radius:18px; overflow:hidden; color:var(--ink);
+    background:var(--glass); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); border:1px solid var(--glass-edge);
+    box-shadow:var(--shadow); cursor:pointer; transition:transform .18s ease, box-shadow .18s ease; font-weight:400; }
+  .mini:hover { transform:translateY(-3px); box-shadow:0 18px 40px -18px rgba(8,31,21,.35); }
+  .mini .thumb { position:relative; aspect-ratio:4/5; background:var(--forest); overflow:hidden; }
+  .mini .thumb img, .mini .thumb video { width:100%; height:100%; object-fit:cover; display:block; }
+  .mini .thumb .over { position:absolute; inset:auto 8px 8px 8px; display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .mini .thumb .top { position:absolute; top:8px; left:8px; right:8px; display:flex; justify-content:space-between; gap:6px; }
+  .chip { white-space:nowrap; display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:999px; font-size:11.5px; font-weight:700;
+    background:rgba(255,255,255,.7); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); color:var(--ink); border:1px solid rgba(255,255,255,.6); }
+  .chip.dark { background:rgba(8,31,21,.55); color:#fff; border-color:rgba(255,255,255,.15); }
+  .mini .body { padding:10px 12px 12px; display:flex; flex-direction:column; gap:4px; }
+  .mini .t { font-weight:700; font-size:14px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .mini .m { font-size:12px; color:var(--muted); }
+  .empty { padding:40px 20px; text-align:center; }
+  .mini .pill, .mini .chip { font-size:11px; padding:2px 8px; }
+  html, body { overflow-x:hidden; }
+  @media (max-width:520px) {
+    header { padding:10px 12px; gap:8px; }
+    .brand span:last-child { display:none; }
+    #acctf { flex:1; min-width:0; max-width:200px; font-size:13px; }
+    #signout { padding:7px 12px; font-size:13px; }
+    main { padding:16px 12px 40px; }
+    .pagehead h1 { font-size:24px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .stat { min-width:0; padding:8px 10px; } .stat b { font-size:19px; } .stat span { font-size:11px; }
+    .mini .body { padding:8px 10px 10px; } .mini .t { font-size:13px; }
+  }
+
+  /* Detail sheet */
+  .sheet { position:fixed; inset:0; z-index:50; display:flex; justify-content:flex-end; }
+  .sheet[hidden] { display:none; }
+  .sheet .scrim { position:absolute; inset:0; background:rgba(8,31,21,.28); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); animation:fade .2s ease; }
+  .sheet .panel { position:relative; width:min(560px, 100%); height:100%; overflow:auto; padding:20px 20px 40px; border-radius:var(--r-lg) 0 0 var(--r-lg);
+    background:rgba(250,249,244,.86); -webkit-backdrop-filter:saturate(170%) blur(30px); backdrop-filter:saturate(170%) blur(30px);
+    border-left:1px solid var(--glass-edge); box-shadow:-20px 0 60px -20px rgba(8,31,21,.35); animation:slidein .25s cubic-bezier(.2,.8,.2,1); }
+  .sheet .close { position:sticky; top:0; float:right; z-index:2; width:36px; height:36px; padding:0; border-radius:50%; background:rgba(255,255,255,.85); color:var(--ink); border:1px solid var(--line); box-shadow:none; font-size:18px; line-height:1; }
+  .sheet .post { display:block; }
+  .sheet .post video, .sheet .post .strip { width:100%; max-width:300px; margin:0 auto 14px; display:block; }
+  .sheet .post video { aspect-ratio:9/16; border-radius:16px; background:#000; }
+  .strip { display:flex; gap:8px; overflow-x:auto; scroll-snap-type:x mandatory; } .strip img { width:240px; border-radius:12px; flex:none; scroll-snap-align:start; }
+  .sheet .strip { max-width:100% !important; }
+  .kv { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px; margin:14px 0; }
+  .kv div { padding:10px 12px; border-radius:var(--r-md); background:rgba(255,255,255,.7); border:1px solid var(--line); }
+  .kv b { display:block; font-size:20px; letter-spacing:-.02em; } .kv span { font-size:12px; color:var(--muted); font-weight:600; }
+  @media (max-width:640px) {
+    .sheet { align-items:flex-end; }
+    .sheet .panel { height:92vh; border-radius:24px 24px 0 0; border-left:0; border-top:1px solid var(--glass-edge); animation:slideup .28s cubic-bezier(.2,.8,.2,1); }
+  }
+  .sheet .actions { position:sticky; bottom:-40px; margin:16px -20px -40px; padding:14px 20px calc(14px + env(safe-area-inset-bottom));
+    background:rgba(250,249,244,.9); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); border-top:1px solid var(--line); }
+  @keyframes fade { from { opacity:0; } }
+  @keyframes slidein { from { transform:translateX(40px); opacity:0; } }
+  @keyframes slideup { from { transform:translateY(60px); opacity:0; } }
+  @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important; } }
 </style>
 </head>
 <body>
 <header>
-  <h1>Growthway Poster</h1>
-  <nav id="nav" hidden>
-    <button data-tab="queue" class="on">Queue</button>
-    <button data-tab="history">Posted</button>
-    <button data-tab="comments">Comments</button>
-    <button data-tab="research">Research</button>
-    <button data-tab="inspo">Inspiration</button>
-    <button data-tab="accounts">Accounts</button>
-  </nav>
+  <div class="brand"><span class="mark">g</span><span>Growthway Poster</span></div>
   <span class="sp"></span>
-  <select id="acctf" hidden aria-label="Show posts for" style="width:auto;background:var(--forest);color:var(--cream);border:1px solid #2d5a43"></select>
-  <button id="signout" class="ghost" style="color:var(--sage);border-color:#2d5a43" hidden>Sign out</button>
+  <select id="acctf" hidden aria-label="Show posts for"></select>
+  <button id="signout" class="ghost" hidden>Sign out</button>
 </header>
+<nav id="nav" class="glass" hidden>
+  <button data-tab="queue" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Queue</span></button>
+  <button data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/><path d="M12 7v5l3 2"/></svg><span>Posted</span></button>
+  <button data-tab="comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12z"/></svg><span>Comments</span></button>
+  <button data-tab="research"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Research</span></button>
+  <button data-tab="inspo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>Inspiration</span></button>
+  <button data-tab="accounts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Accounts</span></button>
+</nav>
 
-<div id="banner" hidden style="background:#fbe1d6;color:#8a3a12;padding:12px 16px;font-weight:600"></div>
+<div id="banner" hidden style="background:rgba(251,225,214,.85);color:#8a3a12;padding:12px 16px;font-weight:600;border:1px solid rgba(196,99,47,.25)"></div>
 <main>
   <section id="login" class="card" hidden>
     <h2 style="margin-top:0">Sign in</h2>
@@ -87,6 +209,7 @@
   <section id="accounts" hidden></section>
 </main>
 <div id="toast"></div>
+<div id="sheet" class="sheet" hidden><div class="scrim" data-close></div><div class="panel" role="dialog" aria-modal="true"><button class="close" data-close aria-label="Close">×</button><div id="sheet-body"></div></div></div>
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
@@ -112,6 +235,13 @@ function fmt(ts) { return ts ? new Date(ts).toLocaleString("en-CA", { dateStyle:
 function localInput(d) { const p = (n) => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }
 function defaultSlot() { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(11, 30, 0, 0); return d; }
 const acct = (id) => accounts.find((a) => a.id === id) ?? {};
+function openSheet(html) { $("#sheet-body").innerHTML = html; $("#sheet").hidden = false; document.body.style.overflow = "hidden"; }
+function closeSheet() { $("#sheet").hidden = true; $("#sheet-body").innerHTML = ""; document.body.style.overflow = ""; }
+for (const x of document.querySelectorAll("#sheet [data-close]")) x.onclick = closeSheet;
+addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheet(); });
+const shortTime = (ts) => ts ? new Date(ts).toLocaleString("en-CA", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
+const nfmt = (n) => n == null ? "–" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "K" : n >= 1e3 ? (n / 1e3).toFixed(1) + "K" : String(n);
+const thumbOf = (p) => p.kind === "carousel" ? (p.media?.[0] ? PUBLIC + p.media[0] : "") : (p.cover_path ? PUBLIC + p.cover_path : "");
 
 async function callFn(name, body = {}) {
   const { data: { session } } = await sb.auth.getSession();
@@ -159,7 +289,7 @@ $("#signup").onclick = async () => {
   $("#loginmsg").textContent = error ? error.message : "Login created. Tell Claude you've signed up; it will confirm you and add you to the admin list.";
 };
 $("#signout").onclick = async () => { await sb.auth.signOut(); location.reload(); };
-for (const b of document.querySelectorAll("#nav button")) b.onclick = () => { tab = b.dataset.tab; for (const x of document.querySelectorAll("#nav button")) x.classList.toggle("on", x === b); render(); };
+for (const b of document.querySelectorAll("#nav button")) b.onclick = () => { closeSheet(); tab = b.dataset.tab; for (const x of document.querySelectorAll("#nav button")) x.classList.toggle("on", x === b); render(); };
 
 async function render() {
   show(tab);
@@ -172,23 +302,40 @@ async function render() {
 }
 
 // ---------- queue ----------
+let queueFilter = "all";
+const STATUS_LABEL = { pending: "Needs review", approved: "Scheduled", publishing: "Posting", failed: "Failed" };
 async function renderQueue() {
   const el = $("#queue");
   const { data: posts, error } = await scope(sb.from("posts").select(POST_COLS)).in("status", ["pending", "approved", "publishing", "failed"]).order("created_at", { ascending: false });
   if (error) { el.innerHTML = `<p class="err">${esc(error.message)}</p>`; return; }
-  el.innerHTML = `<div class="row" style="margin:0 0 12px"><span class="muted">Nothing posts until you press Approve. Approved reels go out at their scheduled time (checked every 15 minutes).</span><span style="flex:1"></span><button class="ghost" id="runpub">Run posting check now</button></div>`
-    + (posts.length ? posts.map(postCard).join("") : `<div class="card muted">${filt ? `Nothing waiting for @${esc(acct(filt).handle)}.` : "The queue is empty."} New posts land here as they're made.</div>`);
+  const n = (st) => posts.filter((p) => p.status === st).length;
+  const shown = posts.filter((p) => queueFilter === "all" || p.status === queueFilter);
+  el.innerHTML = `<div class="pagehead"><div><h1>Queue</h1><div class="muted">Nothing posts until you approve it. Scheduled posts go out within 15 minutes of their time.</div></div><span class="sp"></span><button class="ghost" id="runpub">Run posting check</button></div>
+    <div class="stats">${[["pending", "Needs review"], ["approved", "Scheduled"], ["failed", "Failed"]].map(([k, t]) => `<div class="stat glass"><b>${n(k)}</b><span>${t}</span></div>`).join("")}</div>
+    <div class="seg glass">${[["all", `All ${posts.length}`], ["pending", "Needs review"], ["approved", "Scheduled"], ["failed", "Failed"]].map(([k, t]) => `<button data-qf="${k}" class="${queueFilter === k ? "on" : ""}">${t}</button>`).join("")}</div>
+    ${shown.length ? `<div class="grid">${shown.map(miniPost).join("")}</div>` : `<div class="card empty muted">${filt ? `Nothing here for @${esc(acct(filt).handle)}.` : "Nothing here."} New posts land in the queue as they're made.</div>`}`;
   $("#runpub").onclick = async (e) => { e.target.disabled = true; try { const r = await callFn("publisher"); toast(r.log.length ? r.log.join(" · ") : "Nothing due right now"); } catch (err) { toast(err.message); } e.target.disabled = false; renderQueue(); };
-  for (const p of posts) wirePost(p);
+  for (const b of el.querySelectorAll("[data-qf]")) b.onclick = () => { queueFilter = b.dataset.qf; renderQueue(); };
+  for (const p of shown) $(`#m-${p.id}`).onclick = () => { openSheet(postCard(p)); wirePost(p); };
+}
+function miniPost(p) {
+  const img = thumbOf(p);
+  const when = p.status === "approved" && p.scheduled_for ? shortTime(p.scheduled_for) : `Added ${shortTime(p.created_at)}`;
+  return `<button class="mini" id="m-${p.id}" aria-label="${esc(p.title ?? "Post")}">
+    <div class="thumb">${img ? `<img src="${esc(img)}" loading="lazy" alt="">` : p.video_path ? `<video src="${PUBLIC}${esc(p.video_path)}#t=1" muted playsinline preload="metadata"></video>` : ""}
+      <div class="top"><span class="pill ${p.status}">${STATUS_LABEL[p.status] ?? p.status}</span>${p.variant ? `<span class="chip dark">A/B · ${esc(p.variant)}</span>` : ""}</div>
+      <div class="over">${p.kind === "carousel" ? `<span class="chip">Carousel · ${(p.media ?? []).length}</span>` : `<span class="chip">${p.trial ? "Trial reel" : "Reel"}</span>`}${p.format ? `<span class="chip">${esc(p.format)}</span>` : ""}</div></div>
+    <div class="body"><div class="t">${esc(p.title ?? "Untitled")}</div><div class="m">@${esc(acct(p.account_id).handle ?? "")} · ${when}</div>${p.error ? `<div class="m err">Needs attention</div>` : ""}</div></button>`;
 }
 function postCard(p) {
   const a = acct(p.account_id);
   const when = p.scheduled_for ? new Date(p.scheduled_for) : defaultSlot();
   const editable = p.status === "pending" || p.status === "failed";
-  return `<div class="card post" id="p-${p.id}">
+  return `<div class="post" id="p-${p.id}">
     ${p.kind === "carousel" ? `<div class="strip">${(p.media ?? []).map((m) => `<img src="${PUBLIC}${esc(m)}" loading="lazy">`).join("")}</div>` : `<video src="${PUBLIC}${esc(p.video_path)}" ${p.cover_path ? `poster="${PUBLIC}${esc(p.cover_path)}"` : ""} controls playsinline preload="metadata"></video>`}
     <div>
-      <div class="row" style="margin-top:0"><span class="pill ${p.status}">${p.status}</span><strong>${esc(p.title ?? "Untitled reel")}</strong><span class="muted">→ @${esc(a.handle)}</span></div>
+      <div class="row" style="margin-top:0"><span class="pill ${p.status}">${STATUS_LABEL[p.status] ?? p.status}</span><span class="muted">→ @${esc(a.handle)}</span></div>
+      <h2 style="font-size:20px;margin:8px 0 2px">${esc(p.title ?? "Untitled reel")}</h2>
       <p class="mono muted">${esc(p.source ?? "")} · added ${fmt(p.created_at)}</p>
       <div class="row" style="margin-top:0">${p.kind === "carousel" ? '<span class="tagx">carousel</span>' : ""}${p.format ? `<span class="tagx">${esc(p.format)}</span>` : ""}${p.variant ? `<span class="tagx">A/B test · variant ${esc(p.variant)}</span>` : ""}</div>
       <textarea data-f="caption" ${editable ? "" : "disabled"}>${esc(p.caption)}</textarea>
@@ -206,7 +353,7 @@ function postCard(p) {
         <label class="muted" style="white-space:nowrap">Post at</label>
         <input type="datetime-local" data-f="when" value="${localInput(when)}" style="max-width:230px" ${p.status === "publishing" ? "disabled" : ""}>
       </div>
-      <div class="row">
+      <div class="row actions">
         ${p.status === "pending" ? `<button data-a="approve">Approve & schedule</button><button class="ghost" data-a="now">Approve, post now</button><button class="ghost" data-a="save">Save caption</button><button class="ghost" data-a="reject">Reject</button>` : ""}
         ${p.status === "approved" ? `<span class="muted">Scheduled for ${fmt(p.scheduled_for)}${p.trial && p.kind !== "carousel" ? " · trial reel" : ""}</span><button class="ghost" data-a="reschedule">Save changes</button><button class="ghost" data-a="unapprove">Unschedule</button>` : ""}
         ${p.status === "publishing" ? `<span class="muted">Instagram is processing the video…${p.trial ? " (trial reel)" : ""}</span>` : ""}
@@ -222,7 +369,7 @@ function wirePost(p) {
   cap.oninput = () => root.querySelector("[data-count]").textContent = cap.value.length;
   const upd = async (patch, msg) => {
     const { error } = await sb.from("posts").update(patch).eq("id", p.id);
-    if (error) toast(error.message); else { toast(msg); renderQueue(); }
+    if (error) toast(error.message); else { toast(msg); closeSheet(); renderQueue(); }
   };
   const check = () => {
     if (cap.value.length > 2200) { toast("Caption is over Instagram's 2,200 characters"); return false; }
@@ -239,7 +386,7 @@ function wirePost(p) {
     if (a === "now" && check() && confirm(`Post this ${p.kind === "carousel" ? "carousel" : "reel"} to @${acct(p.account_id).handle} now?`)) {
       await sb.from("posts").update({ caption: cap.value, ...extra(), status: "approved", scheduled_for: new Date().toISOString(), approved_at: new Date().toISOString(), error: null }).eq("id", p.id);
       try { const r = await callFn("publisher"); toast(r.log.join(" · ") || "Sent"); } catch (e) { toast(e.message); }
-      renderQueue();
+      closeSheet(); renderQueue();
     }
     if (a === "save" && check()) upd({ caption: cap.value, ...extra() }, "Saved");
     if (a === "reject" && confirm("Reject this reel? It won't post.")) upd({ status: "rejected" }, "Rejected");
@@ -254,19 +401,34 @@ async function renderHistory() {
   const el = $("#history");
   const { data: stats } = await scope(sb.from("post_stats").select("*")).order("published_at", { ascending: false }).limit(200);
   const rows = stats ?? [];
+  const media = new Map();
+  if (rows.length) { const { data: pm } = await sb.from("posts").select("id,kind,cover_path,media").in("id", rows.map((r) => r.id)); for (const x of pm ?? []) media.set(x.id, thumbOf(x)); }
   const avg = (xs) => xs.length ? Math.round(xs.reduce((a, b) => a + b, 0) / xs.length) : null;
   const by = (key) => { const g = new Map(); for (const r of rows) { if (r.views == null) continue; const k = r[key] ?? "unknown"; g.set(k, [...(g.get(k) ?? []), r.views]); } return [...g].map(([k, v]) => [k, avg(v), v.length]).sort((a, b) => b[1] - a[1]); };
   const trialRows = by("trial").map(([k, v, n]) => [k === "unknown" ? "regular" : "trial (" + k.toLowerCase() + ")", v, n]);
   const groups = new Map(); for (const r of rows) if (r.variant_group) groups.set(r.variant_group, [...(groups.get(r.variant_group) ?? []), r]);
   const ab = [...groups.values()].filter((g) => g.length === 2 && g.every((r) => r.views != null)).map((g) => g.sort((a, b) => b.views - a.views));
   const table = (title, data) => `<div><h2>${title}</h2><table><tr><th></th><th>Avg views</th><th>Posts</th></tr>${data.map(([k, v, n]) => `<tr><td>${esc(k)}</td><td>${v ?? ""}</td><td>${n}</td></tr>`).join("") || `<tr><td colspan="3" class="muted">Not enough data yet</td></tr>`}</table></div>`;
-  el.innerHTML = `<div class="card"><h2 style="margin-top:0">What's working</h2>
+  el.innerHTML = `<div class="pagehead"><div><h1>Posted</h1><div class="muted">How each post is doing, and which formats are winning.</div></div></div>
+    <div class="card"><h2 style="margin-top:0">What's working</h2>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">${table("By format", by("format"))}${table("Regular vs trial", trialRows)}</div>
       <h2>A/B hook tests</h2>${ab.length ? `<table><tr><th>Winner</th><th>Views</th><th>Runner-up</th><th>Views</th></tr>${ab.map(([w, l]) => `<tr><td>${esc(w.hook ?? w.title)}</td><td>${w.views}</td><td>${esc(l.hook ?? l.title)}</td><td>${l.views}</td></tr>`).join("")}</table>` : `<p class="muted">No finished A/B tests yet.</p>`}
       <p class="muted">Views are Instagram's count, refreshed daily for 30 days after posting.</p></div>
-    <div class="card scroll"><table><tr><th>Post</th><th>Format</th><th>Audience</th><th>Posted</th><th>Views</th><th>Reach</th><th>Likes</th><th>Saves</th><th>Shares</th></tr>`
-    + rows.map((p) => `<tr><td>${p.permalink ? `<a href="${esc(p.permalink)}" target="_blank" rel="noopener">${esc(p.title ?? "post")}</a>` : esc(p.title ?? "post")}${p.variant ? ` <span class="tagx">${esc(p.variant)}</span>` : ""}</td><td>${esc(p.format ?? "")}${p.kind === "carousel" ? " · carousel" : ""}</td><td>${p.trial ? "trial" : "regular"}</td><td>${fmt(p.published_at)}</td><td>${p.views ?? ""}</td><td>${p.reach ?? ""}</td><td>${p.likes ?? ""}</td><td>${p.saves ?? ""}</td><td>${p.shares ?? ""}</td></tr>`).join("")
-    + `</table></div>`;
+    <div class="pagehead" style="margin-top:8px"><h1 style="font-size:22px">Posts</h1></div>
+    ${rows.length ? `<div class="grid">${rows.map((p) => `<button class="mini" id="h-${p.id}">
+        <div class="thumb">${media.get(p.id) ? `<img src="${esc(media.get(p.id))}" loading="lazy" alt="">` : ""}
+          <div class="top"><span class="pill published">${p.trial ? "Trial" : "Posted"}</span>${p.variant ? `<span class="chip dark">A/B · ${esc(p.variant)}</span>` : ""}</div>
+          <div class="over"><span class="chip">▶ ${nfmt(p.views)}</span>${p.likes != null ? `<span class="chip">♥ ${nfmt(p.likes)}</span>` : ""}</div></div>
+        <div class="body"><div class="t">${esc(p.title ?? "Post")}</div><div class="m">${esc(p.format ?? (p.kind ?? ""))} · ${shortTime(p.published_at)}</div></div></button>`).join("")}</div>`
+      : `<div class="card empty muted">Nothing posted yet.</div>`}`;
+  for (const p of rows) $(`#h-${p.id}`).onclick = () => openSheet(`
+      ${media.get(p.id) ? `<img src="${esc(media.get(p.id))}" alt="" style="width:100%;max-width:300px;display:block;margin:0 auto 14px;border-radius:16px">` : ""}
+      <div class="row" style="margin-top:0"><span class="pill published">Posted ${shortTime(p.published_at)}</span>${p.trial ? '<span class="tagx">trial reel</span>' : ""}${p.format ? `<span class="tagx">${esc(p.format)}</span>` : ""}${p.variant ? `<span class="tagx">A/B · ${esc(p.variant)}</span>` : ""}</div>
+      <h2 style="font-size:20px;margin:8px 0 2px">${esc(p.title ?? "Post")}</h2>
+      ${p.hook ? `<div class="muted">Hook: ${esc(p.hook)}</div>` : ""}
+      <div class="kv">${[["Views", p.views], ["Reach", p.reach], ["Likes", p.likes], ["Comments", p.comments], ["Saves", p.saves], ["Shares", p.shares]].map(([k, v]) => `<div><b>${nfmt(v)}</b><span>${k}</span></div>`).join("")}</div>
+      <p class="muted">${p.captured_at ? `Updated ${fmt(p.captured_at)}. ` : ""}Refreshed daily for 30 days after posting.</p>
+      ${p.permalink ? `<div class="row"><a href="${esc(p.permalink)}" target="_blank" rel="noopener"><button>Open on Instagram</button></a></div>` : ""}`);
 }
 
 // ---------- comments ----------
