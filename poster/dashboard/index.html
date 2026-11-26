@@ -19,6 +19,7 @@
     --side:232px;
   }
   * { box-sizing:border-box; }
+  [hidden] { display:none !important; }
   html { -webkit-text-size-adjust:100%; }
   body { margin:0; min-height:100vh; color:var(--ink); font:15px/1.5 "Plus Jakarta Sans", system-ui, sans-serif; background:#EEF0E8;
     background-image:
@@ -134,7 +135,8 @@
     #acctf { flex:1; min-width:0; max-width:200px; font-size:13px; }
     #signout { padding:7px 12px; font-size:13px; }
     main { padding:16px 12px 40px; }
-    .pagehead h1 { font-size:24px; }
+    .pagehead { flex-wrap:nowrap; align-items:center; } .pagehead > div:first-child { min-width:0; } .pagehead h1 { font-size:24px; }
+    .pagehead > button { white-space:nowrap; padding:8px 12px; font-size:13px; flex:none; } .pagehead .sp { display:none; } .pagehead > div:first-child { flex:1; }
     .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
     .stat { min-width:0; padding:8px 10px; } .stat b { font-size:19px; } .stat span { font-size:11px; }
     .mini .body { padding:8px 10px 10px; } .mini .t { font-size:13px; }
@@ -162,6 +164,36 @@
   }
   .sheet .actions { position:sticky; bottom:-40px; margin:16px -20px -40px; padding:14px 20px calc(14px + env(safe-area-inset-bottom));
     background:rgba(250,249,244,.9); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); border-top:1px solid var(--line); }
+
+  /* Tiles (Research, Inspiration) */
+  .grid.wide { grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); }
+  @media (max-width:520px) { .grid.wide { grid-template-columns:1fr; } }
+  .tile { display:flex; flex-direction:column; gap:8px; text-align:left; padding:14px; border-radius:18px; color:var(--ink); font-weight:400; cursor:pointer;
+    background:var(--glass); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); border:1px solid var(--glass-edge); box-shadow:var(--shadow);
+    transition:transform .18s ease, box-shadow .18s ease; position:relative; overflow:hidden; min-width:0; }
+  .tile:hover { transform:translateY(-2px); box-shadow:0 16px 36px -18px rgba(8,31,21,.35); }
+  .tile[style*="--c"]::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--c); opacity:.85; }
+  .tile-h { display:flex; align-items:center; gap:10px; min-width:0; }
+  .who { font-weight:700; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0; }
+  .avatar { width:32px; height:32px; flex:none; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; color:var(--forest);
+    background:linear-gradient(135deg, var(--sage), #f3f7ea); border:1px solid rgba(21,60,42,.12); }
+  .avatar.lg { width:48px; height:48px; font-size:18px; }
+  .mult { font-weight:800; font-size:20px; letter-spacing:-.02em; color:var(--rust); }
+  .tile .cap, .tile .note { font-size:13.5px; line-height:1.45; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .tile .note { font-weight:600; }
+  .tile .m { font-size:12px; color:var(--muted); margin-top:auto; }
+  .tile .nums { display:flex; gap:18px; } .tile .nums b { display:block; font-size:19px; letter-spacing:-.02em; } .tile .nums span { font-size:11.5px; color:var(--muted); font-weight:600; }
+  .dot-err { width:8px; height:8px; border-radius:50%; background:var(--rust); flex:none; }
+  .ctag { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--c); white-space:nowrap; }
+  .ctag i, .cchip i { width:7px; height:7px; border-radius:50%; background:var(--c); display:inline-block; }
+  .toolbar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px; } .toolbar .seg { margin-bottom:0; }
+  .search { max-width:220px; border-radius:999px; padding:8px 14px; }
+  @media (max-width:520px) { .search { max-width:none; flex:1 1 100%; } }
+  .chips { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; margin-bottom:16px; padding-bottom:2px; } .chips::-webkit-scrollbar { display:none; }
+  .cchip { white-space:nowrap; display:inline-flex; align-items:center; gap:6px; padding:6px 12px; font-size:13px; background:rgba(255,255,255,.6); color:var(--ink); border:1px solid var(--line); box-shadow:none; }
+  .cchip.on { background:var(--forest); color:var(--cream); border-color:var(--forest); } .cchip.on i { background:var(--sage); }
+  a.line { display:flex; gap:10px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--line); text-decoration:none; color:var(--ink); font-size:13.5px; }
+  a.line b { color:var(--rust); min-width:40px; } a.line span { flex:1; min-width:0; } a.line em { font-style:normal; color:var(--muted); font-size:12px; white-space:nowrap; }
   @keyframes fade { from { opacity:0; } }
   @keyframes slidein { from { transform:translateX(40px); opacity:0; } }
   @keyframes slideup { from { transform:translateY(60px); opacity:0; } }
@@ -455,118 +487,168 @@ async function renderComments() {
 }
 
 // ---------- research ----------
+// Accounts we benchmark against (public business/creator accounts, read nightly via Business Discovery), and their
+// posts that beat their own usual views by 3× or more: "top performers".
+let resView = "top";
+const initial = (u) => esc((u ?? "?").replace(/[^a-z0-9]/gi, "").slice(0, 1).toUpperCase() || "?");
 async function renderResearch() {
   const el = $("#research");
   const { data: comps } = await scope(sb.from("comp_accounts").select("id,account_id,username,notes,active,last_error")).order("username");
-  const { data: snaps } = await sb.from("comp_snapshots").select("comp_id,followers,media_count,captured_at").order("captured_at", { ascending: false }).limit(500);
-  const snap = new Map(); for (const s of snaps ?? []) if (!snap.has(s.comp_id)) snap.set(s.comp_id, s);
+  const ids = (comps ?? []).map((c) => c.id);
   const since = new Date(Date.now() - 90 * 864e5).toISOString();
-  const { data: top } = await sb.from("comp_media").select("comp_id,permalink,caption,posted_at,view_count,like_count,comments_count,outlier,media_product_type").gte("posted_at", since).not("outlier", "is", null).order("outlier", { ascending: false }).limit(80);
-  const name = (id) => (comps ?? []).find((c) => c.id === id)?.username ?? "";
-  const shown = (top ?? []).filter((m) => name(m.comp_id)).slice(0, 25);
-  el.innerHTML = `
-    <div class="card"><h2 style="margin-top:0">Comp accounts</h2>
-      <p class="muted">Public business or creator accounts only (Instagram's rules). Stats update nightly through Instagram's official Business Discovery API.</p>
-      <div class="row"><select id="cacct" style="max-width:200px">${accounts.map((a) => `<option value="${a.id}" ${a.id === filt ? "selected" : ""}>for @${esc(a.handle)}</option>`).join("")}</select>
-      <input id="cuser" placeholder="username, e.g. edutopia" style="max-width:240px"><button id="cadd">Add</button><span style="flex:1"></span><button class="ghost" id="crun">Run research now</button></div>
-      <div class="scroll"><table><tr><th>Account</th><th>For</th><th>Followers</th><th>Posts</th><th>Updated</th><th></th></tr>
-      ${(comps ?? []).map((c) => { const s = snap.get(c.id) ?? {}; return `<tr><td><a href="https://www.instagram.com/${esc(c.username)}/" target="_blank" rel="noopener">@${esc(c.username)}</a>${c.last_error ? `<div class="err">${esc(c.last_error)}</div>` : ""}</td><td>@${esc(acct(c.account_id).handle)}</td><td>${s.followers?.toLocaleString() ?? ""}</td><td>${s.media_count ?? ""}</td><td>${fmt(s.captured_at)}</td><td><button class="ghost" data-del="${c.id}">Remove</button></td></tr>`; }).join("")}
-      </table></div></div>
-    <div class="card scroll"><h2 style="margin-top:0">Outliers, last 90 days</h2>
-      <p class="muted">Views ÷ that account's median views. 3× or more means the topic or hook travelled well beyond its usual audience: a candidate idea for us.</p>
-      <table><tr><th>×</th><th>Account</th><th>Post</th><th>Views</th><th>Likes</th><th>Comments</th><th>Posted</th></tr>
-      ${shown.map((m) => `<tr><td><strong>${m.outlier}×</strong></td><td>@${esc(name(m.comp_id))}</td><td><a href="${esc(m.permalink)}" target="_blank" rel="noopener">${esc((m.caption ?? "").slice(0, 90)) || "open"}</a></td><td>${m.view_count?.toLocaleString() ?? ""}</td><td>${m.like_count?.toLocaleString() ?? ""}</td><td>${m.comments_count ?? ""}</td><td>${fmt(m.posted_at)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No data yet. Add comp accounts, then run research.</td></tr>`}
-      </table></div>`;
-  $("#cadd").onclick = async () => {
-    const u = $("#cuser").value.trim().replace(/^@/, "").replace(/.*instagram\.com\//, "").replace(/\/.*$/, "");
-    if (!/^[A-Za-z0-9._]{1,30}$/.test(u)) { toast("That doesn't look like an Instagram username"); return; }
-    const { error } = await sb.from("comp_accounts").insert({ account_id: $("#cacct").value, username: u });
-    if (error) toast(error.message); else { toast(`Added @${u}`); renderResearch(); }
-  };
-  $("#crun").onclick = async (e) => { e.target.disabled = true; try { const r = await callFn("research"); toast(r.log.join(" · ") || "No comp accounts yet"); } catch (err) { toast(err.message); } renderResearch(); };
-  for (const b of el.querySelectorAll("[data-del]")) b.onclick = async () => { if (!confirm("Remove this comp account and its data?")) return; await sb.from("comp_accounts").delete().eq("id", b.dataset.del); renderResearch(); };
-}
+  const [{ data: snaps }, { data: med }] = await Promise.all([
+    sb.from("comp_snapshots").select("comp_id,followers,media_count,captured_at").in("comp_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]).order("captured_at", { ascending: false }).limit(1000),
+    sb.from("comp_media").select("id,comp_id,permalink,caption,posted_at,view_count,like_count,comments_count,outlier,media_product_type").in("comp_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]).gte("posted_at", since).limit(3000),
+  ]);
+  const snap = new Map(); for (const s of snaps ?? []) if (!snap.has(s.comp_id)) snap.set(s.comp_id, s);
+  const views = new Map(); for (const m of med ?? []) if (m.view_count != null) views.set(m.comp_id, [...(views.get(m.comp_id) ?? []), m.view_count]);
+  const avgViews = (id) => { const v = views.get(id); return v?.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
+  const comp = (id) => (comps ?? []).find((c) => c.id === id) ?? {};
+  const top = (med ?? []).filter((m) => m.outlier >= 3).sort((a, b) => b.outlier - a.outlier).slice(0, 40);
+  const list = [...(comps ?? [])].sort((a, b) => (snap.get(b.id)?.followers ?? -1) - (snap.get(a.id)?.followers ?? -1));
 
+  el.innerHTML = `<div class="pagehead"><div><h1>Research</h1><div class="muted">${list.length} accounts · updated nightly</div></div><span class="sp"></span>
+      <button class="ghost" id="crun">Refresh</button><button id="cadd">+ Add account</button></div>
+    <div class="seg glass">${[["top", `Top performers ${top.length}`], ["accounts", `Accounts ${list.length}`]].map(([k, t]) => `<button data-rv="${k}" class="${resView === k ? "on" : ""}">${t}</button>`).join("")}</div>
+    ${resView === "top"
+      ? (top.length ? `<div class="grid wide">${top.map((m) => `<button class="tile" data-top="${m.id}">
+            <div class="tile-h"><span class="avatar">${initial(comp(m.comp_id).username)}</span><span class="who">@${esc(comp(m.comp_id).username)}</span><span class="mult">${Number(m.outlier).toFixed(1)}×</span></div>
+            <div class="cap">${esc((m.caption ?? "").replace(/#\S+/g, "").trim() || "(no caption)")}</div>
+            <div class="m">▶ ${nfmt(m.view_count)} · ♥ ${nfmt(m.like_count)} · ${shortTime(m.posted_at).split(",")[0]}</div></button>`).join("")}</div>`
+        : `<div class="card empty muted">No standout posts in the last 90 days yet.</div>`)
+      : `<div class="grid">${list.map((c) => { const s = snap.get(c.id) ?? {}; return `<button class="tile" data-comp="${c.id}">
+            <div class="tile-h"><span class="avatar">${initial(c.username)}</span><span class="who">@${esc(c.username)}</span>${c.last_error ? '<span class="dot-err" title="Problem"></span>' : ""}</div>
+            <div class="nums"><div><b>${nfmt(s.followers)}</b><span>followers</span></div><div><b>${nfmt(avgViews(c.id))}</b><span>avg views</span></div></div>
+            ${accounts.length > 1 && !filt ? `<div class="m">for @${esc(acct(c.account_id).handle)}</div>` : ""}</button>`; }).join("")}</div>`}`;
+
+  for (const b of el.querySelectorAll("[data-rv]")) b.onclick = () => { resView = b.dataset.rv; renderResearch(); };
+  $("#crun").onclick = async (e) => { e.target.disabled = true; e.target.textContent = "Refreshing…"; try { await callFn("research"); toast("Research updated"); } catch (err) { toast(err.message); } renderResearch(); };
+  $("#cadd").onclick = () => {
+    openSheet(`<h2 style="font-size:20px;margin-top:4px">Add an account</h2>
+      <p class="muted">Public business or creator accounts only (Instagram's rule).</p>
+      <input id="cuser" placeholder="@username or profile link" autocomplete="off">
+      ${accounts.length > 1 ? `<select id="cacct" style="margin-top:10px">${accounts.map((a) => `<option value="${a.id}" ${a.id === filt ? "selected" : ""}>Benchmark for @${esc(a.handle)}</option>`).join("")}</select>` : ""}
+      <div class="row actions"><button id="csave">Add and look up</button></div>`);
+    $("#csave").onclick = async () => {
+      const u = $("#cuser").value.trim().replace(/^@/, "").replace(/.*instagram\.com\//, "").replace(/\/.*$/, "");
+      if (!/^[A-Za-z0-9._]{1,30}$/.test(u)) { toast("That doesn't look like an Instagram username"); return; }
+      const { error } = await sb.from("comp_accounts").insert({ account_id: $("#cacct")?.value || filt || accounts[0]?.id, username: u });
+      if (error) { toast(error.message); return; }
+      $("#csave").disabled = true; $("#csave").textContent = "Looking up…";
+      try { await callFn("research"); } catch {}
+      closeSheet(); resView = "accounts"; toast(`Added @${u}`); renderResearch();
+    };
+  };
+  for (const b of el.querySelectorAll("[data-top]")) b.onclick = () => {
+    const m = (med ?? []).find((x) => x.id === b.dataset.top); const c = comp(m.comp_id);
+    openSheet(`<div class="tile-h" style="margin:4px 0 6px"><span class="avatar lg">${initial(c.username)}</span><div><div class="who" style="font-size:17px">@${esc(c.username)}</div><div class="muted">${shortTime(m.posted_at)}</div></div></div>
+      <div class="kv">${[["vs. usual", Number(m.outlier).toFixed(1) + "×"], ["Views", nfmt(m.view_count)], ["Likes", nfmt(m.like_count)], ["Comments", nfmt(m.comments_count)]].map(([k, v]) => `<div><b>${v}</b><span>${k}</span></div>`).join("")}</div>
+      <p style="white-space:pre-wrap">${esc(m.caption ?? "")}</p>
+      <div class="row actions"><a href="${esc(m.permalink)}" target="_blank" rel="noopener"><button class="ghost">Open on Instagram</button></a><button id="tosave">Save to Inspiration</button></div>`);
+    $("#tosave").onclick = async () => {
+      const { data: ins, error } = await sb.from("inspirations").insert({ url: m.permalink, author: c.username, account_id: c.account_id, notes: null }).select("id").single();
+      if (error) { toast(/duplicate/.test(error.message) ? "Already in Inspiration" : error.message); return; }
+      toast("Saved to Inspiration"); closeSheet(); try { await callFn("inspire", { id: ins.id }); } catch {}
+    };
+  };
+  for (const b of el.querySelectorAll("[data-comp]")) b.onclick = () => {
+    const c = comp(b.dataset.comp), s = snap.get(c.id) ?? {};
+    const theirs = (med ?? []).filter((m) => m.comp_id === c.id).sort((a, b) => (b.outlier ?? 0) - (a.outlier ?? 0)).slice(0, 5);
+    openSheet(`<div class="tile-h" style="margin:4px 0 6px"><span class="avatar lg">${initial(c.username)}</span><div><div class="who" style="font-size:17px">@${esc(c.username)}</div><div class="muted">Updated ${fmt(s.captured_at) || "never"}</div></div></div>
+      ${c.last_error ? `<p class="err">${esc(c.last_error)}</p>` : ""}
+      <div class="kv">${[["Followers", nfmt(s.followers)], ["Posts", nfmt(s.media_count)], ["Avg views", nfmt(avgViews(c.id))]].map(([k, v]) => `<div><b>${v}</b><span>${k}</span></div>`).join("")}</div>
+      ${theirs.length ? `<h2>Best recent posts</h2>${theirs.map((m) => `<a class="line" href="${esc(m.permalink)}" target="_blank" rel="noopener"><b>${m.outlier ? Number(m.outlier).toFixed(1) + "×" : "–"}</b><span>${esc((m.caption ?? "").replace(/#\S+/g, "").slice(0, 90) || "(no caption)")}</span><em>▶ ${nfmt(m.view_count)}</em></a>`).join("")}` : ""}
+      <div class="row actions"><a href="https://www.instagram.com/${esc(c.username)}/" target="_blank" rel="noopener"><button class="ghost">Open profile</button></a><button class="ghost" id="cdel" style="color:var(--rust)">Remove</button></div>`);
+    $("#cdel").onclick = async () => { if (!confirm(`Stop tracking @${c.username}?`)) return; await sb.from("comp_accounts").delete().eq("id", c.id); closeSheet(); renderResearch(); };
+  };
+}
 
 // ---------- inspiration ----------
 // Reels and posts you save from your personal feeds: paste the link (Share → Copy link), tag it, add a note.
 // The "inspire" function fills in the author's followers and the post's views when the author is a public
 // business or creator account (it recognises Research-list accounts on its own; otherwise type the @author).
 const CATS = ["Hook", "Format", "Topic", "Editing / visuals", "Audio / trend", "Caption", "Other"];
+const CAT_COLOR = { "Hook": "#C4632F", "Format": "#153C2A", "Topic": "#2f5fb3", "Editing / visuals": "#7a4fb3", "Audio / trend": "#b7791f", "Caption": "#2c7a7b", "Other": "#6b6a63" };
+const catColor = (c) => CAT_COLOR[c] ?? "#6b6a63";
 let inspoView = { cat: "", status: "new", q: "" };
 const igLink = (s) => (String(s).match(/https?:\/\/(?:www\.)?instagram\.com\/[^\s?#]+/) ?? [""])[0];
-const num = (n) => n == null ? "" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "K" : n >= 1e3 ? (n / 1e3).toFixed(1) + "K" : String(n);
+let sharedOpened = false;
 async function renderInspo() {
   const el = $("#inspo");
-  let q = scope(sb.from("inspirations").select("*")).order("created_at", { ascending: false }).limit(300);
-  const { data, error } = await q;
+  const { data, error } = await scope(sb.from("inspirations").select("*")).order("created_at", { ascending: false }).limit(300);
   if (error) { el.innerHTML = `<p class="err">${esc(error.message)}</p>`; return; }
   const all = data ?? [];
   const cats = [...new Set([...CATS, ...all.map((r) => r.category).filter(Boolean)])];
-  const rows = all.filter((r) => (!inspoView.cat || r.category === inspoView.cat) && (inspoView.status === "all" || r.status === inspoView.status)
+  const inStatus = all.filter((r) => inspoView.status === "all" || r.status === inspoView.status);
+  const rows = inStatus.filter((r) => (!inspoView.cat || r.category === inspoView.cat)
     && (!inspoView.q || [r.author, r.notes, r.caption, r.category].join(" ").toLowerCase().includes(inspoView.q.toLowerCase())));
-  const count = (c) => all.filter((r) => r.category === c && r.status !== "archived").length;
-  el.innerHTML = `<div class="card"><h2 style="margin-top:0">Save a reel</h2>
-      <p class="muted">On Instagram, tap Share → Copy link, then paste it here. Add the @author if you know it: that's how we get views and followers (accounts on the Research list are recognised automatically).</p>
-      <div class="row"><input id="iurl" placeholder="https://www.instagram.com/reel/…" value="${esc(SHARED)}" style="flex:2;min-width:220px"><button class="ghost" id="ipaste">Paste</button></div>
-      <div class="row"><input id="iauthor" placeholder="@author (optional)" style="max-width:200px">
-        <select id="icat" style="max-width:200px"><option value="">Category…</option>${cats.map((c) => `<option>${esc(c)}</option>`).join("")}<option value="+">+ New category</option></select>
-        ${accounts.length > 1 ? `<select id="iacct" style="max-width:200px">${accounts.map((a) => `<option value="${a.id}" ${a.id === filt ? "selected" : ""}>for @${esc(a.handle)}</option>`).join("")}</select>` : ""}</div>
-      <textarea id="inote" placeholder="What's worth borrowing? (the hook, the structure, the edit…)" style="min-height:60px;margin-top:8px"></textarea>
-      <div class="row"><button id="isave">Save</button><span id="imsg" class="muted"></span></div></div>
-    <div class="card"><div class="row" style="margin-top:0">
-      <button class="${inspoView.cat ? "ghost" : ""}" data-icat="">All</button>
-      ${cats.filter(count).map((c) => `<button class="${inspoView.cat === c ? "" : "ghost"}" data-icat="${esc(c)}">${esc(c)} (${count(c)})</button>`).join("")}</div>
-      <div class="row"><select id="istatus" style="max-width:160px">${[["new", "To use"], ["used", "Used"], ["archived", "Archived"], ["all", "All"]].map(([v, t]) => `<option value="${v}" ${inspoView.status === v ? "selected" : ""}>${t}</option>`).join("")}</select>
-        <input id="isearch" placeholder="Search notes, captions, authors" value="${esc(inspoView.q)}" style="max-width:280px"><span class="muted">${rows.length} saved</span></div></div>`
-    + (rows.length ? rows.map((r) => `<div class="card" id="i-${r.id}">
-        <div class="row" style="margin-top:0"><a href="${esc(r.url)}" target="_blank" rel="noopener"><strong>${r.author ? "@" + esc(r.author) : "Open on Instagram"}</strong></a>
-          ${r.media_type ? `<span class="tagx">${esc(r.media_type)}</span>` : ""}
-          ${r.author_followers != null ? `<span class="muted">${num(r.author_followers)} followers</span>` : ""}
-          ${r.view_count != null ? `<span><strong>${num(r.view_count)}</strong> views</span>` : ""}
-          ${r.view_count != null && r.author_followers ? `<span class="tagx" title="views ÷ followers">${(r.view_count / r.author_followers).toFixed(1)}× reach</span>` : ""}
-          ${r.like_count != null ? `<span class="muted">${num(r.like_count)} likes · ${num(r.comments_count)} comments</span>` : ""}
-          <span class="muted">saved ${fmt(r.created_at)}</span></div>
-        ${r.caption ? `<p class="muted" style="margin:6px 0">${esc(r.caption.slice(0, 220))}${r.caption.length > 220 ? "…" : ""}</p>` : ""}
-        ${r.fetch_error ? `<p class="muted" style="margin:6px 0">ⓘ ${esc(r.fetch_error)}</p>` : ""}
-        <div class="row"><select data-f="category" style="max-width:200px"><option value="">No category</option>${cats.map((c) => `<option ${r.category === c ? "selected" : ""}>${esc(c)}</option>`).join("")}</select>
-          ${r.author ? "" : `<input data-f="author" placeholder="@author" style="max-width:160px">`}</div>
-        <textarea data-f="notes" placeholder="Notes" style="min-height:50px;margin-top:8px">${esc(r.notes ?? "")}</textarea>
-        <div class="row">${r.status !== "used" ? `<button class="ghost" data-st="used">Mark used</button>` : `<button class="ghost" data-st="new">Back to “to use”</button>`}
-          ${r.status !== "archived" ? `<button class="ghost" data-st="archived">Archive</button>` : ""}
-          <button class="ghost" data-look>Look up again</button><button class="ghost" data-del>Delete</button></div></div>`).join("")
-      : `<div class="card muted">Nothing here yet. Save a reel above.</div>`);
+  const count = (c) => inStatus.filter((r) => r.category === c).length;
+  el.innerHTML = `<div class="pagehead"><div><h1>Inspiration</h1><div class="muted">${all.filter((r) => r.status === "new").length} to use · ${all.filter((r) => r.status === "used").length} used</div></div><span class="sp"></span><button id="inew">+ Save a reel</button></div>
+    <div class="toolbar">
+      <div class="seg glass">${[["new", "To use"], ["used", "Used"], ["archived", "Archived"], ["all", "All"]].map(([v, t]) => `<button data-ist="${v}" class="${inspoView.status === v ? "on" : ""}">${t}</button>`).join("")}</div>
+      <input id="isearch" class="search" type="search" placeholder="Search" value="${esc(inspoView.q)}">
+    </div>
+    <div class="chips">${[["", `All ${inStatus.length}`], ...cats.filter(count).map((c) => [c, `${c} ${count(c)}`])].map(([c, t]) => `<button class="cchip ${inspoView.cat === c ? "on" : ""}" data-icat="${esc(c)}" ${c ? `style="--c:${catColor(c)}"` : ""}>${c ? '<i></i>' : ""}${esc(t)}</button>`).join("")}</div>
+    ${rows.length ? `<div class="grid wide">${rows.map((r) => `<button class="tile" data-i="${r.id}" style="--c:${catColor(r.category)}">
+        <div class="tile-h"><span class="avatar">${initial(r.author)}</span><span class="who">${r.author ? "@" + esc(r.author) : "Unknown author"}</span>${r.category ? `<span class="ctag"><i></i>${esc(r.category)}</span>` : ""}</div>
+        ${r.notes ? `<div class="note">${esc(r.notes)}</div>` : r.caption ? `<div class="cap">${esc(r.caption.replace(/#\S+/g, "").trim())}</div>` : `<div class="cap muted">No note yet</div>`}
+        <div class="m">${r.view_count != null ? `▶ ${nfmt(r.view_count)}` : ""}${r.view_count != null && r.author_followers ? ` · <b>${(r.view_count / r.author_followers).toFixed(1)}×</b> reach` : ""}${r.view_count == null && r.author_followers != null ? `${nfmt(r.author_followers)} followers` : ""}${r.view_count == null && r.author_followers == null ? (r.media_type ?? "link") : ""} · ${shortTime(r.created_at).split(",")[0]}</div></button>`).join("")}</div>`
+      : `<div class="card empty"><div style="font-size:28px">✦</div><div style="font-weight:700;margin-top:6px">Nothing here yet</div><div class="muted">On Instagram, tap Share → Copy link, then “Save a reel”.</div></div>`}`;
 
-  const catSel = $("#icat");
-  catSel.onchange = () => { if (catSel.value === "+") { const n = prompt("New category name"); if (n?.trim()) { catSel.add(new Option(n.trim(), n.trim(), true, true)); } else catSel.value = ""; } };
-  $("#ipaste").onclick = async () => { try { $("#iurl").value = await navigator.clipboard.readText(); } catch { toast("Long-press the box and choose Paste"); } };
-  $("#isave").onclick = async () => {
-    const url = igLink($("#iurl").value);
-    if (!url) { toast("That doesn't look like an Instagram link"); return; }
-    $("#imsg").textContent = "Saving…";
-    const row = { url, author: $("#iauthor").value.replace(/^@/, "").trim() || null, category: catSel.value && catSel.value !== "+" ? catSel.value : null,
-      notes: $("#inote").value.trim() || null, account_id: $("#iacct")?.value || filt || accounts[0]?.id || null };
-    const { data: ins, error } = await sb.from("inspirations").insert(row).select("id").single();
-    if (error) { $("#imsg").textContent = /duplicate/.test(error.message) ? "Already saved." : error.message; return; }
-    if (SHARED) history.replaceState(null, "", location.pathname);
-    $("#imsg").textContent = "Saved. Looking it up…";
-    try { await callFn("inspire", { id: ins.id }); } catch {}
-    inspoView.status = "new"; renderInspo();
+  const form = (r = null) => `
+    ${r ? "" : `<h2 style="font-size:20px;margin-top:4px">Save a reel</h2><div class="row" style="margin-top:4px"><input id="iurl" placeholder="Paste the Instagram link" value="${esc(SHARED && !sharedOpened ? SHARED : "")}" style="flex:1;min-width:0"><button class="ghost" id="ipaste">Paste</button></div>`}
+    <div class="row"><input id="iauthor" placeholder="@author (for views)" value="${esc(r?.author ? "@" + r.author : "")}" style="flex:1;min-width:0">
+      <select id="icat" style="flex:1;min-width:0"><option value="">Category</option>${cats.map((c) => `<option ${r?.category === c ? "selected" : ""}>${esc(c)}</option>`).join("")}<option value="+">+ New category</option></select></div>
+    ${!r && accounts.length > 1 ? `<select id="iacct" style="margin-top:10px">${accounts.map((a) => `<option value="${a.id}" ${a.id === filt ? "selected" : ""}>For @${esc(a.handle)}</option>`).join("")}</select>` : ""}
+    <textarea id="inote" placeholder="What's worth borrowing?" style="min-height:90px;margin-top:10px">${esc(r?.notes ?? "")}</textarea>`;
+  const wireCat = () => { const s = $("#icat"); s.onchange = () => { if (s.value === "+") { const n = prompt("New category name"); if (n?.trim()) s.add(new Option(n.trim(), n.trim(), true, true)); else s.value = ""; } }; };
+  const openNew = () => {
+    openSheet(form() + `<div class="row actions"><button id="isave">Save</button><span id="imsg" class="muted"></span></div>`);
+    wireCat();
+    $("#ipaste").onclick = async () => { try { $("#iurl").value = await navigator.clipboard.readText(); } catch { toast("Long-press the box and choose Paste"); } };
+    $("#isave").onclick = async () => {
+      const url = igLink($("#iurl").value);
+      if (!url) { toast("That doesn't look like an Instagram link"); return; }
+      $("#imsg").textContent = "Saving…";
+      const cat = $("#icat").value;
+      const { data: ins, error } = await sb.from("inspirations").insert({ url, author: $("#iauthor").value.replace(/^@/, "").trim() || null,
+        category: cat && cat !== "+" ? cat : null, notes: $("#inote").value.trim() || null, account_id: $("#iacct")?.value || filt || accounts[0]?.id || null }).select("id").single();
+      if (error) { $("#imsg").textContent = /duplicate/.test(error.message) ? "Already saved." : error.message; return; }
+      if (SHARED) history.replaceState(null, "", location.pathname);
+      $("#imsg").textContent = "Looking it up…";
+      try { await callFn("inspire", { id: ins.id }); } catch {}
+      closeSheet(); inspoView.status = "new"; renderInspo();
+    };
   };
+  $("#inew").onclick = openNew;
+  if (SHARED && !sharedOpened) { openNew(); sharedOpened = true; }
   for (const b of el.querySelectorAll("[data-icat]")) b.onclick = () => { inspoView.cat = b.dataset.icat; renderInspo(); };
-  $("#istatus").onchange = (e) => { inspoView.status = e.target.value; renderInspo(); };
+  for (const b of el.querySelectorAll("[data-ist]")) b.onclick = () => { inspoView.status = b.dataset.ist; inspoView.cat = ""; renderInspo(); };
   $("#isearch").onchange = (e) => { inspoView.q = e.target.value.trim(); renderInspo(); };
-  for (const r of rows) {
-    const root = document.getElementById(`i-${r.id}`);
-    const save = async (patch, msg) => { const { error } = await sb.from("inspirations").update(patch).eq("id", r.id); toast(error ? error.message : msg); };
-    root.querySelector('[data-f="category"]').onchange = (e) => save({ category: e.target.value || null }, "Category saved");
-    root.querySelector('[data-f="notes"]').onchange = (e) => save({ notes: e.target.value.trim() || null }, "Note saved");
-    const au = root.querySelector('[data-f="author"]');
-    if (au) au.onchange = async (e) => { await save({ author: e.target.value.replace(/^@/, "").trim() || null }, "Looking it up…"); try { await callFn("inspire", { id: r.id }); } catch {} renderInspo(); };
-    for (const b of root.querySelectorAll("[data-st]")) b.onclick = async () => { await save({ status: b.dataset.st }, "Updated"); renderInspo(); };
-    root.querySelector("[data-look]").onclick = async (e) => { e.target.disabled = true; try { await callFn("inspire", { id: r.id }); } catch (err) { toast(err.message); } renderInspo(); };
-    root.querySelector("[data-del]").onclick = async () => { if (!confirm("Delete this saved reel?")) return; await sb.from("inspirations").delete().eq("id", r.id); renderInspo(); };
-  }
+  for (const b of el.querySelectorAll("[data-i]")) b.onclick = () => {
+    const r = all.find((x) => x.id === b.dataset.i);
+    openSheet(`<div class="tile-h" style="margin:4px 0 6px"><span class="avatar lg">${initial(r.author)}</span><div><div class="who" style="font-size:17px">${r.author ? "@" + esc(r.author) : "Unknown author"}</div><div class="muted">Saved ${fmt(r.created_at)}${r.media_type ? " · " + esc(r.media_type) : ""}</div></div></div>
+      ${r.view_count != null || r.author_followers != null ? `<div class="kv">${[["Views", nfmt(r.view_count)], ["Reach", r.view_count != null && r.author_followers ? (r.view_count / r.author_followers).toFixed(1) + "×" : "–"], ["Likes", nfmt(r.like_count)], ["Followers", nfmt(r.author_followers)]].map(([k, v]) => `<div><b>${v}</b><span>${k}</span></div>`).join("")}</div>` : ""}
+      ${r.caption ? `<details style="margin:8px 0"><summary class="muted" style="cursor:pointer">Caption</summary><p style="white-space:pre-wrap;margin:6px 0 0">${esc(r.caption)}</p></details>` : ""}
+      ${r.fetch_error ? `<p class="muted">ⓘ ${esc(r.fetch_error)}</p>` : ""}
+      ${form(r)}
+      <div id="imenu" class="row" hidden>${r.status !== "archived" ? `<button class="ghost" data-st="archived">Archive</button>` : ""}<button class="ghost" id="ilook">Look up again</button><button class="ghost" id="idel" style="color:var(--rust)">Delete</button></div>
+      <div class="row actions"><button id="iupd">Save</button>${r.status !== "used" ? `<button class="ghost" data-st="used">Mark used</button>` : `<button class="ghost" data-st="new">Back to “to use”</button>`}
+        <a href="${esc(r.url)}" target="_blank" rel="noopener"><button class="ghost">Open</button></a>
+        <button class="ghost" id="imore" aria-label="More">⋯</button></div>`);
+    wireCat();
+    const save = async (patch) => { const { error } = await sb.from("inspirations").update(patch).eq("id", r.id); if (error) toast(error.message); return !error; };
+    $("#iupd").onclick = async () => {
+      const author = $("#iauthor").value.replace(/^@/, "").trim() || null, cat = $("#icat").value;
+      if (!(await save({ author, category: cat && cat !== "+" ? cat : null, notes: $("#inote").value.trim() || null }))) return;
+      if (author !== r.author) { toast("Looking it up…"); try { await callFn("inspire", { id: r.id }); } catch {} } else toast("Saved");
+      closeSheet(); renderInspo();
+    };
+    $("#imore").onclick = () => { $("#imenu").hidden = !$("#imenu").hidden; };
+    for (const x of document.querySelectorAll("#sheet [data-st]")) x.onclick = async () => { if (await save({ status: x.dataset.st })) { toast("Updated"); closeSheet(); renderInspo(); } };
+    $("#ilook").onclick = async (e) => { e.target.disabled = true; try { await callFn("inspire", { id: r.id }); toast("Updated"); } catch (err) { toast(err.message); } closeSheet(); renderInspo(); };
+    $("#idel").onclick = async () => { if (!confirm("Delete this saved reel?")) return; await sb.from("inspirations").delete().eq("id", r.id); closeSheet(); renderInspo(); };
+  };
 }
 
 // ---------- accounts ----------
