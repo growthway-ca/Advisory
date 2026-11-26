@@ -1,0 +1,57 @@
+{
+  "slug": "2026-11-26-manitoba-wearables",
+  "titleB": "Your kid's [[glasses]] can record class",
+  "kickerB": "Parents: new rule",
+  "scenes": [
+    {
+      "type": "title",
+      "kicker": "Manitoba schools",
+      "text": "Now banned: smart watches and [[AI glasses]]",
+      "sub": "The phone ban just got bigger."
+    },
+    {
+      "type": "notes",
+      "title": "What the new directive covers",
+      "notes": [
+        "Smart watches",
+        {
+          "text": "Smart glasses",
+          "hot": true
+        },
+        "Other wearables that do what phones do",
+        "Recording, messaging, social media, AI tools"
+      ],
+      "source": "Manitoba education minister's letter, Nov. 17, 2026, via CBC News"
+    },
+    {
+      "type": "notes",
+      "title": "Why it matters",
+      "notes": [
+        "Phones banned since Sept. 2024",
+        {
+          "text": "Glasses can record without others readily knowing",
+          "hot": true
+        },
+        "Hanover School Division banned them first"
+      ],
+      "source": "CBC News, Nov. 24, 2026"
+    },
+    {
+      "type": "point",
+      "lead": "For every school, not just Manitoba:",
+      "text": "Write the rule for [[the next device]]. Not just the last one."
+    },
+    {
+      "type": "outro"
+    }
+  ],
+  "caption": "Manitoba just added smart watches, smart glasses and other wearables to its school cellphone ban.\n\nThe education minister's Nov. 17 letter to superintendents covers devices with \"messaging, social media, internet browsing, photography, audio or video recording, artificial intelligence tools, or other cellphone-like functions.\" The phone ban itself has been in place since September 2024. Hanover School Division banned smart glasses a week earlier, warning parents they \"can record audio and video without others readily knowing.\"\n\nMinister Tracy Schmidt: \"As technology evolves, so must our guidelines to ensure students are learning in healthy, safe environments.\"\n\nWherever you are: does your school's phone policy say anything about watches and glasses? If it only names phones, it's already out of date. 👇 Tell us what your school's rule covers.\n\nSource: CBC News (Nov. 24, 2026).",
+  "hashtags": [
+    "#Manitoba",
+    "#CellphoneBan",
+    "#SmartGlasses",
+    "#AIinEducation",
+    "#CanadianEducation",
+    "#Growthway"
+  ]
+}
