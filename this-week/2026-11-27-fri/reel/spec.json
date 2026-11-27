@@ -1,0 +1,56 @@
+{
+  "slug": "2026-11-27-week-roundup",
+  "scenes": [
+    {
+      "type": "title",
+      "kicker": "Week of Nov. 23",
+      "text": "This week in [[AI & schools]]",
+      "sub": "Four stories, 30 seconds."
+    },
+    {
+      "type": "timeline",
+      "title": "The week",
+      "events": [
+        {
+          "when": "Nov 20",
+          "text": "Google.org funds training for [[7,000 Canadian educators]] in AI by 2028"
+        },
+        {
+          "when": "Nov 24",
+          "text": "Manitoba bans smart watches and [[AI glasses]] in schools"
+        },
+        {
+          "when": "Nov 26",
+          "text": "Ontario survey: only [[15.9%]] of teachers rate their AI skills advanced or expert"
+        },
+        {
+          "when": "Nov 26",
+          "text": "P.E.I.: a full-day phone ban is [[coming]]"
+        },
+        {
+          "when": "Dec 7",
+          "text": "Hour of AI Week starts",
+          "next": true
+        }
+      ],
+      "source": "Raspberry Pi Foundation; CBC News; The Conversation (Brock University); CBC News"
+    },
+    {
+      "type": "point",
+      "lead": "The pattern:",
+      "text": "Rules are moving faster than [[teacher training]]"
+    },
+    {
+      "type": "outro"
+    }
+  ],
+  "caption": "This week in AI & schools 🇨🇦\n\n1. Google.org is funding Experience AI training for 7,000 Canadian educators, aiming to reach an estimated 300,000 young people by 2028.\n2. Manitoba added smart watches, smart glasses and other wearables, including ones with AI tools, to its school cellphone ban.\n3. A Brock University survey of 441 Ontario secondary teachers: 90.7% know of students using generative AI for schoolwork, but only 15.9% rate their own skills as advanced or expert. 56% strongly agree teachers need time to work it in.\n4. P.E.I.'s education minister says a \"bell-to-bell\" phone ban \"is indeed coming.\"\n\nNext up: Hour of AI Week, Dec. 7–11.\n\nThe pattern: rules for devices are moving fast. Time and training for teachers aren't keeping up. Which one would you fix first? 👇\n\nSources: Raspberry Pi Foundation (Nov. 20); CBC News (Nov. 24 and 26); The Conversation, Sunaina Sharma, Brock University (Nov. 26).",
+  "hashtags": [
+    "#AIinEducation",
+    "#CanadianEducation",
+    "#Teachers",
+    "#CellphoneBan",
+    "#Ontario",
+    "#Growthway"
+  ]
+}
