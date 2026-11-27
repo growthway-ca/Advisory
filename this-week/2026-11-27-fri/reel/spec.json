@@ -1,56 +1,32 @@
 {
-  "slug": "2026-11-27-week-roundup",
+  "slug": "2026-11-27-week-roundup-60",
   "scenes": [
-    {
-      "type": "title",
-      "kicker": "Week of Nov. 23",
-      "text": "This week in [[AI & schools]]",
-      "sub": "Four stories, 30 seconds."
-    },
-    {
-      "type": "timeline",
-      "title": "The week",
-      "events": [
-        {
-          "when": "Nov 20",
-          "text": "Google.org funds training for [[7,000 Canadian educators]] in AI by 2028"
-        },
-        {
-          "when": "Nov 24",
-          "text": "Manitoba bans smart watches and [[AI glasses]] in schools"
-        },
-        {
-          "when": "Nov 26",
-          "text": "Ontario survey: only [[15.9%]] of teachers rate their AI skills advanced or expert"
-        },
-        {
-          "when": "Nov 26",
-          "text": "P.E.I.: a full-day phone ban is [[coming]]"
-        },
-        {
-          "when": "Dec 7",
-          "text": "Hour of AI Week starts",
-          "next": true
-        }
-      ],
-      "source": "Raspberry Pi Foundation; CBC News; The Conversation (Brock University); CBC News"
-    },
-    {
-      "type": "point",
-      "lead": "The pattern:",
-      "text": "Rules are moving faster than [[teacher training]]"
-    },
-    {
-      "type": "outro"
-    }
+    { "type": "title", "kicker": "Week of Nov. 23", "text": "This week in [[AI & schools]]", "sub": "Four stories, and the one that matters most.", "seconds": 3.8 },
+    { "type": "timeline", "title": "The week", "step": 1.7, "seconds": 13, "events": [
+      { "when": "Nov 20", "text": "Google.org funds training for [[7,000 Canadian educators]] in AI by 2028" },
+      { "when": "Nov 24", "text": "Manitoba bans smart watches and [[AI glasses]] in schools" },
+      { "when": "Nov 26", "text": "Ontario survey: only [[15.9%]] of teachers rate their AI skills advanced or expert" },
+      { "when": "Nov 26", "text": "P.E.I.: a full-day phone ban is [[coming]]" },
+      { "when": "Dec 7", "text": "Hour of AI Week starts", "next": true }
+    ], "source": "Raspberry Pi Foundation; CBC News; The Conversation (Brock University); CBC News" },
+    { "type": "gap", "kicker": "Why it matters", "title": "441 Ontario high school teachers", "seconds": 8,
+      "bars": [ { "label": "See students using AI for schoolwork", "value": 90.7, "display": "90.7%" },
+                { "label": "Rate their own AI skills advanced or expert", "value": 15.9, "display": "15.9%" } ],
+      "gapLabel": "THE GAP", "source": "Sharma & Kumar, Brock University survey (2025), via The Conversation, Nov. 26, 2026" },
+    { "type": "quote", "text": "I think trying to ban the use of GenAI in schools is pointless — it is here to stay.", "name": "An Ontario secondary teacher", "role": "Brock University survey", "seconds": 6.5 },
+    { "type": "notes", "title": "What teachers asked for", "seconds": 6.5, "notes": [
+      { "text": "56% strongly agree: time to work AI into teaching", "hot": true },
+      "43% strongly agree: training"
+    ], "source": "Brock University survey via The Conversation" },
+    { "type": "point", "lead": "Our take:", "text": "Phone bans are cheap. [[Teacher time]] isn't. That's the real budget question.", "seconds": 6 },
+    { "type": "point", "lead": "This week proved it:", "text": "Rules are moving faster than [[teacher training]]", "seconds": 5 },
+    { "type": "notes", "title": "Ask your school this week", "seconds": 7.5, "notes": [
+      "Who is training teachers on AI?",
+      { "text": "When is the PD time scheduled?", "hot": true },
+      "What's the rule for student AI use?"
+    ] },
+    { "type": "outro" }
   ],
-  "caption": "This week in AI & schools 🇨🇦\n\n1. Google.org is funding Experience AI training for 7,000 Canadian educators, aiming to reach an estimated 300,000 young people by 2028.\n2. Manitoba added smart watches, smart glasses and other wearables, including ones with AI tools, to its school cellphone ban.\n3. A Brock University survey of 441 Ontario secondary teachers: 90.7% know of students using generative AI for schoolwork, but only 15.9% rate their own skills as advanced or expert. 56% strongly agree teachers need time to work it in.\n4. P.E.I.'s education minister says a \"bell-to-bell\" phone ban \"is indeed coming.\"\n\nNext up: Hour of AI Week, Dec. 7–11.\n\nThe pattern: rules for devices are moving fast. Time and training for teachers aren't keeping up. Which one would you fix first? 👇\n\nSources: Raspberry Pi Foundation (Nov. 20); CBC News (Nov. 24 and 26); The Conversation, Sunaina Sharma, Brock University (Nov. 26).",
-  "hashtags": [
-    "#AIinEducation",
-    "#CanadianEducation",
-    "#Teachers",
-    "#CellphoneBan",
-    "#Ontario",
-    "#Growthway"
-  ]
+  "caption": "This week in AI & schools 🇨🇦\n\n1. Google.org is funding Experience AI training for 7,000 Canadian educators, aiming to reach an estimated 300,000 young people by 2028.\n2. Manitoba added smart watches, smart glasses and other wearables, including ones with AI tools, to its school cellphone ban.\n3. A Brock University survey of 441 Ontario secondary teachers: 90.7% know of students using generative AI for schoolwork, but only 15.9% rate their own skills as advanced or expert.\n4. P.E.I.'s education minister says a \"bell-to-bell\" phone ban \"is indeed coming.\"\n\nWhy #3 matters most: students moved first, and teachers are telling us what they need. 56% strongly agree they need time to work AI into their teaching; 43% strongly agree they need training. Phone bans are cheap. Teacher time isn't. That's the real budget question for every board this year.\n\nThree questions to ask your school this week: Who is training teachers on AI? When is the PD time scheduled? What's the rule for student AI use? 👇\n\nNext up: Hour of AI Week, Dec. 7–11.\n\nSources: Raspberry Pi Foundation (Nov. 20); CBC News (Nov. 24 and 26); The Conversation, Sunaina Sharma, Brock University (Nov. 26).",
+  "hashtags": ["#AIinEducation", "#CanadianEducation", "#Teachers", "#CellphoneBan", "#Ontario", "#Growthway"]
 }

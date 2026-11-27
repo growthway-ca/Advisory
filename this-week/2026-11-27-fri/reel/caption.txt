@@ -2,12 +2,14 @@ This week in AI & schools 🇨🇦
 
 1. Google.org is funding Experience AI training for 7,000 Canadian educators, aiming to reach an estimated 300,000 young people by 2028.
 2. Manitoba added smart watches, smart glasses and other wearables, including ones with AI tools, to its school cellphone ban.
-3. A Brock University survey of 441 Ontario secondary teachers: 90.7% know of students using generative AI for schoolwork, but only 15.9% rate their own skills as advanced or expert. 56% strongly agree teachers need time to work it in.
+3. A Brock University survey of 441 Ontario secondary teachers: 90.7% know of students using generative AI for schoolwork, but only 15.9% rate their own skills as advanced or expert.
 4. P.E.I.'s education minister says a "bell-to-bell" phone ban "is indeed coming."
 
-Next up: Hour of AI Week, Dec. 7–11.
+Why #3 matters most: students moved first, and teachers are telling us what they need. 56% strongly agree they need time to work AI into their teaching; 43% strongly agree they need training. Phone bans are cheap. Teacher time isn't. That's the real budget question for every board this year.
 
-The pattern: rules for devices are moving fast. Time and training for teachers aren't keeping up. Which one would you fix first? 👇
+Three questions to ask your school this week: Who is training teachers on AI? When is the PD time scheduled? What's the rule for student AI use? 👇
+
+Next up: Hour of AI Week, Dec. 7–11.
 
 Sources: Raspberry Pi Foundation (Nov. 20); CBC News (Nov. 24 and 26); The Conversation, Sunaina Sharma, Brock University (Nov. 26).
 
