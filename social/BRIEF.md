@@ -143,11 +143,27 @@ Same sourcing rules as everything else: every number comes from a source you ope
   Don't repeat a story that already has a reel in `this-week/` or `last-week/`; if nothing new is strong enough, make an
   evergreen practical reel instead (a parent or teacher how-to, a "myth vs fact", a "before/after" on assessment or
   homework), still sourced.
-- **Friday:** "This week in AI & schools": the week's 2–3 biggest developments told in that day's format (sticky notes,
-  a timeline or a scorecard work best for a roundup), then the outro.
+- **Friday:** "This week in AI & schools": the week's 2–4 biggest developments told in that day's format (sticky notes,
+  a timeline or a scorecard work best for a roundup), then a "why it matters" breakdown of the most important one.
+
+**Length and depth (every reel): about 60 seconds (55–65 s), and thought leadership, not headline relay.** Matt's
+direction (Nov. 27): "Let's try to be thought leaders, not just headline regurgitators." Every reel has three acts:
+1. **What happened** (~15 s): the `title` hook, then the news in the day's narrative format.
+2. **Why it matters** (~25–30 s): break one point down. Use 2–4 beats: the number that shows the tension (a `gap` or
+   `stat`), the voice of the people affected (a `quote`, word for word from the source), the context a parent or
+   teacher wouldn't know, and **Growthway's take**: a clear, specific opinion in a `point` scene led with "Our take:",
+   consistent with `positions.md` (practical AI literacy over bans or hype; teachers need PD and clear policy first;
+   parents are part of the solution). Argue about policy and practice, never people, and keep Growthway non-partisan.
+3. **What to do** (~10 s): 2–3 concrete questions or actions for parents or teachers this week (`notes` or `search`),
+   then the `outro`.
+Set `seconds` on scenes so viewers can read them: about 3 words a second, at least 5 s for any scene with a sentence,
+and step the timeline/notes beats at 1.5 s or more. Check the build's reported length; if it's under 55 s, the reel
+needs more substance (a further beat of context or a quote), not slower padding. The caption follows the same arc:
+the news, "why it matters" with the take, and the questions.
 
 **Format:** every reel opens with a `title` scene (green, logo, a punchy title that works as the cover) and ends with the
-`outro`. In between, tell the story in one narrative format, and never use the same format two reels in a row. Rotate
+`outro`. In between, tell the news in one narrative format (the "why it matters" beats may use supporting scenes such as
+`gap`, `stat`, `quote` and `point`), and never use the same format two reels in a row. Rotate
 `notes`, `thread`, `mythfact`, `timeline`, `scorecard`, `fineprint`, `search` in that order, starting after the format used
 in the most recent `reel/spec.json` in `this-week/` or `last-week/` on `social` (Friday's roundup can use `timeline`,
 `notes` or `scorecard` when it's that format's turn, or the next of those three). Pick the angle that fits the format:

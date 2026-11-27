@@ -66,7 +66,7 @@ Scene lengths are worked out from the content; set `seconds` only to override.
 - Pace: set `seconds` per scene; kinetic scenes read best at 3–4 seconds.
 - Key phrases are only ever highlighted with `[[double brackets]]`. There is no circle style: it clipped at the edge of the line.
 
-A good reel is 3–5 scenes and 20–35 seconds: title → the format scene (sometimes two beats of it, or one supporting beat) → outro.
+A good reel is about 60 seconds and 7–10 scenes, in three acts: what happened (title → the format scene), why it matters (2–4 beats: a `gap` or `stat`, a `quote`, context, and a `point` with Growthway's take), and what to do (`notes` or `search` with 2–3 questions) → outro. Set `seconds` so every line can be read (about 3 words a second).
 
 ### Sound, A/B titles, carousels
 
